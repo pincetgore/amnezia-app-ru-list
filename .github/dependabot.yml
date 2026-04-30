@@ -1,0 +1,13 @@
+version: 2
+updates:
+  # Автоматическое обновление GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Автоматическое обновление Python-зависимостей (requirements.txt)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
