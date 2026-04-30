@@ -26,7 +26,7 @@
 │    ip-list.json с ip-list.json                              │
 │         │       │                                           │
 │         ▼       ▼                                           │
-│    Напрямую   Через VPN                                     │
+│    Напрямую   Через Amnezia                                 │
 │   (sberbank,  (telegram,                                    │
 │    rzd, wb)   youtube и др.)                                │
 └─────────────────────────────────────────────────────────────┘
@@ -53,8 +53,8 @@
 ### Вариант 2: Сгенерировать самостоятельно
 
 ```bash
-git clone https://github.com/uriruhman/ru-bypass-list.git
-cd ru-bypass-list
+git clone [https://github.com/pincetgore/amnezia-app-ru-list.git]
+cd amnezia-app-ru-list
 pip install -r requirements.txt
 python main.py
 ```
@@ -347,31 +347,12 @@ python main.py
 
 ---
 
-## Структура проекта
-
-```
-ru-bypass-list/
-├── main.py                          # Entry point, CLI
-├── config.yaml                      # Service definitions: names, ASNs, domains
-├── resolvers/
-│   ├── asn.py                       # RIPE NCC API + bgp.he.net fallback
-│   └── dns.py                       # DNS A-record resolution via dnspython
-├── output/
-│   └── formatter.py                 # Output formatting (AmneziaVPN JSON / plain text)
-├── ip-list.json                     # Generated output (updated weekly by CI)
-├── requirements.txt                 # Python dependencies
-├── .github/workflows/update.yml     # Weekly CI job
-└── README.md
-```
-
 ## Автообновление
 
 GitHub Actions workflow запускается **каждый понедельник в 04:00 UTC** и автоматически:
 1. Запрашивает актуальные данные из RIPE и DNS
 2. Генерирует `ip-list.json` (для Amnezia) и `cidrs.txt` (простой список)
 3. Создаёт/обновляет релиз `latest` и загружает в него сгенерированные файлы
-
-Также можно запустить вручную через **Actions** -> **Update IP List** -> **Run workflow**.
 
 ---
 
