@@ -1,4 +1,4 @@
-# ru-bypass-list
+# amnezia-app-ru-list
 
 Автоматически генерируемый список IP-адресов и доменов российских сервисов для **split tunneling** для Amnezia.
 
