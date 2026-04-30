@@ -39,7 +39,6 @@ services:
       - 47541
       - 44715
     domains:
-      - vk-cdn.net
       - cdn-vk.ru
       - mradx.net
       - mvk.com
@@ -66,7 +65,6 @@ services:
       - vkmessenger.app
       - vkmessenger.com
       - vkontakte.ru
-      - vkplay.ru
       - vkuser.net
       - vkuseraudio.com
       - vkuseraudio.net
@@ -96,6 +94,14 @@ services:
       - ok.ru
       - okcdn.ru
 
+  - name: "Max"
+    asn: []
+    domains:
+      - max.ru
+      - apptracer.ru
+      - mycdn.me
+      - oneme.ru
+
   # ============================================================
   # БАНКИ
   # ============================================================
@@ -115,7 +121,6 @@ services:
     domains:
       - tbank.ru
       - tinkoff.ru
-      - tinkoff-voip.com
       - tcsbank.ru
       - tinkoffinsurance.ru
       - cdn-tinkoff.ru
@@ -154,7 +159,6 @@ services:
       - 198504
     domains:
       - psbank.ru
-      - online.psbank.ru
 
   - name: "Совкомбанк"
     asn: []
@@ -178,13 +182,11 @@ services:
     asn: []
     domains:
       - open.ru
-      - openbank.ru
 
   - name: "Росбанк"
     asn: []
     domains:
       - rosbank.ru
-      - online.rosbank.ru
 
   - name: "Банк Россия"
     asn: []
@@ -203,13 +205,6 @@ services:
     domains:
       - nspk.ru
       - sbp.nspk.ru
-
-  - name: "Mir Pay / НСПК"
-    asn:
-      - 207009
-    domains:
-      - mironline.ru
-      - mirpay.ru
 
   # ============================================================
   # ТЕЛЕКОМ
@@ -265,7 +260,6 @@ services:
       - wildberries.ru
       - wb.ru
       - wbstatic.net
-      - wbbasket.ru
       - wbx-auth.wildberries.ru
 
   - name: "Ozon"
@@ -273,7 +267,6 @@ services:
     domains:
       - ozon.ru
       - ozonbank.ru
-      - ozon-st.cdn.ngenix.net
       - ozon.app
       - ozon.com
       - ozon.dev
@@ -800,7 +793,7 @@ services:
     asn: []
     domains:
       - cloud.yandex.ru
-      - yandexcloud.net
+      - yandex.cloud
       - storage.yandexcloud.net
 
   - name: "VK Cloud"
