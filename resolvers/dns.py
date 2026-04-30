@@ -50,8 +50,9 @@ def resolve_domains(domains: list[str], timeout: int = 10, max_workers: int = 20
     Queries are executed concurrently using a thread pool.
     """
     resolver = dns.resolver.Resolver()
-    # Используем публичные DNS-серверы (Google, Cloudflare) вместо системных
-    resolver.nameservers = ['8.8.8.8', '1.1.1.1', '8.8.4.4', '1.0.0.1']
+    # Используем Яндекс.DNS первыми, так как многие RU-домены (ВТБ, VK, X5) 
+    # блокируют запросы от зарубежных DNS (Google/Cloudflare) для защиты от DDoS
+    resolver.nameservers = ['77.88.8.8', '77.88.8.1', '8.8.8.8', '1.1.1.1']
     resolver.timeout = timeout
     resolver.lifetime = timeout
 
