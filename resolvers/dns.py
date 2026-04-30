@@ -16,9 +16,10 @@ import dns.resolver
 logger = logging.getLogger(__name__)
 
 
-def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> list[IPv4Network]:
+def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> tuple[list[IPv4Network], str | None]:
     """Helper function to resolve a single domain."""
     networks = []
+    warning = None
     try:
         answers = resolver.resolve(domain, "A")
         for rdata in answers:
@@ -31,18 +32,21 @@ def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> list
         logger.debug("DNS domain does not exist (NXDOMAIN) for %s", domain)
     except (dns.resolver.NoAnswer, dns.resolver.NoNameservers) as e:
         logger.warning("DNS resolution failed for %s: %s", domain, e)
+        warning = domain
     except dns.exception.Timeout:
         logger.warning("DNS timeout for %s", domain)
+        warning = domain
     except Exception as e:
         logger.warning("DNS error for %s: %s", domain, e)
-    return networks
+        warning = domain
+    return networks, warning
 
 
-def resolve_domains(domains: list[str], timeout: int = 10, max_workers: int = 20) -> list[IPv4Network]:
-    """Resolve a list of domains to /32 IPv4 networks via DNS A-records.
+def resolve_domains(domains: list[str], timeout: int = 10, max_workers: int = 20) -> tuple[list[IPv4Network], list[str]]:
+    """Resolve a list of domains to /32 IPv4 networks and return warnings.
 
     Errors for individual domains are logged and skipped — the function
-    always returns a (possibly empty) list without raising.
+    returns a tuple of (networks, warning_domains) without raising.
     Queries are executed concurrently using a thread pool.
     """
     resolver = dns.resolver.Resolver()
@@ -52,10 +56,14 @@ def resolve_domains(domains: list[str], timeout: int = 10, max_workers: int = 20
     resolver.lifetime = timeout
 
     networks = []
+    warnings = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = [executor.submit(_resolve_single_domain, domain, resolver) for domain in domains]
         
         for future in concurrent.futures.as_completed(futures):
-            networks.extend(future.result())
+            nets, warn = future.result()
+            networks.extend(nets)
+            if warn:
+                warnings.append(warn)
 
-    return networks
+    return networks, warnings

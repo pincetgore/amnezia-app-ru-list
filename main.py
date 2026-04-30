@@ -69,6 +69,7 @@ def main():
     service_results = []
     stats = []
     errors = 0
+    all_dns_warnings = []
 
     # -- Process each service: resolve ASN prefixes + DNS records --
     for service in tqdm(services, desc="Processing services", unit="svc"):
@@ -88,8 +89,9 @@ def main():
         # Step 2: Resolve domain A-records to supplement ASN data with /32 IPs
         if domains:
             try:
-                dns_networks = resolve_domains(domains)
+                dns_networks, dns_warnings = resolve_domains(domains)
                 service_networks.extend(dns_networks)
+                all_dns_warnings.extend(dns_warnings)
             except Exception as e:
                 logger.error("Failed DNS resolution for %s: %s", name, e)
                 errors += 1
@@ -121,6 +123,11 @@ def main():
     print(f"  Total entries:      {len(aggregated) + total_domains}")
     if errors:
         print(f"  Errors:             {errors}")
+    if all_dns_warnings:
+        print(f"  DNS Warnings:       {len(all_dns_warnings)}")
+        print("\nDomains with DNS warnings:")
+        for w in sorted(set(all_dns_warnings)):
+            print(f"  - {w}")
     print(f"\nOutput: {args.output}")
 
 
