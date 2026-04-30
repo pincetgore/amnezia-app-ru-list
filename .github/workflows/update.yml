@@ -31,7 +31,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest tests/
+          pytest
 
       - name: Generate artifacts
         run: |
