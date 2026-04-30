@@ -28,9 +28,7 @@ services:
       - maps.yandex.ru
       - weather.yandex.ru
       - translate.yandex.ru
-      - cloud.yandex.ru
       - afisha.yandex.ru
-      - auto.ru
       - alice.yandex.ru
       - practicum.yandex.ru
       - metrika.yandex.ru
@@ -38,7 +36,7 @@ services:
       - passport.yandex.ru
       - yandexcloud.net
 
-  - name: "ВКонтакте + Юла"
+  - name: "ВКонтакте"
     asn:
       - 47541
       - 44715
@@ -82,7 +80,6 @@ services:
       - vkuservideo.net
       - vkuservideo.ru
       - vkvideo.ru
-      - youla.ru
 
   - name: "Mail.ru + Одноклассники"
     asn:
@@ -112,8 +109,6 @@ services:
       - online.sberbank.ru
       - sber.ru
       - sbermarket.ru
-      - sbolshim.ru
-      - domclick.ru
       - spasibosberbank.ru
 
   - name: "Тинькофф / Т-Банк"
@@ -392,6 +387,8 @@ services:
     domains:
       - cdek.ru
       - lk.cdek.ru
+      - ad-cdek.ru
+      - cdek.shopping
 
   - name: "Boxberry"
     asn: []
@@ -408,7 +405,12 @@ services:
       - perekrestok.ru
       - vprok.ru
       - x5.ru
+      - x5club.ru
+      - x5media.ru
+      - x5paket.ru
+      - x5static.net
       - online.perekrestok.ru
+      - myapelsin.ru
 
   - name: "Магнит"
     asn: []
@@ -438,6 +440,11 @@ services:
     asn: []
     domains:
       - svetofor.info
+
+  - name: "Дикси"
+    asn: []
+    domains:
+      - dixy.ru
 
   # ============================================================
   # СТРИМИНГ / ВИДЕО / МУЗЫКА
@@ -640,11 +647,6 @@ services:
       - domclick.ru
       - api.domclick.ru
 
-  - name: "Авито Недвижимость"
-    asn: []
-    domains:
-      - avito.ru
-
   - name: "ДомРФ"
     asn: []
     domains:
@@ -705,6 +707,7 @@ services:
       - 196695
     domains:
       - 2gis.ru
+      - 2gis.com
       - api.2gis.ru
       - tile.2gis.com
 
