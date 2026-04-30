@@ -27,6 +27,10 @@ HE_BGP_URL = "https://bgp.he.net/AS{asn}#_prefixes4"
 # Timestamp of the last API request (used for rate limiting)
 _last_request_time = 0.0
 
+# Reuse connection for performance
+_session = requests.Session()
+_session.headers.update({"User-Agent": "Mozilla/5.0 (ru-bypass-list generator)"})
+
 
 def _rate_limit():
     """Enforce a minimum 1-second gap between consecutive API requests."""
@@ -45,7 +49,7 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network]:
     """
     _rate_limit()
     try:
-        resp = requests.get(
+        resp = _session.get(
             RIPE_API_URL,
             params={"resource": f"AS{asn}"},
             timeout=timeout,
@@ -79,9 +83,8 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> list[IPv4Network]:
     """
     _rate_limit()
     try:
-        resp = requests.get(
+        resp = _session.get(
             HE_BGP_URL.format(asn=asn),
-            headers={"User-Agent": "Mozilla/5.0"},
             timeout=timeout,
         )
         resp.raise_for_status()

@@ -1,17 +1,23 @@
 import pytest
 import yaml
 import ipaddress
+from ipaddress import IPv4Network
+from output.formatter import aggregate_networks
 
-# Предполагается, что в main.py есть функции `aggregate_cidrs` и загрузки конфига
-# from main import aggregate_cidrs
 
 def test_aggregate_cidrs_removes_subnets():
     """Проверяет, что мелкие подсети поглощаются более крупными."""
-    # Заглушка: замените на реальный вызов вашей функции агрегации
-    # ips = ["10.0.0.0/8", "10.1.0.0/16", "192.168.1.1/32"]
-    # result = aggregate_cidrs(ips)
-    # assert "10.1.0.0/16" not in result
-    pass
+    ips = [
+        IPv4Network("10.0.0.0/8"),
+        IPv4Network("10.1.0.0/16"),   # Должно поглотиться первой строкой
+        IPv4Network("192.168.1.1/32")
+    ]
+    result = aggregate_networks(ips)
+    result_strs = [str(net) for net in result]
+    
+    assert "10.0.0.0/8" in result_strs
+    assert "10.1.0.0/16" not in result_strs, "Вложенная подсеть 10.1.0.0/16 не была удалена!"
+    assert "192.168.1.1/32" in result_strs
 
 def test_config_yaml_is_valid():
     """Проверяет, что рабочий config.yaml имеет правильную структуру."""
