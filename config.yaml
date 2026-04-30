@@ -38,26 +38,56 @@ services:
       - passport.yandex.ru
       - yandexcloud.net
 
-  - name: "ВКонтакте"
+  - name: "ВКонтакте + Юла"
     asn:
       - 47541
       - 44715
     domains:
-      - vk.com
-      - vk.ru
-      - vk.me
-      - vkuseraudio.net
-      - vkuservideo.net
       - vk-cdn.net
+      - cdn-vk.ru
+      - mradx.net
+      - mvk.com
       - userapi.com
+      - vk-analytics.ru
+      - vk-apps.com
+      - vk-apps.ru
+      - vk-cdn.me
+      - vk-cdn.net
+      - vk-portal.net
       - vk.cc
+      - vk.com
+      - vk.company
+      - vk.design
+      - vk.link
+      - vk.me
+      - vk.ru
+      - vk.team
+      - vkcache.com
+      - vkclips.app
+      - vkcloud-static.ru
+      - vkgo.app
+      - vklive.app
+      - vkmessenger.app
+      - vkmessenger.com
+      - vkontakte.ru
+      - vkplay.ru
+      - vkuser.net
+      - vkuseraudio.com
+      - vkuseraudio.net
+      - vkuseraudio.ru
+      - vkusercdn.ru
+      - vkuserlive.net
+      - vkuserphoto.ru
+      - vkuservideo.com
+      - vkuservideo.net
+      - vkuservideo.ru
+      - vkvideo.ru
+      - youla.ru
 
-  - name: "Mail.ru / VK Group"
+  - name: "Mail.ru + Одноклассники"
     asn:
       - 47764
     domains:
-      - mail.ru
-      - ok.ru
       - my.mail.ru
       - cloud.mail.ru
       - hc.mail.ru
@@ -66,8 +96,10 @@ services:
       - e.mail.ru
       - biz.mail.ru
       - imgsmail.ru
-
-  # Telegram НЕ включаем — он должен идти ЧЕРЕЗ VPN
+      - dzen.ru
+      - mail.ru
+      - ok.ru
+      - okcdn.ru
 
   # ============================================================
   # БАНКИ
@@ -93,6 +125,7 @@ services:
       - tinkoff-voip.com
       - tcsbank.ru
       - tinkoffinsurance.ru
+      - cdn-tinkoff.ru
 
   - name: "ВТБ"
     asn:
@@ -248,6 +281,13 @@ services:
       - ozon.ru
       - ozonbank.ru
       - ozon-st.cdn.ngenix.net
+      - ozon.app
+      - ozon.com
+      - ozon.dev
+      - ozon.global
+      - ozon.market
+      - ozon.travel
+      - ozone.ru
 
   - name: "Авито"
     asn:
@@ -268,6 +308,7 @@ services:
     domains:
       - kazanexpress.ru
       - magnit.market
+      - magnit.ru
 
   - name: "СберМегаМаркет"
     asn: []
@@ -313,6 +354,11 @@ services:
     asn: []
     domains:
       - detmir.ru
+
+  - name: "Hoff"
+    asn: []
+    domains:
+      - hoff.ru
 
   # ============================================================
   # ЕДА / ДОСТАВКА / ТАКСИ
