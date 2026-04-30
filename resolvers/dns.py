@@ -22,6 +22,8 @@ def resolve_domains(domains: list[str], timeout: int = 10) -> list[IPv4Network]:
     always returns a (possibly empty) list without raising.
     """
     resolver = dns.resolver.Resolver()
+    # Используем публичные DNS-серверы (Google, Cloudflare) вместо системных
+    resolver.nameservers = ['8.8.8.8', '1.1.1.1', '8.8.4.4', '1.0.0.1']
     resolver.timeout = timeout
     resolver.lifetime = timeout
 
