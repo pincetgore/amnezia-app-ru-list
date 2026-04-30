@@ -1,0 +1,1 @@
+# amnezia-app-ru-list
