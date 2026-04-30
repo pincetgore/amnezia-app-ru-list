@@ -1,0 +1,863 @@
+services:
+  # ============================================================
+  # TECH / ПОИСКОВИКИ / СУПЕРАПЫ
+  # ============================================================
+  - name: "Яндекс"
+    asn:
+      - 13238
+      - 202611
+      - 208722
+    domains:
+      - yandex.ru
+      - yandex.net
+      - ya.ru
+      - yastatic.net
+      - yandex.com
+      - yandex-team.ru
+      - kinopoisk.ru
+      - hd.kinopoisk.ru
+      - music.yandex.ru
+      - disk.yandex.ru
+      - market.yandex.ru
+      - eda.yandex.ru
+      - lavka.yandex.ru
+      - taxi.yandex.ru
+      - go.yandex.ru
+      - zen.yandex.ru
+      - dzen.ru
+      - maps.yandex.ru
+      - weather.yandex.ru
+      - translate.yandex.ru
+      - cloud.yandex.ru
+      - afisha.yandex.ru
+      - auto.ru
+      - alice.yandex.ru
+      - practicum.yandex.ru
+      - metrika.yandex.ru
+      - mc.yandex.ru
+      - passport.yandex.ru
+      - yandexcloud.net
+
+  - name: "ВКонтакте"
+    asn:
+      - 47541
+      - 44715
+    domains:
+      - vk.com
+      - vk.ru
+      - vk.me
+      - vkuseraudio.net
+      - vkuservideo.net
+      - vk-cdn.net
+      - userapi.com
+      - vk.cc
+
+  - name: "Mail.ru / VK Group"
+    asn:
+      - 47764
+    domains:
+      - mail.ru
+      - ok.ru
+      - my.mail.ru
+      - cloud.mail.ru
+      - hc.mail.ru
+      - games.mail.ru
+      - news.mail.ru
+      - e.mail.ru
+      - biz.mail.ru
+      - imgsmail.ru
+
+  # Telegram НЕ включаем — он должен идти ЧЕРЕЗ VPN
+
+  # ============================================================
+  # БАНКИ
+  # ============================================================
+  - name: "Сбербанк"
+    asn:
+      - 44693
+    domains:
+      - sberbank.ru
+      - online.sberbank.ru
+      - sber.ru
+      - sbermarket.ru
+      - sbolshim.ru
+      - domclick.ru
+      - spasibosberbank.ru
+
+  - name: "Тинькофф / Т-Банк"
+    asn:
+      - 205638
+    domains:
+      - tbank.ru
+      - tinkoff.ru
+      - tinkoff-voip.com
+      - tcsbank.ru
+      - tinkoffinsurance.ru
+
+  - name: "ВТБ"
+    asn:
+      - 12722
+    domains:
+      - vtb.ru
+      - vtb-group.ru
+      - online.vtb.ru
+
+  - name: "Альфа-Банк"
+    asn:
+      - 28884
+    domains:
+      - alfabank.ru
+      - alfadirect.ru
+      - alfa.me
+
+  - name: "Газпромбанк"
+    asn:
+      - 56375
+    domains:
+      - gazprombank.ru
+      - gpb.ru
+
+  - name: "Россельхозбанк"
+    asn: []
+    domains:
+      - rshb.ru
+      - online.rshb.ru
+
+  - name: "Промсвязьбанк"
+    asn:
+      - 198504
+    domains:
+      - psbank.ru
+      - online.psbank.ru
+
+  - name: "Совкомбанк"
+    asn: []
+    domains:
+      - sovcombank.ru
+      - halvacard.ru
+
+  - name: "Райффайзен Банк"
+    asn: []
+    domains:
+      - raiffeisen.ru
+      - online.raiffeisen.ru
+
+  - name: "Московский Кредитный Банк"
+    asn: []
+    domains:
+      - mkb.ru
+      - online.mkb.ru
+
+  - name: "Открытие"
+    asn: []
+    domains:
+      - open.ru
+      - openbank.ru
+
+  - name: "Росбанк"
+    asn: []
+    domains:
+      - rosbank.ru
+      - online.rosbank.ru
+
+  - name: "Банк Россия"
+    asn: []
+    domains:
+      - abr.ru
+
+  - name: "ЮMoney"
+    asn: []
+    domains:
+      - yoomoney.ru
+      - yookassa.ru
+
+  - name: "СБП / НСПК"
+    asn:
+      - 207009
+    domains:
+      - nspk.ru
+      - sbp.nspk.ru
+
+  - name: "Mir Pay / НСПК"
+    asn:
+      - 207009
+    domains:
+      - mironline.ru
+      - mirpay.ru
+
+  # ============================================================
+  # ТЕЛЕКОМ
+  # ============================================================
+  # Телекомы: только домены, без ASN (ISP-диапазоны слишком большие)
+  - name: "МТС"
+    asn: []
+    domains:
+      - mts.ru
+      - payment.mts.ru
+      - login.mts.ru
+      - kion.ru
+
+  - name: "МегаФон"
+    asn: []
+    domains:
+      - megafon.ru
+      - lk.megafon.ru
+
+  - name: "Билайн / Вымпелком"
+    asn: []
+    domains:
+      - beeline.ru
+      - my.beeline.ru
+
+  - name: "Теле2"
+    asn: []
+    domains:
+      - tele2.ru
+      - my.tele2.ru
+
+  - name: "Ростелеком"
+    asn: []
+    domains:
+      - rt.ru
+      - rostelecom.ru
+      - wink.ru
+      - lk.rt.ru
+
+  - name: "Дом.ру / ЭР-Телеком"
+    asn: []
+    domains:
+      - domru.ru
+      - lk.domru.ru
+
+  # ============================================================
+  # E-COMMERCE / МАРКЕТПЛЕЙСЫ
+  # ============================================================
+  - name: "Wildberries"
+    asn:
+      - 210639
+    domains:
+      - wildberries.ru
+      - wb.ru
+      - wbstatic.net
+      - wbbasket.ru
+      - wbx-auth.wildberries.ru
+
+  - name: "Ozon"
+    asn: []
+    domains:
+      - ozon.ru
+      - ozonbank.ru
+      - ozon-st.cdn.ngenix.net
+
+  - name: "Авито"
+    asn:
+      - 200467
+    domains:
+      - avito.ru
+      - avito.st
+
+  - name: "Яндекс.Маркет"
+    asn: []
+    domains:
+      - market.yandex.ru
+      - pokupki.market.yandex.ru
+      - beru.ru
+
+  - name: "KazanExpress / Магнит Маркет"
+    asn: []
+    domains:
+      - kazanexpress.ru
+      - magnit.market
+
+  - name: "СберМегаМаркет"
+    asn: []
+    domains:
+      - sbermegamarket.ru
+      - megamarket.ru
+
+  - name: "Lamoda"
+    asn: []
+    domains:
+      - lamoda.ru
+      - lamoda.co
+
+  - name: "DNS Shop"
+    asn: []
+    domains:
+      - dns-shop.ru
+      - dns-shop.net
+
+  - name: "М.Видео / Эльдорадо"
+    asn: []
+    domains:
+      - mvideo.ru
+      - eldorado.ru
+
+  - name: "Ситилинк"
+    asn: []
+    domains:
+      - citilink.ru
+
+  - name: "Леруа Мерлен"
+    asn: []
+    domains:
+      - leroymerlin.ru
+      - lemanapro.ru
+
+  - name: "Золотое Яблоко"
+    asn: []
+    domains:
+      - goldapple.ru
+
+  - name: "Детский мир"
+    asn: []
+    domains:
+      - detmir.ru
+
+  # ============================================================
+  # ЕДА / ДОСТАВКА / ТАКСИ
+  # ============================================================
+  - name: "Яндекс Еда / Лавка / Такси"
+    asn: []
+    domains:
+      - eda.yandex.ru
+      - lavka.yandex.ru
+      - taxi.yandex.ru
+      - go.yandex.ru
+
+  - name: "Самокат"
+    asn: []
+    domains:
+      - samokat.ru
+
+  - name: "Delivery Club"
+    asn: []
+    domains:
+      - delivery-club.ru
+
+  - name: "ВкусВилл"
+    asn: []
+    domains:
+      - vkusvill.ru
+      - online.vkusvill.ru
+
+  - name: "СДЭК"
+    asn: []
+    domains:
+      - cdek.ru
+      - lk.cdek.ru
+
+  - name: "Boxberry"
+    asn: []
+    domains:
+      - boxberry.ru
+
+  # ============================================================
+  # РИТЕЙЛ / ПРОДУКТЫ
+  # ============================================================
+  - name: "Пятёрочка / X5 Group"
+    asn: []
+    domains:
+      - 5ka.ru
+      - perekrestok.ru
+      - vprok.ru
+      - x5.ru
+      - online.perekrestok.ru
+
+  - name: "Магнит"
+    asn: []
+    domains:
+      - magnit.ru
+      - dostavka.magnit.ru
+
+  - name: "Лента"
+    asn: []
+    domains:
+      - lenta.com
+      - online.lenta.com
+
+  - name: "Метро"
+    asn: []
+    domains:
+      - metro-cc.ru
+      - online.metro-cc.ru
+
+  - name: "FixPrice"
+    asn: []
+    domains:
+      - fix-price.com
+      - fix-price.ru
+
+  - name: "Светофор"
+    asn: []
+    domains:
+      - svetofor.info
+
+  # ============================================================
+  # СТРИМИНГ / ВИДЕО / МУЗЫКА
+  # ============================================================
+  - name: "Кинопоиск"
+    asn: []
+    domains:
+      - kinopoisk.ru
+      - hd.kinopoisk.ru
+      - api.kinopoisk.ru
+
+  - name: "Rutube"
+    asn:
+      - 49676
+    domains:
+      - rutube.ru
+      - static.rutube.ru
+
+  - name: "IVI"
+    asn: []
+    domains:
+      - ivi.ru
+      - ivi.tv
+      - api.ivi.ru
+
+  - name: "Okko"
+    asn: []
+    domains:
+      - okko.tv
+      - api.okko.tv
+
+  - name: "KION (МТС)"
+    asn: []
+    domains:
+      - kion.ru
+      - api.kion.ru
+
+  - name: "Wink (Ростелеком)"
+    asn: []
+    domains:
+      - wink.ru
+      - api.wink.ru
+
+  - name: "START"
+    asn: []
+    domains:
+      - start.ru
+      - start.video
+
+  - name: "Premier"
+    asn: []
+    domains:
+      - premier.one
+      - api.premier.one
+
+  - name: "Яндекс Музыка"
+    asn: []
+    domains:
+      - music.yandex.ru
+      - api.music.yandex.net
+
+  - name: "Звук (Сбер)"
+    asn: []
+    domains:
+      - zvuk.com
+      - sberaudio.ru
+
+  - name: "VK Видео"
+    asn: []
+    domains:
+      - vkvideo.ru
+      - video.vk.com
+
+  # ============================================================
+  # ГОСУДАРСТВЕННЫЕ СЕРВИСЫ
+  # ============================================================
+  - name: "Госуслуги"
+    asn:
+      - 48498
+    domains:
+      - gosuslugi.ru
+      - esia.gosuslugi.ru
+      - pos.gosuslugi.ru
+      - lk.gosuslugi.ru
+
+  - name: "ФНС / Налоговая"
+    asn: []
+    domains:
+      - nalog.gov.ru
+      - lkfl2.nalog.ru
+      - lkip2.nalog.ru
+
+  - name: "Мос.ру"
+    asn: []
+    domains:
+      - mos.ru
+      - my.mos.ru
+      - uslugi.mos.ru
+
+  - name: "ЦБ РФ"
+    asn: []
+    domains:
+      - cbr.ru
+      - finmarket.ru
+
+  - name: "Почта России"
+    asn:
+      - 29124
+    domains:
+      - pochta.ru
+      - tracking.pochta.ru
+
+  # ============================================================
+  # ТРАНСПОРТ / ПУТЕШЕСТВИЯ
+  # ============================================================
+  - name: "РЖД"
+    asn:
+      - 34485
+    domains:
+      - rzd.ru
+      - ticket.rzd.ru
+      - pass.rzd.ru
+
+  - name: "Аэрофлот"
+    asn: []
+    domains:
+      - aeroflot.ru
+      - api.aeroflot.ru
+      - booking.aeroflot.ru
+
+  - name: "S7 Airlines"
+    asn: []
+    domains:
+      - s7.ru
+      - s7airlines.com
+
+  - name: "Победа"
+    asn: []
+    domains:
+      - pobeda.aero
+      - booking.pobeda.aero
+
+  - name: "Уральские авиалинии"
+    asn: []
+    domains:
+      - uralairlines.ru
+
+  - name: "Aviasales"
+    asn: []
+    domains:
+      - aviasales.ru
+      - aviasales.com
+
+  - name: "Tutu.ru"
+    asn: []
+    domains:
+      - tutu.ru
+      - api.tutu.ru
+
+  - name: "Островок"
+    asn: []
+    domains:
+      - ostrovok.ru
+      - api.ostrovok.ru
+
+  - name: "Яндекс.Путешествия"
+    asn: []
+    domains:
+      - travel.yandex.ru
+
+  - name: "Суточно.ру"
+    asn: []
+    domains:
+      - sutochno.ru
+
+  - name: "Московский метрополитен"
+    asn: []
+    domains:
+      - mosmetro.ru
+      - wi-fi.ru
+
+  - name: "Тройка"
+    asn: []
+    domains:
+      - transport.mos.ru
+      - troika.mos.ru
+
+  # ============================================================
+  # НЕДВИЖИМОСТЬ
+  # ============================================================
+  - name: "ЦИАН"
+    asn: []
+    domains:
+      - cian.ru
+      - api.cian.ru
+
+  - name: "Домклик (Сбер)"
+    asn: []
+    domains:
+      - domclick.ru
+      - api.domclick.ru
+
+  - name: "Авито Недвижимость"
+    asn: []
+    domains:
+      - avito.ru
+
+  - name: "ДомРФ"
+    asn: []
+    domains:
+      - domrf.ru
+
+  # ============================================================
+  # РАБОТА / HR
+  # ============================================================
+  - name: "HeadHunter"
+    asn:
+      - 211398
+    domains:
+      - hh.ru
+      - api.hh.ru
+      - headhunter.ru
+
+  - name: "SuperJob"
+    asn: []
+    domains:
+      - superjob.ru
+
+  - name: "Работа.ру"
+    asn: []
+    domains:
+      - rabota.ru
+
+  - name: "Хабр"
+    asn: []
+    domains:
+      - habr.com
+      - career.habr.com
+
+  # ============================================================
+  # АВТО
+  # ============================================================
+  - name: "Авто.ру (Яндекс)"
+    asn: []
+    domains:
+      - auto.ru
+      - api.auto.ru
+
+  - name: "Drom.ru"
+    asn: []
+    domains:
+      - drom.ru
+      - auto.drom.ru
+
+  - name: "Автотека"
+    asn: []
+    domains:
+      - autoteka.ru
+
+  # ============================================================
+  # КАРТЫ / НАВИГАЦИЯ / ГЕО
+  # ============================================================
+  - name: "2ГИС"
+    asn:
+      - 196695
+    domains:
+      - 2gis.ru
+      - api.2gis.ru
+      - tile.2gis.com
+
+  - name: "Яндекс.Карты"
+    asn: []
+    domains:
+      - maps.yandex.ru
+      - core-renderer-tiles.maps.yandex.net
+
+  # ============================================================
+  # ОБРАЗОВАНИЕ
+  # ============================================================
+  - name: "Яндекс Практикум"
+    asn: []
+    domains:
+      - practicum.yandex.ru
+
+  - name: "Skillbox"
+    asn: []
+    domains:
+      - skillbox.ru
+
+  - name: "GeekBrains"
+    asn: []
+    domains:
+      - geekbrains.ru
+      - gb.ru
+
+  - name: "Нетология"
+    asn: []
+    domains:
+      - netology.ru
+
+  - name: "Skyeng"
+    asn: []
+    domains:
+      - skyeng.ru
+      - student.skyeng.ru
+
+  # ============================================================
+  # МЕДИЦИНА / ЗДОРОВЬЕ
+  # ============================================================
+  - name: "ДокторНаРаботе / СберЗдоровье"
+    asn: []
+    domains:
+      - sberhealth.ru
+      - doctoronline.ru
+
+  - name: "Аптека.ру"
+    asn: []
+    domains:
+      - apteka.ru
+
+  - name: "Еаптека"
+    asn: []
+    domains:
+      - eapteka.ru
+
+  # ============================================================
+  # МЕССЕНДЖЕРЫ / СОЦСЕТИ
+  # ============================================================
+  - name: "Дзен"
+    asn: []
+    domains:
+      - dzen.ru
+      - zen.yandex.ru
+
+  - name: "TenChat"
+    asn: []
+    domains:
+      - tenchat.ru
+
+  # ============================================================
+  # ИГРЫ
+  # ============================================================
+  - name: "VK Play"
+    asn: []
+    domains:
+      - vkplay.ru
+      - api.vkplay.ru
+
+  - name: "MY.GAMES"
+    asn: []
+    domains:
+      - my.games
+      - api.my.games
+
+  # ============================================================
+  # ОБЛАКА / ХОСТИНГ
+  # ============================================================
+  - name: "Яндекс.Облако"
+    asn: []
+    domains:
+      - cloud.yandex.ru
+      - yandexcloud.net
+      - storage.yandexcloud.net
+
+  - name: "VK Cloud"
+    asn: []
+    domains:
+      - cloud.vk.com
+      - mcs.mail.ru
+
+  - name: "Selectel"
+    asn: []
+    domains:
+      - selectel.ru
+
+  - name: "REG.RU"
+    asn: []
+    domains:
+      - reg.ru
+
+  # ============================================================
+  # ФИНТЕХ / ИНВЕСТИЦИИ
+  # ============================================================
+  - name: "Тинькофф Инвестиции"
+    asn: []
+    domains:
+      - tinkoff.ru
+      - invest-gw.tinkoff.ru
+
+  - name: "СберИнвестиции"
+    asn: []
+    domains:
+      - sberinvestor.ru
+
+  - name: "ВТБ Мои Инвестиции"
+    asn: []
+    domains:
+      - broker.vtb.ru
+
+  - name: "Мосбиржа"
+    asn: []
+    domains:
+      - moex.com
+
+  # ============================================================
+  # ДРУГОЕ
+  # ============================================================
+  - name: "Wildberries Банк"
+    asn: []
+    domains:
+      - wb-bank.ru
+
+  - name: "Литрес"
+    asn: []
+    domains:
+      - litres.ru
+
+  - name: "1С"
+    asn: []
+    domains:
+      - 1c.ru
+      - 1c-bitrix.ru
+
+  - name: "Битрикс24"
+    asn: []
+    domains:
+      - bitrix24.ru
+      - b24.io
+
+  - name: "AmoCRM"
+    asn: []
+    domains:
+      - amocrm.ru
+      - amocrm.com
+
+  - name: "Контур"
+    asn: []
+    domains:
+      - kontur.ru
+      - extern.kontur.ru
+      - elba.kontur.ru
+
+  - name: "Kaspersky"
+    asn:
+      - 200187
+    domains:
+      - kaspersky.ru
+      - kaspersky.com
+
+  - name: "Dr.Web"
+    asn: []
+    domains:
+      - drweb.ru
+      - drweb.com
+
+  - name: "Ozon Банк"
+    asn: []
+    domains:
+      - ozonbank.ru
+
+  - name: "Юла"
+    asn: []
+    domains:
+      - youla.ru
+
+  - name: "Яндекс.Доставка"
+    asn: []
+    domains:
+      - dostavka.yandex.ru
