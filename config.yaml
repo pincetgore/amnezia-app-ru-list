@@ -30,11 +30,9 @@ services:
       - translate.yandex.ru
       - afisha.yandex.ru
       - alice.yandex.ru
-      - practicum.yandex.ru
       - metrika.yandex.ru
       - mc.yandex.ru
       - passport.yandex.ru
-      - yandexcloud.net
 
   - name: "ВКонтакте"
     asn:
