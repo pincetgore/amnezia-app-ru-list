@@ -288,6 +288,16 @@ services:
       - nspk.ru
       - sbp.nspk.ru
 
+  - name: "Wildberries Банк"
+    asn: []
+    domains:
+      - wb-bank.ru
+
+  - name: "Ozon Банк"
+    asn: []
+    domains:
+      - ozonbank.ru
+
   # ============================================================
   # ТЕЛЕКОМ
   # ============================================================
@@ -645,13 +655,6 @@ services:
       - pochta.ru
       - tracking.pochta.ru
 
-  - name: "ЕМИАС"
-    asn:
-      - 209030
-    domains:
-      - emias.info
-      - emias.ru
-
   # ============================================================
   # ТРАНСПОРТ / ПУТЕШЕСТВИЯ
   # ============================================================
@@ -807,6 +810,7 @@ services:
       - 2gis.com
       - api.2gis.ru
       - tile.2gis.com
+      - 2gis.tech
 
   - name: "Яндекс.Карты"
     asn: []
@@ -862,6 +866,18 @@ services:
     asn: []
     domains:
       - eapteka.ru
+
+  - name: "Аптеки Столички"
+    asn: []
+    domains:
+      - stolichki.ru
+
+  - name: "ЕМИАС"
+    asn:
+      - 209030
+    domains:
+      - emias.info
+      - emias.ru
 
   # ============================================================
   # МЕССЕНДЖЕРЫ / СОЦСЕТИ
@@ -944,11 +960,6 @@ services:
   # ============================================================
   # ДРУГОЕ
   # ============================================================
-  - name: "Wildberries Банк"
-    asn: []
-    domains:
-      - wb-bank.ru
-
   - name: "Литрес"
     asn: []
     domains:
@@ -991,11 +1002,6 @@ services:
     domains:
       - drweb.ru
       - drweb.com
-
-  - name: "Ozon Банк"
-    asn: []
-    domains:
-      - ozonbank.ru
 
   - name: "Юла"
     asn: []
