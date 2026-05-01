@@ -60,7 +60,7 @@
 ### Вариант 2: Сгенерировать самостоятельно
 
 ```bash
-git clone [https://github.com/pincetgore/amnezia-app-ru-list.git]
+git clone https://github.com/pincetgore/amnezia-app-ru-list.git
 cd amnezia-app-ru-list
 pip install -r requirements.txt
 python main.py
