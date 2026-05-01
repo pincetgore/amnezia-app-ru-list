@@ -67,7 +67,7 @@ jobs:
           body: |
             Автоматически сгенерированный список IP-адресов и доменов российских сервисов.
             
-            📅 **Дата генерации:** ${{ env.CURRENT_DATE }}
+            📅 **Дата генерации:** ${{ env.CURRENT_DATETIME }}
             🏷 **Тип запуска:** ${{ env.RELEASE_LABEL }}
 
             - `ip-list-${{ env.CURRENT_DATETIME }}.json` — для импорта в AmneziaVPN.
