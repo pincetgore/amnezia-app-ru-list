@@ -30,24 +30,18 @@ def format_amnezia(service_results: list[dict]) -> tuple[list, list]:
     """Build AmneziaVPN JSON structure from per-service results.
 
     Output layout:
-      1. Domain entries (readable names shown in AmneziaVPN UI)
-      2. Aggregated CIDR entries (actual routing rules)
+      1. Aggregated CIDR entries (actual routing rules)
 
     Returns (entries_list, aggregated_networks) tuple.
     """
     entries = []
-    seen_domains = set()
     all_networks = []
 
-    # Collect unique domains from all services (displayed as labels in the app)
+    # Collect networks from all services
     for svc in service_results:
-        for domain in svc.get("domains", []):
-            if domain not in seen_domains:
-                entries.append({"hostname": domain, "ip": ""})
-                seen_domains.add(domain)
         all_networks.extend(svc.get("networks", []))
 
-    # Aggregate all CIDR ranges across services and append after domains
+    # Aggregate all CIDR ranges across services
     aggregated = aggregate_networks(all_networks)
     sorted_nets = sorted(aggregated, key=lambda n: (n.network_address, n.prefixlen))
 

@@ -118,9 +118,7 @@ def main():
     print(f"  Services processed: {len(stats)}")
     print(f"  Total raw prefixes: {sum(c for _, c in stats)}")
     print(f"  After aggregation:  {len(aggregated)}")
-    total_domains = sum(len(s["domains"]) for s in service_results)
-    print(f"  Domain entries:     {total_domains}")
-    print(f"  Total entries:      {len(aggregated) + total_domains}")
+    print(f"  Total entries:      {len(aggregated)}")
     if errors:
         print(f"  Errors:             {errors}")
     if all_dns_warnings:
