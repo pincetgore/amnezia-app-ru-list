@@ -338,7 +338,13 @@ services:
   # ============================================================
   - name: "Wildberries"
     asn:
-      - 210639
+      - 49053
+      - 57073
+      - 201512
+      - 201513
+      - 211517
+      - 213105
+      - 215070
     domains:
       - wildberries.ru
       - wb.ru
@@ -346,7 +352,8 @@ services:
       - wbx-auth.wildberries.ru
 
   - name: "Ozon"
-    asn: []
+    asn:
+      - 207986
     domains:
       - ozon.ru
       - ozonbank.ru
@@ -360,7 +367,7 @@ services:
 
   - name: "Авито"
     asn:
-      - 200467
+      - 201012
     domains:
       - avito.ru
       - avito.st
@@ -373,7 +380,9 @@ services:
       - beru.ru
 
   - name: "KazanExpress / Магнит Маркет"
-    asn: []
+    asn:
+      - 57319
+      - 60691
     domains:
       - kazanexpress.ru
       - magnit.market
@@ -386,7 +395,8 @@ services:
       - megamarket.ru
 
   - name: "Lamoda"
-    asn: []
+    asn:
+      - 57906
     domains:
       - lamoda.ru
       - lamoda.co
