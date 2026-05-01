@@ -513,8 +513,9 @@ services:
       - lenta.com
       - online.lenta.com
 
-  - name: "Метро"
-    asn: []
+  - name: "Metro Cash and Carry"
+    asn:
+      - 210756
     domains:
       - metro-cc.ru
       - online.metro-cc.ru
