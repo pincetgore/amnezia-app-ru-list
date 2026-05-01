@@ -606,8 +606,7 @@ services:
   # ГОСУДАРСТВЕННЫЕ СЕРВИСЫ
   # ============================================================
   - name: "Госуслуги"
-    asn:
-      - 48498
+    asn: []
     domains:
       - gosuslugi.ru
       - esia.gosuslugi.ru
@@ -635,8 +634,7 @@ services:
       - finmarket.ru
 
   - name: "Почта России"
-    asn:
-      - 29124
+    asn: []
     domains:
       - pochta.ru
       - tracking.pochta.ru
