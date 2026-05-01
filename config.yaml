@@ -1005,11 +1005,6 @@ services:
       - drweb.ru
       - drweb.com
 
-  - name: "Юла"
-    asn: []
-    domains:
-      - youla.ru
-
   - name: "Профи.ру"
     asn:
       - 60580
