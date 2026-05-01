@@ -36,8 +36,11 @@ services:
 
   - name: "ВКонтакте"
     asn:
+      - 28709
       - 47541
-      - 44715
+      - 47542
+      - 62243
+      - 207581
     domains:
       - cdn-vk.ru
       - mradx.net
