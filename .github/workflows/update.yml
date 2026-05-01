@@ -33,11 +33,16 @@ jobs:
         run: |
           pytest
 
-      - name: Get current date
+      - name: Get current date and trigger type
         id: date
         run: |
           echo "CURRENT_DATE=$(date +'%d.%m.%Y')" >> $GITHUB_ENV
           echo "CURRENT_DATETIME=$(date +'%Y-%m-%d_%H-%M')" >> $GITHUB_ENV
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "RELEASE_LABEL=manual" >> $GITHUB_ENV
+          else
+            echo "RELEASE_LABEL=auto" >> $GITHUB_ENV
+          fi
 
       - name: Generate artifacts
         run: |
@@ -58,11 +63,12 @@ jobs:
             ip-list-*.json
             cidrs.txt
           tag_name: latest
-          name: "Актуальный список IP-адресов (${{ env.CURRENT_DATE }})"
+          name: "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]"
           body: |
             Автоматически сгенерированный список IP-адресов и доменов российских сервисов.
             
             📅 **Дата генерации:** ${{ env.CURRENT_DATE }}
+            🏷 **Тип запуска:** ${{ env.RELEASE_LABEL }}
 
             - `ip-list-${{ env.CURRENT_DATETIME }}.json` — для импорта в AmneziaVPN.
             - `cidrs.txt` — простой список CIDR-диапазонов.
