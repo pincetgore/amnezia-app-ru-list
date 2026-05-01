@@ -483,7 +483,10 @@ services:
   # РИТЕЙЛ / ПРОДУКТЫ
   # ============================================================
   - name: "Пятёрочка / X5 Group"
-    asn: []
+    asn:
+      - 198027
+      - 215810
+      - 44704
     domains:
       - 5ka.ru
       - perekrestok.ru
@@ -497,7 +500,9 @@ services:
       - myapelsin.ru
 
   - name: "Магнит"
-    asn: []
+    asn:
+      - 57319
+      - 60691
     domains:
       - magnit.ru
       - dostavka.magnit.ru
@@ -526,7 +531,8 @@ services:
       - svetofor.info
 
   - name: "Дикси"
-    asn: []
+    asn:
+      - 202760
     domains:
       - dixy.ru
 
