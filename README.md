@@ -127,7 +127,7 @@ python main.py -v
 
 ---
 
-## Включённые сервисы (124 записи)
+## Включённые сервисы (125 записей)
 
 ### Технологии / Поисковики / Суперапы
 | Сервис | ASN | Домены |
@@ -136,7 +136,6 @@ python main.py -v
 | ВКонтакте | AS28709, AS47541 и др. | `vk.com`, `vk.ru`, `userapi.com` и др. |
 | Mail.ru + Одноклассники | AS47764 | `mail.ru`, `ok.ru`, `cloud.mail.ru` и др. |
 | Max | -- | `max.ru`, `apptracer.ru`, `mycdn.me` и др. |
-| Aliexpress | AS45102 | `aliexpress.ru` |
 
 ### Банки
 | Сервис | ASN | Домены |
@@ -156,6 +155,8 @@ python main.py -v
 | Банк Россия | AS50640, AS196796 и др. | `abr.ru` |
 | ЮMoney | -- | `yoomoney.ru`, `yookassa.ru` |
 | СБП / НСПК | AS21292, AS41185 и др. | `nspk.ru`, `sbp.nspk.ru` |
+| Wildberries Банк | -- | `wb-bank.ru` |
+| Ozon Банк | -- | `ozonbank.ru` |
 
 ### Телеком
 | Сервис | Домены |
@@ -171,7 +172,7 @@ python main.py -v
 | Сервис | ASN | Домены |
 |--------|-----|--------|
 | Wildberries | AS49053, AS57073 и др. | `wildberries.ru`, `wb.ru` и др. |
-| Ozon | AS207986 | `ozon.ru`, `ozon.app`, `ozone.ru` и др. |
+| Ozon | AS207986, AS44386 | `ozon.ru`, `ozon.app`, `ozone.ru` и др. |
 | Авито | AS201012 | `avito.ru`, `avito.st` |
 | Яндекс.Маркет | -- | `market.yandex.ru`, `pokupki.market.yandex.ru` и др. |
 | KazanExpress / Магнит Маркет | AS57319, AS60691 | `kazanexpress.ru`, `magnit.market` и др. |
@@ -184,6 +185,7 @@ python main.py -v
 | Золотое Яблоко | -- | `goldapple.ru` |
 | Детский мир | -- | `detmir.ru` |
 | Hoff | -- | `hoff.ru` |
+| Aliexpress | AS45102 | `aliexpress.ru` |
 
 ### Еда / Доставка / Такси
 | Сервис | Домены |
@@ -191,7 +193,6 @@ python main.py -v
 | Яндекс Еда / Лавка / Такси | `eda.yandex.ru`, `lavka.yandex.ru`, `taxi.yandex.ru`, `go.yandex.ru` |
 | Самокат | `samokat.ru` |
 | Delivery Club | `delivery-club.ru` |
-| ВкусВилл | `vkusvill.ru`, `online.vkusvill.ru` |
 | СДЭК | `cdek.ru`, `lk.cdek.ru` и др. |
 | Boxberry | `boxberry.ru` |
 
@@ -205,6 +206,7 @@ python main.py -v
 | FixPrice | -- | `fix-price.com`, `fix-price.ru` |
 | Светофор | -- | `svetofor.info` |
 | Дикси | AS202760, AS51115 | `dixy.ru` |
+| ВкусВилл | -- | `vkusvill.ru`, `online.vkusvill.ru` |
 
 ### Стриминг / Видео / Музыка
 | Сервис | ASN | Домены |
@@ -315,7 +317,7 @@ python main.py -v
 |--------|--------|
 | Тинькофф Инвестиции | `invest-gw.tinkoff.ru` |
 | СберИнвестиции | `sberinvestor.ru` |
-| ВТБ Мои Инвестиции | `broker.vtb.ru` |
+| ВТБ Мои Инвестиции | `invest.vtb.ru` |
 | Мосбиржа | `moex.com` |
 
 ### Другое

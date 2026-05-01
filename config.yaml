@@ -48,15 +48,11 @@ services:
       - 62243
       - 207581
     domains:
-      - cdn-vk.ru
-      - mradx.net
       - mvk.com
       - userapi.com
-      - vk-analytics.ru
       - vk-apps.com
       - vk-apps.ru
       - vk-cdn.me
-      - vk-cdn.net
       - vk-portal.net
       - vk.cc
       - vk.com
@@ -109,13 +105,6 @@ services:
       - max.ru
       - apptracer.ru
       - mycdn.me
-      - oneme.ru
-
-  - name: "Aliexpress"
-    asn:
-      - 45102
-    domains:
-      - aliexpress.ru
 
   # ============================================================
   # БАНКИ
@@ -365,13 +354,12 @@ services:
   - name: "Ozon"
     asn:
       - 207986
+      - 44386
     domains:
       - ozon.ru
       - ozon.app
       - ozon.com
       - ozon.dev
-      - ozon.global
-      - ozon.market
       - ozon.travel
       - ozone.ru
 
@@ -449,6 +437,12 @@ services:
     domains:
       - hoff.ru
 
+  - name: "Aliexpress"
+    asn:
+      - 45102
+    domains:
+      - aliexpress.ru
+
   # ============================================================
   # ЕДА / ДОСТАВКА / ТАКСИ
   # ============================================================
@@ -469,12 +463,6 @@ services:
     asn: []
     domains:
       - delivery-club.ru
-
-  - name: "ВкусВилл"
-    asn: []
-    domains:
-      - vkusvill.ru
-      - online.vkusvill.ru
 
   - name: "СДЭК"
     asn: []
@@ -505,8 +493,6 @@ services:
       - x5club.ru
       - x5media.ru
       - x5paket.ru
-      - x5static.net
-      - online.perekrestok.ru
       - myapelsin.ru
 
   - name: "Магнит"
@@ -547,6 +533,12 @@ services:
       - 51115
     domains:
       - dixy.ru
+
+  - name: "ВкусВилл"
+    asn: []
+    domains:
+      - vkusvill.ru
+      - online.vkusvill.ru
 
   # ============================================================
   # СТРИМИНГ / ВИДЕО / МУЗЫКА
@@ -624,7 +616,8 @@ services:
   # ГОСУДАРСТВЕННЫЕ СЕРВИСЫ
   # ============================================================
   - name: "Госуслуги"
-    asn: []
+    asn:
+      - 12389
     domains:
       - gosuslugi.ru
       - esia.gosuslugi.ru
@@ -812,7 +805,6 @@ services:
       - 2gis.com
       - api.2gis.ru
       - tile.2gis.com
-      - 2gis.tech
 
   - name: "Яндекс.Карты"
     asn: []
@@ -952,7 +944,7 @@ services:
   - name: "ВТБ Мои Инвестиции"
     asn: []
     domains:
-      - broker.vtb.ru
+      - invest.vtb.ru
 
   - name: "Мосбиржа"
     asn: []
