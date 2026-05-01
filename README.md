@@ -168,7 +168,7 @@ python main.py -v
 | Сервис | ASN | Домены |
 |--------|-----|--------|
 | Wildberries | AS49053, AS57073 и др. | `wildberries.ru`, `wb.ru` и др. |
-| Ozon | AS207986 | `ozon.ru`, `ozonbank.ru` и др. |
+| Ozon | AS207986 | `ozon.ru`, `ozon.app`, `ozone.ru` и др. |
 | Авито | AS201012 | `avito.ru`, `avito.st` |
 | Яндекс.Маркет | -- | `market.yandex.ru`, `pokupki.market.yandex.ru` и др. |
 | KazanExpress / Магнит Маркет | AS57319, AS60691 | `kazanexpress.ru`, `magnit.market` и др. |
@@ -310,7 +310,7 @@ python main.py -v
 ### Финтех / Инвестиции
 | Сервис | Домены |
 |--------|--------|
-| Тинькофф Инвестиции | `tinkoff.ru`, `invest-gw.tinkoff.ru` |
+| Тинькофф Инвестиции | `invest-gw.tinkoff.ru` |
 | СберИнвестиции | `sberinvestor.ru` |
 | ВТБ Мои Инвестиции | `broker.vtb.ru` |
 | Мосбиржа | `moex.com` |
