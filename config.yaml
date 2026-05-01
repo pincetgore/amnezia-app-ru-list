@@ -112,7 +112,8 @@ services:
       - oneme.ru
 
   - name: "Aliexpress"
-    asn: []
+    asn:
+      - 45102
     domains:
       - aliexpress.ru
 
