@@ -178,7 +178,11 @@ services:
 
   - name: "Альфа-Банк"
     asn:
-      - 28884
+      - 15632
+      - 34838
+      - 35013
+      - 59840
+      - 208811
     domains:
       - alfabank.ru
       - alfadirect.ru
@@ -186,25 +190,37 @@ services:
 
   - name: "Газпромбанк"
     asn:
-      - 56375
+      - 35022
+      - 48033
+      - 51536
+      - 60383
     domains:
       - gazprombank.ru
       - gpb.ru
 
   - name: "Россельхозбанк"
-    asn: []
+    asn:
+      - 41615
     domains:
       - rshb.ru
       - online.rshb.ru
 
   - name: "Промсвязьбанк"
-    asn:
-      - 198504
+    asn: []
     domains:
       - psbank.ru
 
   - name: "Совкомбанк"
-    asn: []
+    asn:
+      - 34155
+      - 34336
+      - 43600
+      - 44165
+      - 49241
+      - 51136
+      - 197258
+      - 199463
+      - 209973
     domains:
       - sovcombank.ru
       - halvacard.ru
@@ -216,13 +232,29 @@ services:
       - online.raiffeisen.ru
 
   - name: "Московский Кредитный Банк"
-    asn: []
+    asn:
+      - 39267
+      - 50464
+      - 202273
     domains:
       - mkb.ru
       - online.mkb.ru
 
   - name: "Открытие"
-    asn: []
+    asn:
+      - 5589
+      - 25296
+      - 28829
+      - 39428
+      - 41258
+      - 41300
+      - 41428
+      - 41673
+      - 42224
+      - 42843
+      - 49288
+      - 60348
+      - 197010
     domains:
       - open.ru
 
@@ -232,7 +264,11 @@ services:
       - rosbank.ru
 
   - name: "Банк Россия"
-    asn: []
+    asn:
+      - 50640
+      - 196796
+      - 210113
+      - 212254
     domains:
       - abr.ru
 
@@ -244,7 +280,11 @@ services:
 
   - name: "СБП / НСПК"
     asn:
-      - 207009
+      - 21292
+      - 41185
+      - 41187
+      - 50339
+      - 60967
     domains:
       - nspk.ru
       - sbp.nspk.ru
