@@ -1,6 +1,6 @@
 # amnezia-app-ru-list
 
-[![Update IP List and Create Release](https://github.com/pincetgore/amnezia-app-ru-list/actions/workflows/update.yml/badge.svg)](https://github.com/pincetgore/amnezia-app-ru-list/actions/workflows/update.yml)
+[![Update IP List and Create Release](https://github.com/pincetgore/amnezia-app-ru-list/actions/workflows/update.yml/badge.svg)](https://github.com/pincetgore/amnezia-app-ru-list/actions/workflows/update.yml) [![License](https://img.shields.io/badge/LICENSE-MIT-F6C25B?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=555555)](#)
 
 ## ⚠️ Юридическая информация
 
