@@ -1,5 +1,7 @@
 # amnezia-app-ru-list
 
+[![Update IP List and Create Release](https://github.com/pincetgore/amnezia-app-ru-list/actions/workflows/update.yml/badge.svg)](https://github.com/pincetgore/amnezia-app-ru-list/actions/workflows/update.yml)
+
 ## ⚠️ Юридическая информация
 
 > **Этот проект создан исключительно в ознакомительных и исследовательских целях.**
