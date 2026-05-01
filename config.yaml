@@ -123,6 +123,10 @@ services:
   - name: "Тинькофф / Т-Банк"
     asn:
       - 205638
+      - 12686
+      - 28712
+      - 34147
+      - 43399
     domains:
       - tbank.ru
       - tinkoff.ru
