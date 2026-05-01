@@ -86,6 +86,16 @@ services:
   - name: "Mail.ru + Одноклассники"
     asn:
       - 47764
+      - 49797
+      - 49988
+      - 51286
+      - 57973
+      - 60863
+      - 61119
+      - 199295
+      - 207970
+      - 211963
+      - 213235
     domains:
       - my.mail.ru
       - cloud.mail.ru
@@ -132,7 +142,7 @@ services:
       - sbermarket.ru
       - spasibosberbank.ru
 
-  - name: "Тинькофф / Т-Банк"
+  - name: "Т-Банк"
     asn:
       - 205638
       - 12686
@@ -263,7 +273,8 @@ services:
       - abr.ru
 
   - name: "ЮMoney"
-    asn: []
+    asn:
+      - 43247
     domains:
       - yoomoney.ru
       - yookassa.ru
@@ -522,11 +533,6 @@ services:
       - fix-price.com
       - fix-price.ru
 
-  - name: "Светофор"
-    asn: []
-    domains:
-      - svetofor.info
-
   - name: "Дикси"
     asn:
       - 202760
@@ -632,7 +638,8 @@ services:
       - lkip2.nalog.ru
 
   - name: "Мос.ру"
-    asn: []
+    asn:
+      - 8901
     domains:
       - mos.ru
       - my.mos.ru
@@ -862,7 +869,8 @@ services:
       - eapteka.ru
 
   - name: "Аптеки Столички"
-    asn: []
+    asn:
+      - 201706
     domains:
       - stolichki.ru
 
@@ -931,7 +939,7 @@ services:
   # ============================================================
   # ФИНТЕХ / ИНВЕСТИЦИИ
   # ============================================================
-  - name: "Тинькофф Инвестиции"
+  - name: "Т-Инвестиции"
     asn: []
     domains:
       - invest-gw.tinkoff.ru
