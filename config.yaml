@@ -534,6 +534,7 @@ services:
   - name: "Дикси"
     asn:
       - 202760
+      - 51115
     domains:
       - dixy.ru
 
