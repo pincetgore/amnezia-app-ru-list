@@ -542,7 +542,7 @@ services:
 
   - name: "Rutube"
     asn:
-      - 49676
+      - 207353
     domains:
       - rutube.ru
       - static.rutube.ru
