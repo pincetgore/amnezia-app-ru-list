@@ -35,11 +35,13 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "CURRENT_DATE=$(date +'%d.%m.%Y')" >> $GITHUB_ENV
+        run: |
+          echo "CURRENT_DATE=$(date +'%d.%m.%Y')" >> $GITHUB_ENV
+          echo "CURRENT_DATETIME=$(date +'%Y-%m-%d_%H-%M')" >> $GITHUB_ENV
 
       - name: Generate artifacts
         run: |
-          python main.py -o ip-list.json -f amnezia
+          python main.py -o ip-list-${{ env.CURRENT_DATETIME }}.json -f amnezia
           python main.py -o cidrs.txt -f plain
 
       - name: Delete old release and tag
@@ -53,7 +55,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           files: |
-            ip-list.json
+            ip-list-*.json
             cidrs.txt
           tag_name: latest
           name: "Актуальный список IP-адресов (${{ env.CURRENT_DATE }})"
@@ -62,5 +64,5 @@ jobs:
             
             📅 **Дата генерации:** ${{ env.CURRENT_DATE }}
 
-            - `ip-list.json` — для импорта в AmneziaVPN.
+            - `ip-list-${{ env.CURRENT_DATETIME }}.json` — для импорта в AmneziaVPN.
             - `cidrs.txt` — простой список CIDR-диапазонов.
