@@ -1,5 +1,8 @@
 # amnezia-app-ru-list
 
+[![Update](https://img.shields.io/github/actions/workflow/status/pincetgore/amnezia-app-ru-list/update.yml?style=for-the-badge&logo=github&label=UPDATE)](https://github.com/pincetgore/amnezia-app-ru-list/actions/workflows/update.yml)
+[![License](https://img.shields.io/badge/LICENSE-MIT-F6C25B?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=555555)](#)
+
 ## ⚠️ Юридическая информация
 
 > **Этот проект создан исключительно в ознакомительных и исследовательских целях.**
@@ -60,7 +63,7 @@
 ### Вариант 2: Сгенерировать самостоятельно
 
 ```bash
-git clone [https://github.com/pincetgore/amnezia-app-ru-list.git]
+git clone https://github.com/pincetgore/amnezia-app-ru-list.git
 cd amnezia-app-ru-list
 pip install -r requirements.txt
 python main.py
@@ -393,9 +396,3 @@ GitHub Actions workflow запускается **каждый понедельн
 ## Почему без ASN для телекомов?
 
 МТС (AS8359), МегаФон (AS31133), Билайн (AS3216), Ростелеком (AS12389) — это интернет-провайдеры с сотнями/тысячами IP-префиксов. Включение их полных ASN-диапазонов перегружает маршрутную таблицу Android (появляется восклицательный знак на иконке VPN) и может вызвать сбои. Для работы личных кабинетов операторов достаточно DNS-резолвинга их доменов.
-
----
-
-## Лицензия
-
-MIT
