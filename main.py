@@ -9,6 +9,7 @@ an aggregated ip-list.json compatible with AmneziaVPN split tunneling.
 
 import argparse
 import logging
+import sys
 
 import yaml
 from tqdm import tqdm

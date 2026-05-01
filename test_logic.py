@@ -46,3 +46,6 @@ def test_domains_format():
     for entry in services:
         for domain in entry.get("domains", []):
             assert not domain.startswith("http"), f"Домен не должен содержать протокол: {domain}"
+            assert not domain.endswith("/"), f"Домен не должен заканчиваться на слеш: {domain}"
+            assert " " not in domain, f"Домен не должен содержать пробелы: '{domain}'"
+            assert not domain.startswith("*"), f"Wildcard-домены (*.domain) не поддерживаются: {domain}"
