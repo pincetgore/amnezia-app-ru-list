@@ -30,7 +30,6 @@ services:
       - taxi.yandex.ru
       - go.yandex.ru
       - zen.yandex.ru
-      - dzen.ru
       - maps.yandex.ru
       - weather.yandex.ru
       - translate.yandex.ru
@@ -98,7 +97,6 @@ services:
       - e.mail.ru
       - biz.mail.ru
       - imgsmail.ru
-      - dzen.ru
       - mail.ru
       - ok.ru
       - okcdn.ru
@@ -357,7 +355,6 @@ services:
       - 207986
     domains:
       - ozon.ru
-      - ozonbank.ru
       - ozon.app
       - ozon.com
       - ozon.dev
@@ -920,7 +917,6 @@ services:
   - name: "Тинькофф Инвестиции"
     asn: []
     domains:
-      - tinkoff.ru
       - invest-gw.tinkoff.ru
 
   - name: "СберИнвестиции"
