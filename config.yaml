@@ -1012,3 +1012,9 @@ services:
     asn: []
     domains:
       - dostavka.yandex.ru
+
+  - name: "Профи.ру"
+    asn:
+      - 60580
+    domains:
+      - profi.ru
