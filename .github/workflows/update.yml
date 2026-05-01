@@ -47,7 +47,7 @@ jobs:
       - name: Generate artifacts
         run: |
           python main.py -o ip-list-${{ env.CURRENT_DATETIME }}.json -f amnezia
-          python main.py -o cidrs.txt -f plain
+          python main.py -o cidrs-${{ env.CURRENT_DATETIME }}.txt -f plain
 
       - name: Delete old release and tag
         run: |
@@ -61,7 +61,7 @@ jobs:
         with:
           files: |
             ip-list-*.json
-            cidrs.txt
+            cidrs-*.txt
           tag_name: latest
           name: "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]"
           body: |
@@ -71,4 +71,4 @@ jobs:
             🏷 **Тип запуска:** ${{ env.RELEASE_LABEL }}
 
             - `ip-list-${{ env.CURRENT_DATETIME }}.json` — для импорта в AmneziaVPN.
-            - `cidrs.txt` — простой список CIDR-диапазонов.
+            - `cidrs-${{ env.CURRENT_DATETIME }}.txt` — простой список CIDR-диапазонов.
