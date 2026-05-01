@@ -125,34 +125,35 @@ python main.py -v
 
 ---
 
-## Включённые сервисы (123 записи)
+## Включённые сервисы (124 записи)
 
 ### Технологии / Поисковики / Суперапы
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Яндекс | AS13238, AS202611, AS208722 | `yandex.ru`, `ya.ru`, `dzen.ru` и др. |
-| ВКонтакте | AS47541, AS44715 | `vk.com`, `vk.ru`, `userapi.com` и др. |
+| Яндекс | AS13238, AS44534 и др. | `yandex.ru`, `yandex.net`, `ya.ru` и др. |
+| ВКонтакте | AS28709, AS47541 и др. | `vk.com`, `vk.ru`, `userapi.com` и др. |
 | Mail.ru + Одноклассники | AS47764 | `mail.ru`, `ok.ru`, `cloud.mail.ru` и др. |
 | Max | -- | `max.ru`, `apptracer.ru`, `mycdn.me` и др. |
+| Aliexpress | -- | `aliexpress.ru` |
 
 ### Банки
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Сбербанк | AS44693 | `sberbank.ru`, `online.sberbank.ru`, `sber.ru` и др. |
-| Тинькофф / Т-Банк | AS205638 | `tbank.ru`, `tinkoff.ru` и др. |
-| ВТБ | AS12722 | `vtb.ru`, `online.vtb.ru` |
-| Альфа-Банк | AS28884 | `alfabank.ru`, `alfadirect.ru`, `alfa.me` |
-| Газпромбанк | AS56375 | `gazprombank.ru`, `gpb.ru` |
-| Россельхозбанк | -- | `rshb.ru`, `online.rshb.ru` |
-| Промсвязьбанк | AS198504 | `psbank.ru` |
-| Совкомбанк | -- | `sovcombank.ru`, `halvacard.ru` |
+| Сбербанк | AS33844, AS35237 и др. | `sberbank.ru`, `online.sberbank.ru`, `sber.ru` и др. |
+| Тинькофф / Т-Банк | AS12686, AS28712 и др. | `tbank.ru`, `tinkoff.ru` и др. |
+| ВТБ | AS24823, AS34662 и др. | `vtb.ru`, `online.vtb.ru` |
+| Альфа-Банк | AS15632, AS34838 и др. | `alfabank.ru`, `alfadirect.ru`, `alfa.me` |
+| Газпромбанк | AS35022, AS48033 и др. | `gazprombank.ru`, `gpb.ru` |
+| Россельхозбанк | AS41615 | `rshb.ru`, `online.rshb.ru` |
+| Промсвязьбанк | -- | `psbank.ru` |
+| Совкомбанк | AS34155, AS34336 и др. | `sovcombank.ru`, `halvacard.ru` |
 | Райффайзен Банк | -- | `raiffeisen.ru`, `online.raiffeisen.ru` |
-| Московский Кредитный Банк | -- | `mkb.ru`, `online.mkb.ru` |
-| Открытие | -- | `open.ru` |
+| Московский Кредитный Банк | AS39267, AS50464, AS202273 | `mkb.ru`, `online.mkb.ru` |
+| Открытие | AS5589, AS25296 и др. | `open.ru` |
 | Росбанк | -- | `rosbank.ru` |
-| Банк Россия | -- | `abr.ru` |
+| Банк Россия | AS50640, AS196796 и др. | `abr.ru` |
 | ЮMoney | -- | `yoomoney.ru`, `yookassa.ru` |
-| СБП / НСПК | AS207009 | `nspk.ru`, `sbp.nspk.ru` |
+| СБП / НСПК | AS21292, AS41185 и др. | `nspk.ru`, `sbp.nspk.ru` |
 
 ### Телеком
 | Сервис | Домены |
@@ -167,13 +168,13 @@ python main.py -v
 ### E-commerce / Маркетплейсы
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Wildberries | AS210639 | `wildberries.ru`, `wb.ru` и др. |
-| Ozon | -- | `ozon.ru`, `ozonbank.ru` и др. |
-| Авито | AS200467 | `avito.ru`, `avito.st` |
+| Wildberries | AS49053, AS57073 и др. | `wildberries.ru`, `wb.ru` и др. |
+| Ozon | AS207986 | `ozon.ru`, `ozonbank.ru` и др. |
+| Авито | AS201012 | `avito.ru`, `avito.st` |
 | Яндекс.Маркет | -- | `market.yandex.ru`, `pokupki.market.yandex.ru` и др. |
-| KazanExpress / Магнит Маркет | -- | `kazanexpress.ru`, `magnit.market` и др. |
+| KazanExpress / Магнит Маркет | AS57319, AS60691 | `kazanexpress.ru`, `magnit.market` и др. |
 | СберМегаМаркет | -- | `sbermegamarket.ru`, `megamarket.ru` |
-| Lamoda | -- | `lamoda.ru`, `lamoda.co` |
+| Lamoda | AS57906 | `lamoda.ru`, `lamoda.co` |
 | DNS Shop | -- | `dns-shop.ru`, `dns-shop.net` |
 | М.Видео / Эльдорадо | -- | `mvideo.ru`, `eldorado.ru` |
 | Ситилинк | -- | `citilink.ru` |
@@ -193,21 +194,21 @@ python main.py -v
 | Boxberry | `boxberry.ru` |
 
 ### Ритейл / Продукты
-| Сервис | Домены |
-|--------|--------|
-| Пятёрочка / X5 Group | `5ka.ru`, `perekrestok.ru`, `vprok.ru`, `x5.ru` и др. |
-| Магнит | `magnit.ru`, `dostavka.magnit.ru` |
-| Лента | `lenta.com`, `online.lenta.com` |
-| Метро | `metro-cc.ru`, `online.metro-cc.ru` |
-| FixPrice | `fix-price.com`, `fix-price.ru` |
-| Светофор | `svetofor.info` |
-| Дикси | `dixy.ru` |
+| Сервис | ASN | Домены |
+|--------|-----|--------|
+| Пятёрочка / X5 Group | AS198027, AS215810 и др. | `5ka.ru`, `perekrestok.ru`, `vprok.ru`, `x5.ru` и др. |
+| Магнит | AS57319, AS60691 | `magnit.ru`, `dostavka.magnit.ru` |
+| Лента | -- | `lenta.com`, `online.lenta.com` |
+| Metro Cash and Carry | AS210756 | `metro-cc.ru`, `online.metro-cc.ru` |
+| FixPrice | -- | `fix-price.com`, `fix-price.ru` |
+| Светофор | -- | `svetofor.info` |
+| Дикси | AS202760, AS51115 | `dixy.ru` |
 
 ### Стриминг / Видео / Музыка
 | Сервис | ASN | Домены |
 |--------|-----|--------|
 | Кинопоиск | -- | `kinopoisk.ru`, `hd.kinopoisk.ru`, `api.kinopoisk.ru` |
-| Rutube | AS49676 | `rutube.ru`, `static.rutube.ru` |
+| Rutube | AS207353 | `rutube.ru`, `static.rutube.ru` |
 | IVI | -- | `ivi.ru`, `ivi.tv`, `api.ivi.ru` |
 | Okko | -- | `okko.tv`, `api.okko.tv` |
 | KION (МТС) | -- | `kion.ru`, `api.kion.ru` |
@@ -221,16 +222,16 @@ python main.py -v
 ### Государственные сервисы
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Госуслуги | AS48498 | `gosuslugi.ru`, `esia.gosuslugi.ru` и др. |
+| Госуслуги | -- | `gosuslugi.ru`, `esia.gosuslugi.ru` и др. |
 | ФНС / Налоговая | -- | `nalog.gov.ru`, `lkfl2.nalog.ru`, `lkip2.nalog.ru` |
 | Мос.ру | -- | `mos.ru`, `my.mos.ru`, `uslugi.mos.ru` |
 | ЦБ РФ | -- | `cbr.ru`, `finmarket.ru` |
-| Почта России | AS29124 | `pochta.ru`, `tracking.pochta.ru` |
+| Почта России | -- | `pochta.ru`, `tracking.pochta.ru` |
 
 ### Транспорт / Путешествия
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| РЖД | AS34485 | `rzd.ru`, `ticket.rzd.ru`, `pass.rzd.ru` |
+| РЖД | AS20702, AS28991 | `rzd.ru`, `ticket.rzd.ru`, `pass.rzd.ru` |
 | Аэрофлот | -- | `aeroflot.ru`, `api.aeroflot.ru`, `booking.aeroflot.ru` |
 | S7 Airlines | -- | `s7.ru`, `s7airlines.com` |
 | Победа | -- | `pobeda.aero`, `booking.pobeda.aero` |
@@ -253,7 +254,7 @@ python main.py -v
 ### Работа / HR
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| HeadHunter | AS211398 | `hh.ru`, `api.hh.ru`, `headhunter.ru` |
+| HeadHunter | AS47724, AS59601 | `hh.ru`, `api.hh.ru`, `headhunter.ru` |
 | SuperJob | -- | `superjob.ru` |
 | Работа.ру | -- | `rabota.ru` |
 | Хабр | -- | `habr.com`, `career.habr.com` |
@@ -268,7 +269,7 @@ python main.py -v
 ### Карты / Навигация / Гео
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| 2ГИС | AS196695 | `2gis.ru`, `api.2gis.ru`, `tile.2gis.com` и др. |
+| 2ГИС | AS197482 | `2gis.ru`, `api.2gis.ru`, `tile.2gis.com` и др. |
 | Яндекс.Карты | -- | `maps.yandex.ru`, `core-renderer-tiles.maps.yandex.net` |
 
 ### Образование
