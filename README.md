@@ -321,7 +321,6 @@ python main.py -v
 ### Другое
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Wildberries Банк | -- | `wb-bank.ru` |
 | Литрес | -- | `litres.ru` |
 | 1С | -- | `1c.ru`, `1c-bitrix.ru` |
 | Битрикс24 | -- | `bitrix24.ru`, `b24.io` |
@@ -329,9 +328,7 @@ python main.py -v
 | Контур | -- | `kontur.ru`, `extern.kontur.ru`, `elba.kontur.ru` |
 | Kaspersky | AS200187 | `kaspersky.ru`, `kaspersky.com` |
 | Dr.Web | -- | `drweb.ru`, `drweb.com` |
-| Ozon Банк | -- | `ozonbank.ru` |
-| Юла | -- | `youla.ru` |
-| Яндекс.Доставка | -- | `dostavka.yandex.ru` |
+| Профи.ру | AS60580 | `profi.ru` |
 
 ---
 
