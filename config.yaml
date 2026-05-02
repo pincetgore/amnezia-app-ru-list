@@ -458,6 +458,8 @@ services:
     asn: []
     domains:
       - myspar.ru
+      - api.myspar.ru
+      - app.myspar.ru
 
   # ============================================================
   # ЕДА / ДОСТАВКА / ТАКСИ
@@ -555,6 +557,8 @@ services:
     asn: []
     domains:
       - rendez-vous.ru
+      - api.rendez-vous.ru
+      - mobile.rendez-vous.ru
 
   # ============================================================
   # СТРИМИНГ / ВИДЕО / МУЗЫКА
@@ -895,11 +899,15 @@ services:
     asn: []
     domains:
       - invitro.ru
+      - api.invitro.ru
+      - lk.invitro.ru
 
   - name: "Медси"
     asn: []
     domains:
-      - medsi.ru
+      - api.medsi.ru
+      - app.medsi.ru
+      - smartmed.pro
 
   # ============================================================
   # МЕССЕНДЖЕРЫ / СОЦСЕТИ
@@ -1035,8 +1043,12 @@ services:
     asn: []
     domains:
       - onepricecoffee.com
+      - api.onepricecoffee.com
+      - app.onepricecoffee.com
 
   - name: "Best Benefits"
     asn: []
     domains:
       - bestbenefits.ru
+      - api.bestbenefits.ru
+      - app.bestbenefits.ru
