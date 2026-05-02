@@ -147,13 +147,13 @@ python main.py -v
 | Газпромбанк | AS35022, AS48033 и др. | `gazprombank.ru`, `gpb.ru` |
 | Россельхозбанк | AS41615 | `rshb.ru`, `online.rshb.ru` |
 | Промсвязьбанк | -- | `psbank.ru` |
-| Совкомбанк | AS34155, AS34336 и др. | `sovcombank.ru`, `halvacard.ru` |
+| Совкомбанк | AS51136, AS197258 и др. | `sovcombank.ru`, `halvacard.ru` |
 | Райффайзен Банк | -- | `raiffeisen.ru`, `online.raiffeisen.ru` |
 | Московский Кредитный Банк | AS39267, AS50464, AS202273 | `mkb.ru`, `online.mkb.ru` |
-| Открытие | AS5589, AS25296 и др. | `open.ru` |
+| Открытие | AS5589 | `open.ru` |
 | Росбанк | -- | `rosbank.ru` |
 | Банк Россия | AS50640, AS196796 и др. | `abr.ru` |
-| ЮMoney | -- | `yoomoney.ru`, `yookassa.ru` |
+| ЮMoney | AS43247 | `yoomoney.ru`, `yookassa.ru` |
 | СБП / НСПК | AS21292, AS41185 и др. | `nspk.ru`, `sbp.nspk.ru` |
 | Wildberries Банк | -- | `wb-bank.ru` |
 | Ozon Банк | -- | `ozonbank.ru` |
@@ -186,7 +186,7 @@ python main.py -v
 | Детский мир | -- | `detmir.ru` |
 | Hoff | -- | `hoff.ru` |
 | Aliexpress | AS45102 | `aliexpress.ru` |
-| SPAR | -- | `myspar.ru` |
+| SPAR | -- | `myspar.ru`, `api.myspar.ru` и др. |
 
 ### Еда / Доставка / Такси
 | Сервис | Домены |
@@ -227,9 +227,9 @@ python main.py -v
 ### Государственные сервисы
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Госуслуги | -- | `gosuslugi.ru`, `esia.gosuslugi.ru` и др. |
+| Госуслуги | AS12389 | `gosuslugi.ru`, `esia.gosuslugi.ru` и др. |
 | ФНС / Налоговая | -- | `nalog.gov.ru`, `lkfl2.nalog.ru`, `lkip2.nalog.ru` |
-| Мос.ру | -- | `mos.ru`, `my.mos.ru`, `uslugi.mos.ru` |
+| Мос.ру | AS8901 | `mos.ru`, `my.mos.ru`, `uslugi.mos.ru` |
 | ЦБ РФ | -- | `cbr.ru`, `finmarket.ru` |
 | Почта России | -- | `pochta.ru`, `tracking.pochta.ru` |
 
@@ -294,8 +294,8 @@ python main.py -v
 | Еаптека | -- | `eapteka.ru` |
 | Аптеки Столички | AS201706 | `stolichki.ru` |
 | ЕМИАС | AS209030 | `emias.info`, `emias.ru` |
-| Invitro | -- | `invitro.ru` |
-| Медси | -- | `medsi.ru` |
+| Invitro | -- | `invitro.ru`, `api.invitro.ru` и др. |
+| Медси | -- | `api.medsi.ru`, `app.medsi.ru` и др. |
 
 ### Мессенджеры / Соцсети
 | Сервис | Домены |
@@ -336,8 +336,8 @@ python main.py -v
 | Kaspersky | AS200187 | `kaspersky.ru`, `kaspersky.com` |
 | Dr.Web | -- | `drweb.ru`, `drweb.com` |
 | Профи.ру | AS60580 | `profi.ru` |
-| One Price Coffee | -- | `onepricecoffee.com` |
-| Best Benefits | -- | `bestbenefits.ru` |
+| One Price Coffee | -- | `onepricecoffee.com`, `premiumbonus.ru` и др. |
+| Best Benefits | -- | `bestbenefits.ru`, `api.bestbenefits.ru` и др. |
 
 ---
 
