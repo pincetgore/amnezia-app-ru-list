@@ -127,7 +127,7 @@ python main.py -v
 
 ---
 
-## Включённые сервисы (125 записей)
+## Включённые сервисы (130 записей)
 
 ### Технологии / Поисковики / Суперапы
 | Сервис | ASN | Домены |
@@ -141,7 +141,7 @@ python main.py -v
 | Сервис | ASN | Домены |
 |--------|-----|--------|
 | Сбербанк | AS33844, AS35237 и др. | `sberbank.ru`, `online.sberbank.ru`, `sber.ru` и др. |
-| Тинькофф / Т-Банк | AS205638, AS12686 и др. | `tbank.ru`, `tinkoff.ru` и др. |
+| Т-Банк | AS205638, AS12686 и др. | `tbank.ru`, `tinkoff.ru` и др. |
 | ВТБ | AS24823, AS34662 и др. | `vtb.ru`, `online.vtb.ru` |
 | Альфа-Банк | AS15632, AS34838 и др. | `alfabank.ru`, `alfadirect.ru`, `alfa.me` |
 | Газпромбанк | AS35022, AS48033 и др. | `gazprombank.ru`, `gpb.ru` |
@@ -186,6 +186,7 @@ python main.py -v
 | Детский мир | -- | `detmir.ru` |
 | Hoff | -- | `hoff.ru` |
 | Aliexpress | AS45102 | `aliexpress.ru` |
+| SPAR | -- | `myspar.ru` |
 
 ### Еда / Доставка / Такси
 | Сервис | Домены |
@@ -266,7 +267,7 @@ python main.py -v
 ### Авто
 | Сервис | Домены |
 |--------|--------|
-| Авто.ру (Яндекс) | `auto.ru`, `api.auto.ru` |
+| Авто.ру | `auto.ru`, `api.auto.ru` |
 | Drom.ru | `drom.ru`, `auto.drom.ru` |
 | Автотека | `autoteka.ru` |
 
@@ -286,11 +287,15 @@ python main.py -v
 | Skyeng | `skyeng.ru`, `student.skyeng.ru` |
 
 ### Медицина / Здоровье
-| Сервис | Домены |
-|--------|--------|
-| ДокторНаРаботе / СберЗдоровье | `sberhealth.ru`, `doctoronline.ru` |
-| Аптека.ру | `apteka.ru` |
-| Еаптека | `eapteka.ru` |
+| Сервис | ASN | Домены |
+|--------|-----|--------|
+| ДокторНаРаботе / СберЗдоровье | -- | `sberhealth.ru`, `doctoronline.ru` |
+| Аптека.ру | -- | `apteka.ru` |
+| Еаптека | -- | `eapteka.ru` |
+| Аптеки Столички | AS201706 | `stolichki.ru` |
+| ЕМИАС | AS209030 | `emias.info`, `emias.ru` |
+| Invitro | -- | `invitro.ru` |
+| Медси | -- | `medsi.ru` |
 
 ### Мессенджеры / Соцсети
 | Сервис | Домены |
@@ -315,7 +320,7 @@ python main.py -v
 ### Финтех / Инвестиции
 | Сервис | Домены |
 |--------|--------|
-| Тинькофф Инвестиции | `invest-gw.tinkoff.ru` |
+| Т-Инвестиции | `invest-gw.tinkoff.ru` |
 | СберИнвестиции | `sberinvestor.ru` |
 | ВТБ Мои Инвестиции | `invest.vtb.ru` |
 | Мосбиржа | `moex.com` |
@@ -331,6 +336,8 @@ python main.py -v
 | Kaspersky | AS200187 | `kaspersky.ru`, `kaspersky.com` |
 | Dr.Web | -- | `drweb.ru`, `drweb.com` |
 | Профи.ру | AS60580 | `profi.ru` |
+| One Price Coffee | -- | `onepricecoffee.com` |
+| Best Benefits | -- | `bestbenefits.ru` |
 
 ---
 
