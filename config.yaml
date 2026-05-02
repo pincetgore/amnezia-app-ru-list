@@ -891,6 +891,11 @@ services:
     domains:
       - invitro.ru
 
+  - name: "Медси"
+    asn: []
+    domains:
+      - medsi.ru
+
   # ============================================================
   # МЕССЕНДЖЕРЫ / СОЦСЕТИ
   # ============================================================
@@ -1025,3 +1030,8 @@ services:
     asn: []
     domains:
       - onepricecoffee.com
+
+    - name: "Best Benefits"
+    asn: []
+    domains:
+      - bestbenefits.ru
