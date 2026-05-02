@@ -1015,3 +1015,8 @@ services:
       - 60580
     domains:
       - profi.ru
+
+    - name: "One Price Coffee"
+    asn: []
+    domains:
+      - onepricecoffee.com
