@@ -809,7 +809,6 @@ services:
       - apk.2gis.ru
       - apthw.2gis.ru
       - artifactory-test.web-staging.2gis.ru
-      - artifactory.2gis.com
       - artifactory.web-staging.2gis.ru
       - autosite.web-staging.2gis.ru
       - award-2023.2gis.ru
@@ -863,7 +862,6 @@ services:
       - dev.2gis.com
       - dev.2gis.ru
       - devday.2gis.ru
-      - direct.2gis.com
       - disk.2gis.com
       - dispatcher.2gis.ru
       - dmfit.api.2gis.com
@@ -915,7 +913,6 @@ services:
       - hctn.2gis.ru
       - help.2gis.ru
       - hermes.2gis.ru
-      - hermestest.2gis.ru
       - heroes.2gis.ru
       - hstatic.2gis.com
       - hybrid.api.2gis.com
