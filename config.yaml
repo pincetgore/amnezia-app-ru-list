@@ -551,7 +551,7 @@ services:
       - vkusvill.ru
       - online.vkusvill.ru
 
-    - name: "Rendez-vous"
+  - name: "Rendez-vous"
     asn: []
     domains:
       - rendez-vous.ru
