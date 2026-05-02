@@ -1014,6 +1014,8 @@ services:
       - onepricecoffee.com
       - api.onepricecoffee.com
       - app.onepricecoffee.com
+      - premiumbonus.ru
+      - api.premiumbonus.su
 
   - name: "Best Benefits"
     asn: []
