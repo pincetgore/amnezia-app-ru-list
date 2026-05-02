@@ -8,6 +8,7 @@ an aggregated ip-list.json compatible with AmneziaVPN split tunneling.
 """
 
 import argparse
+import concurrent.futures
 import logging
 import sys
 from typing import Any, Dict
@@ -84,17 +85,23 @@ def main():
     for service in tqdm(services, desc="Processing services", unit="svc"):
         name = service["name"]
         service_networks = []
-        domains = service.get("domains", [])
+        # Безопасное извлечение: защищает от случаев, когда в YAML указано 'domains: null'
+        domains = service.get("domains") or []
+        asns = service.get("asn") or []
 
         # Step 1: Fetch all announced IP prefixes for each ASN via RIPE API
-        for asn in service.get("asn", []):
-            try:
-                prefixes = resolve_asn(asn)
-                service_networks.extend(prefixes)
-            except Exception as e:
-                logger.error("Failed to resolve AS%d for %s: %s", asn, name, e)
-                logger.debug("Exception details:", exc_info=True)
-                errors += 1
+        if asns:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+                future_to_asn = {executor.submit(resolve_asn, asn): asn for asn in asns}
+                for future in concurrent.futures.as_completed(future_to_asn):
+                    asn = future_to_asn[future]
+                    try:
+                        prefixes = future.result()
+                        service_networks.extend(prefixes)
+                    except Exception as e:
+                        logger.error("Failed to resolve AS%d for %s: %s", asn, name, e)
+                        logger.debug("Exception details:", exc_info=True)
+                        errors += 1
 
         # Step 2: Resolve domain A-records to supplement ASN data with /32 IPs
         if domains:
@@ -138,6 +145,9 @@ def main():
         for w in sorted(set(all_dns_warnings)):
             print(f"  - {w}")
     print(f"\nOutput: {args.output}")
+
+    # Опционально: Для строгих CI/CD пайплайнов можно возвращать код ошибки,
+    # если произошли сбои: if errors > 0: sys.exit(1)
 
 
 if __name__ == "__main__":

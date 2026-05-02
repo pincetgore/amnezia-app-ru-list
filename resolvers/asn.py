@@ -11,6 +11,7 @@ being throttled by upstream APIs.
 
 import logging
 import re
+import threading
 import time
 from ipaddress import IPv4Network
 
@@ -31,14 +32,17 @@ _last_request_time = 0.0
 _session = requests.Session()
 _session.headers.update({"User-Agent": "Mozilla/5.0 (ru-bypass-list generator)"})
 
+# Мьютекс для потокобезопасного ограничения скорости запросов
+_rate_limit_lock = threading.Lock()
 
 def _rate_limit():
     """Enforce a minimum 1-second gap between consecutive API requests."""
     global _last_request_time
-    elapsed = time.time() - _last_request_time
-    if elapsed < 1.0:
-        time.sleep(1.0 - elapsed)
-    _last_request_time = time.time()
+    with _rate_limit_lock:
+        elapsed = time.time() - _last_request_time
+        if elapsed < 1.0:
+            time.sleep(1.0 - elapsed)
+        _last_request_time = time.time()
 
 
 def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network] | None:
