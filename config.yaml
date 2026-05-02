@@ -788,6 +788,7 @@ services:
       - 2gis.ru
       - 2gis.com
       - api.2gis.ru
+      - api.2gis.com
       - tile.2gis.com
       - catalog.api.2gis.com
       - jam.api.2gis.com
@@ -795,6 +796,10 @@ services:
       - api.reviews.2gis.com
       - disk.2gis.com
       - d-assets.2gis.ru
+      - auth.2gis.com
+      - auth.2gis.ru
+      - stat.2gis.com
+      - timg.2gis.com
 
   - name: "Яндекс.Карты"
     asn: []
