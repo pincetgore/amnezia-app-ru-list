@@ -6,16 +6,15 @@ either an AmneziaVPN-compatible JSON file or a plain-text CIDR list.
 
 AmneziaVPN format:
   A JSON array of objects: [{"hostname": "<domain_or_cidr>", "ip": ""}, ...]
-  Domains are listed first (human-readable labels in the app UI),
-  followed by aggregated CIDR ranges.
 """
 
 import json
 from ipaddress import IPv4Network, collapse_addresses
 from pathlib import Path
+from typing import Any, Dict, List
 
 
-def aggregate_networks(networks: list[IPv4Network]) -> list[IPv4Network]:
+def aggregate_networks(networks: List[IPv4Network]) -> List[IPv4Network]:
     """Deduplicate and aggregate networks.
 
     Uses stdlib collapse_addresses() to merge overlapping/adjacent subnets
@@ -26,44 +25,25 @@ def aggregate_networks(networks: list[IPv4Network]) -> list[IPv4Network]:
     return list(collapse_addresses(networks))
 
 
-def format_amnezia(service_results: list[dict]) -> tuple[list, list]:
+def format_amnezia(sorted_nets: List[IPv4Network]) -> List[Dict[str, str]]:
     """Build AmneziaVPN JSON structure from per-service results.
 
     Output layout:
       1. Aggregated CIDR entries (actual routing rules)
-
-    Returns (entries_list, aggregated_networks) tuple.
     """
-    entries = []
-    all_networks = []
-
-    # Collect networks from all services
-    for svc in service_results:
-        all_networks.extend(svc.get("networks", []))
-
-    # Aggregate all CIDR ranges across services
-    aggregated = aggregate_networks(all_networks)
-    sorted_nets = sorted(aggregated, key=lambda n: (n.network_address, n.prefixlen))
-
-    for net in sorted_nets:
-        entries.append({"hostname": str(net), "ip": ""})
-
-    return entries, aggregated
+    return [{"hostname": str(net), "ip": ""} for net in sorted_nets]
 
 
-def format_plain(service_results: list[dict]) -> tuple[str, list]:
+def format_plain(sorted_nets: List[IPv4Network]) -> str:
     """Build a plain-text CIDR list (one prefix per line)."""
-    all_networks = []
-    for svc in service_results:
-        all_networks.extend(svc.get("networks", []))
-
-    aggregated = aggregate_networks(all_networks)
-    sorted_nets = sorted(aggregated, key=lambda n: (n.network_address, n.prefixlen))
-    text = "\n".join(str(n) for n in sorted_nets) + "\n"
-    return text, aggregated
+    return "\n".join(str(n) for n in sorted_nets) + "\n"
 
 
-def write_output(service_results: list[dict], output_path: str, fmt: str = "amnezia"):
+def write_output(
+    service_results: List[Dict[str, Any]],
+    output_path: str,
+    fmt: str = "amnezia"
+) -> List[IPv4Network]:
     """Write the formatted output to a file.
 
     Supported formats:
@@ -75,11 +55,20 @@ def write_output(service_results: list[dict], output_path: str, fmt: str = "amne
     path = Path(output_path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
+    # Collect networks from all services
+    all_networks = []
+    for svc in service_results:
+        all_networks.extend(svc.get("networks", []))
+
+    # Aggregate all CIDR ranges across services and sort them
+    aggregated = aggregate_networks(all_networks)
+    sorted_nets = sorted(aggregated, key=lambda n: (n.network_address, n.prefixlen))
+
     if fmt == "amnezia":
-        data, aggregated = format_amnezia(service_results)
+        data = format_amnezia(sorted_nets)
         path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
     elif fmt == "plain":
-        text, aggregated = format_plain(service_results)
+        text = format_plain(sorted_nets)
         path.write_text(text)
     else:
         raise ValueError(f"Unknown format: {fmt}")
