@@ -1031,12 +1031,12 @@ services:
     domains:
       - profi.ru
 
-    - name: "One Price Coffee"
+  - name: "One Price Coffee"
     asn: []
     domains:
       - onepricecoffee.com
 
-    - name: "Best Benefits"
+  - name: "Best Benefits"
     asn: []
     domains:
       - bestbenefits.ru
