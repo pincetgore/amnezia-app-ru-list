@@ -53,7 +53,10 @@ def resolve_domains(domains: list[str], timeout: int = 10, max_workers: int = 20
     # Используем Яндекс.DNS первыми, так как многие RU-домены (ВТБ, VK, X5) 
     # блокируют запросы от зарубежных DNS (Google/Cloudflare) для защиты от DDoS
     resolver.nameservers = ['77.88.8.8', '77.88.8.1', '8.8.8.8', '1.1.1.1']
-    resolver.timeout = timeout
+    
+    # Таймаут на один сервер делаем пропорциональным количеству серверов (2.5 сек)
+    resolver.timeout = timeout / len(resolver.nameservers)
+    # Общее время на все попытки резолвинга
     resolver.lifetime = timeout
 
     networks = []
