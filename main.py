@@ -15,6 +15,7 @@ from typing import Any, Dict
 
 import yaml
 from tqdm import tqdm
+from ipaddress import IPv4Network
 
 from output.formatter import write_output
 from resolvers.asn import resolve_asn
@@ -88,6 +89,7 @@ def main():
         # Безопасное извлечение: защищает от случаев, когда в YAML указано 'domains: null'
         domains = service.get("domains") or []
         asns = service.get("asn") or []
+        ip_ranges = service.get("ip_ranges") or []
 
         # Step 1: Fetch all announced IP prefixes for each ASN via RIPE API
         if asns:
@@ -113,6 +115,15 @@ def main():
                 logger.error("Failed DNS resolution for %s: %s", name, e)
                 logger.debug("Exception details:", exc_info=True)
                 errors += 1
+
+        # Step 3: Append explicitly defined IP ranges
+        if ip_ranges:
+            for ip_str in ip_ranges:
+                try:
+                    service_networks.append(IPv4Network(ip_str, strict=False))
+                except ValueError as e:
+                    logger.error("Invalid IP range '%s' for %s: %s", ip_str, name, e)
+                    errors += 1
 
         count = len(service_networks)
         stats.append((name, count))

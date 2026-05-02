@@ -31,7 +31,7 @@ def test_config_yaml_is_valid():
     
     for entry in services:
         assert "name" in entry, f"Отсутствует 'name' в записи: {entry}"
-        assert "asn" in entry or "domains" in entry, f"Запись {entry['name']} должна иметь asn или domains"
+        assert "asn" in entry or "domains" in entry or "ip_ranges" in entry, f"Запись {entry['name']} должна иметь asn, domains или ip_ranges"
         
         if "asn" in entry and entry["asn"]:
             assert isinstance(entry["asn"], list), f"ASN в {entry['name']} должен быть списком"
