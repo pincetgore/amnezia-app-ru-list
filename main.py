@@ -10,6 +10,7 @@ an aggregated ip-list.json compatible with AmneziaVPN split tunneling.
 import argparse
 import logging
 import sys
+from typing import Any, Dict
 
 import yaml
 from tqdm import tqdm
@@ -26,10 +27,17 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def load_config(path: str = "config.yaml") -> dict:
+def load_config(path: str = "config.yaml") -> Dict[str, Any]:
     """Load service definitions from a YAML config file."""
-    with open(path, encoding="utf-8") as f:
-        return yaml.safe_load(f)
+    try:
+        with open(path, encoding="utf-8") as f:
+            return yaml.safe_load(f) or {}
+    except FileNotFoundError:
+        logger.critical("Config file '%s' not found.", path)
+        sys.exit(1)
+    except yaml.YAMLError as e:
+        logger.critical("Failed to parse YAML in '%s': %s", path, e)
+        sys.exit(1)
 
 
 def main():
@@ -85,6 +93,7 @@ def main():
                 service_networks.extend(prefixes)
             except Exception as e:
                 logger.error("Failed to resolve AS%d for %s: %s", asn, name, e)
+                logger.debug("Exception details:", exc_info=True)
                 errors += 1
 
         # Step 2: Resolve domain A-records to supplement ASN data with /32 IPs
@@ -95,6 +104,7 @@ def main():
                 all_dns_warnings.extend(dns_warnings)
             except Exception as e:
                 logger.error("Failed DNS resolution for %s: %s", name, e)
+                logger.debug("Exception details:", exc_info=True)
                 errors += 1
 
         count = len(service_networks)
