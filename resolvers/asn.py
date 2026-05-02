@@ -41,7 +41,7 @@ def _rate_limit():
     _last_request_time = time.time()
 
 
-def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network]:
+def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network] | None:
     """Fetch all announced IPv4 prefixes for an ASN from RIPE NCC API.
 
     Returns an empty list on failure (network error, invalid response, etc.)
@@ -72,7 +72,7 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network]:
 
     except requests.RequestException as e:
         logger.warning("RIPE API failed for AS%d: %s", asn, e)
-        return []
+        return None
 
 
 def get_prefixes_he(asn: int, timeout: int = 30) -> list[IPv4Network]:
@@ -112,6 +112,6 @@ def resolve_asn(asn: int) -> list[IPv4Network]:
     Tries RIPE NCC first; falls back to bgp.he.net if RIPE returns no results.
     """
     prefixes = get_prefixes_ripe(asn)
-    if not prefixes:
+    if prefixes is None:
         prefixes = get_prefixes_he(asn)
-    return prefixes
+    return prefixes or []
