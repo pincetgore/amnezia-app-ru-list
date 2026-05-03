@@ -1,8 +1,11 @@
-<img width="1584" height="672" alt="newimage" src="https://github.com/user-attachments/assets/4f7fabc9-c136-4bb8-9bfc-a15c7f206970" />
+<img width="1584" height="672" alt="trikolor" src="https://github.com/user-attachments/assets/5afaee38-442a-499f-a49b-f8ebb6820d2d" />
 
 [![Update](https://img.shields.io/github/actions/workflow/status/pincetgore/amnezia-app-ru-list/update.yml?style=for-the-badge&logo=github&label=UPDATE)](https://github.com/pincetgore/amnezia-app-ru-list/actions/workflows/update.yml)
+![Tests](https://img.shields.io/badge/Unit_Tests-Passing-brightgreen?style=for-the-badge)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![GitHub last commit](https://img.shields.io/github/last-commit/pincetgore/amnezia-app-ru-list?style=for-the-badge&logo=github)
+![Data Source](https://img.shields.io/badge/Data_Source-RIPE_NCC_API-ea580c?style=for-the-badge)
 [![License](https://img.shields.io/badge/LICENSE-MIT-F6C25B?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=555555)](#)
-
 
 ## ⚠️ Юридическая информация
 
@@ -17,8 +20,8 @@
   - [Тесты](#тесты)
   - [Включённые сервисы](#включённые-сервисы-117-записей)
 - [Инструкция по применению](#инструкция-по-применению)
-  - [1. Получение актуального списка](#1-получение-актуального-списка)
-  - [2. Настройка приложения AmneziaVPN](#2-настройте-приложение-amneziavpn)
+  - [Получение актуального списка](#получение-актуального-списка)
+  - [Настройка приложения AmneziaVPN](#настройте-приложение-amneziavpn)
 - [Локальное развертывание](#локальное-развертывание)
   - [Добавление нового сервиса](#как-добавить-свой-сервис)
   - [Ручной запуск тестов](#как-запустить-тесты-самостоятельно)
@@ -303,12 +306,12 @@ GitHub Actions workflow запускается **каждый понедельн
 
 # Инструкция по применению
 
-## 1. Получение актуального списка
+## Получение актуального списка
 
 1. Перейдите на страницу **Releases**.
 2. Скачайте файл `ip-list-<дата_время>.json` из последнего релиза.
 
-## 2. Настройка приложения AmneziaVPN
+## Настройка приложения AmneziaVPN
 
 В приложении AmneziaVPN для iOS, MacOS и Linux раздельное тунелирование возможно только по IP-адресам.
 
