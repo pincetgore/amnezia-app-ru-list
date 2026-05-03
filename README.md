@@ -1,9 +1,8 @@
 <img width="1584" height="672" alt="trikolor" src="https://github.com/user-attachments/assets/5afaee38-442a-499f-a49b-f8ebb6820d2d" />
 
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 [![Update](https://img.shields.io/github/actions/workflow/status/pincetgore/amnezia-app-ru-list/update.yml?style=for-the-badge&logo=github&label=UPDATE)](https://github.com/pincetgore/amnezia-app-ru-list/actions/workflows/update.yml)
 ![Tests](https://img.shields.io/badge/Unit_Tests-Passing-brightgreen?style=for-the-badge)
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![GitHub last commit](https://img.shields.io/github/last-commit/pincetgore/amnezia-app-ru-list?style=for-the-badge&logo=github)
 ![Data Source](https://img.shields.io/badge/Data_Source-RIPE_NCC_API-ea580c?style=for-the-badge)
 [![License](https://img.shields.io/badge/LICENSE-MIT-F6C25B?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=555555)](#)
 
