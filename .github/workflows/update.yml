@@ -2,7 +2,7 @@ name: Update IP List and Create Release
 
 on:
   schedule:
-    - cron: '0 4 * * 1' # Запуск каждый понедельник в 04:00 UTC
+    - cron: '0 4 * * *' # Запуск ежедневно в 04:00 UTC
   workflow_dispatch:    # Позволяет запускать процесс вручную через интерфейс GitHub
 
 env:
