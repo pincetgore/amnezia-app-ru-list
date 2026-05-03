@@ -49,3 +49,57 @@ def test_domains_format():
             assert not domain.endswith("/"), f"Домен не должен заканчиваться на слеш: {domain}"
             assert " " not in domain, f"Домен не должен содержать пробелы: '{domain}'"
             assert not domain.startswith("*"), f"Wildcard-домены (*.domain) не поддерживаются: {domain}"
+
+def test_no_duplicate_domains():
+    """Проверяет отсутствие дубликатов доменов во всем config.yaml."""
+    with open("config.yaml", "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+    
+    seen_domains = {}
+    duplicates = []
+    
+    for service in config.get("services", []):
+        service_name = service.get("name", "Unknown")
+        for domain in service.get("domains") or []:
+            if domain in seen_domains:
+                duplicates.append(f"{domain} (в '{service_name}' и '{seen_domains[domain]}')")
+            else:
+                seen_domains[domain] = service_name
+                
+    assert not duplicates, "Найдены дублирующиеся домены:\n" + "\n".join(duplicates)
+
+def test_no_duplicate_asns():
+    """Проверяет отсутствие дубликатов ASN во всем config.yaml."""
+    with open("config.yaml", "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+    
+    seen_asns = {}
+    duplicates = []
+    
+    for service in config.get("services", []):
+        service_name = service.get("name", "Unknown")
+        for asn in service.get("asn") or []:
+            if asn in seen_asns:
+                duplicates.append(f"AS{asn} (в '{service_name}' и '{seen_asns[asn]}')")
+            else:
+                seen_asns[asn] = service_name
+                
+    assert not duplicates, "Найдены дублирующиеся ASN:\n" + "\n".join(duplicates)
+
+def test_no_duplicate_ip_ranges():
+    """Проверяет отсутствие точных дубликатов ip_ranges во всем config.yaml."""
+    with open("config.yaml", "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+    
+    seen_ips = {}
+    duplicates = []
+    
+    for service in config.get("services", []):
+        service_name = service.get("name", "Unknown")
+        for ip in service.get("ip_ranges") or []:
+            if ip in seen_ips:
+                duplicates.append(f"{ip} (в '{service_name}' и '{seen_ips[ip]}')")
+            else:
+                seen_ips[ip] = service_name
+                
+    assert not duplicates, "Найдены дублирующиеся ip_ranges:\n" + "\n".join(duplicates)
