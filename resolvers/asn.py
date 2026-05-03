@@ -1,12 +1,12 @@
 """
-ASN-to-prefix resolver.
+Резолвер ASN в префиксы.
 
-Fetches all announced IPv4 prefixes for a given Autonomous System Number (ASN).
-Primary source: RIPE NCC RISstat API.
-Fallback: HTML scraping from bgp.he.net.
+Получает все анонсированные IPv4-префиксы для заданного номера автономной системы (ASN).
+Основной источник: RIPE NCC RISstat API.
+Резервный источник: парсинг HTML с bgp.he.net.
 
-Rate limiting is enforced globally (min 1 second between requests) to avoid
-being throttled by upstream APIs.
+Для предотвращения блокировки со стороны API применяется глобальное ограничение скорости
+(минимум 1 секунда между запросами).
 """
 
 import logging
@@ -19,16 +19,16 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-# RIPE NCC RISstat API endpoint for announced prefixes
+# Эндпоинт RIPE NCC RISstat API для анонсированных префиксов
 RIPE_API_URL = "https://stat.ripe.net/data/announced-prefixes/data.json"
 
-# Hurricane Electric BGP Toolkit — used as a fallback when RIPE returns no data
+# Hurricane Electric BGP Toolkit — используется как резерв, если RIPE не возвращает данные
 HE_BGP_URL = "https://bgp.he.net/AS{asn}#_prefixes4"
 
-# Timestamp of the last API request (used for rate limiting)
+# Временная метка последнего запроса к API (используется для ограничения скорости)
 _last_request_time = 0.0
 
-# Reuse connection for performance
+# Переиспользование соединения для производительности
 _session = requests.Session()
 _session.headers.update({"User-Agent": "Mozilla/5.0 (ru-bypass-list generator)"})
 
@@ -36,7 +36,7 @@ _session.headers.update({"User-Agent": "Mozilla/5.0 (ru-bypass-list generator)"}
 _rate_limit_lock = threading.Lock()
 
 def _rate_limit():
-    """Enforce a minimum 1-second gap between consecutive API requests."""
+    """Обеспечивает минимальный интервал в 1 секунду между последовательными запросами к API."""
     global _last_request_time
     with _rate_limit_lock:
         elapsed = time.time() - _last_request_time
@@ -46,10 +46,10 @@ def _rate_limit():
 
 
 def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network] | None:
-    """Fetch all announced IPv4 prefixes for an ASN from RIPE NCC API.
+    """Получает все анонсированные IPv4-префиксы для ASN из RIPE NCC API.
 
-    Returns an empty list on failure (network error, invalid response, etc.)
-    so the caller can fall through to the bgp.he.net fallback.
+    Возвращает пустой список при сбое (сетевая ошибка, неверный ответ и т.д.),
+    чтобы вызывающая функция могла перейти к резервному варианту bgp.he.net.
     """
     _rate_limit()
     try:
@@ -64,7 +64,7 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network] | None:
         prefixes = []
         for entry in data.get("data", {}).get("prefixes", []):
             prefix = entry.get("prefix", "")
-            # Skip IPv6 prefixes (contain colons)
+            # Пропускаем IPv6-префиксы (содержат двоеточия)
             if ":" in prefix:
                 continue
             try:
@@ -80,10 +80,10 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network] | None:
 
 
 def get_prefixes_he(asn: int, timeout: int = 30) -> list[IPv4Network]:
-    """Scrape announced IPv4 prefixes from bgp.he.net (fallback).
+    """Парсит анонсированные IPv4-префиксы с bgp.he.net (резервный вариант).
 
-    Parses CIDR notation strings from the HTML response using a regex.
-    Less reliable than RIPE but useful when RIPE returns empty results.
+    Извлекает строки в формате CIDR из HTML-ответа с помощью регулярного выражения.
+    Менее надежен, чем RIPE, но полезен, когда RIPE возвращает пустой результат.
     """
     _rate_limit()
     try:
@@ -93,7 +93,7 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> list[IPv4Network]:
         )
         resp.raise_for_status()
 
-        # Extract all IPv4 CIDR strings from the page HTML
+        # Извлекаем все IPv4 CIDR-строки из HTML-кода страницы
         pattern = r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2})'
         raw = re.findall(pattern, resp.text)
         prefixes = []
@@ -111,9 +111,9 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> list[IPv4Network]:
 
 
 def resolve_asn(asn: int) -> list[IPv4Network]:
-    """Resolve all IPv4 prefixes for an ASN.
+    """Получает все IPv4-префиксы для ASN.
 
-    Tries RIPE NCC first; falls back to bgp.he.net if RIPE returns no results.
+    Сначала пытается использовать RIPE NCC; если RIPE не возвращает результаты, переключается на bgp.he.net.
     """
     prefixes = get_prefixes_ripe(asn)
     if prefixes is None:

@@ -1,10 +1,10 @@
 """
-DNS domain resolver.
+Резолвер DNS доменов.
 
-Resolves a list of domain names to their IPv4 addresses via DNS A-record
-queries. Each resolved IP is returned as a /32 network. This supplements
-ASN-based prefix resolution for services that don't have a dedicated ASN
-or use shared/cloud hosting.
+Получает IPv4-адреса для списка доменных имен через запросы DNS A-записей.
+Каждый полученный IP-адрес возвращается как сеть /32. Это дополняет
+получение префиксов на основе ASN для сервисов, которые не имеют выделенной ASN
+или используют общий/облачный хостинг.
 """
 
 import logging
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> tuple[list[IPv4Network], str | None]:
-    """Helper function to resolve a single domain."""
+    """Вспомогательная функция для получения IP-адресов одного домена."""
     networks = []
     warning = None
     try:
@@ -43,11 +43,11 @@ def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> tupl
 
 
 def resolve_domains(domains: list[str], timeout: int = 10, max_workers: int = 20) -> tuple[list[IPv4Network], list[str]]:
-    """Resolve a list of domains to /32 IPv4 networks and return warnings.
+    """Получает IPv4-сети /32 для списка доменов и возвращает предупреждения.
 
-    Errors for individual domains are logged and skipped — the function
-    returns a tuple of (networks, warning_domains) without raising.
-    Queries are executed concurrently using a thread pool.
+    Ошибки для отдельных доменов логируются и пропускаются — функция
+    возвращает кортеж (сети, домены_с_предупреждениями) без вызова исключений.
+    Запросы выполняются параллельно с использованием пула потоков.
     """
     resolver = dns.resolver.Resolver()
     # Используем Яндекс.DNS первыми, так как многие RU-домены (ВТБ, VK, X5) 

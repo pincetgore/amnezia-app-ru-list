@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 """
-Entry point for ru-bypass-list generator.
-
-Reads service definitions from config.yaml, resolves their IP ranges
-via ASN lookups (RIPE NCC API) and DNS A-record queries, then outputs
-an aggregated ip-list.json compatible with AmneziaVPN split tunneling.
+Читает определения сервисов из config.yaml, получает их IP-диапазоны
+через запросы ASN (RIPE NCC API) и DNS A-записи, затем выводит
+агрегированный ip-list.json, совместимый с раздельным туннелированием AmneziaVPN.
 """
 
 import argparse
@@ -30,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_config(path: str = "config.yaml") -> Dict[str, Any]:
-    """Load service definitions from a YAML config file."""
+    """Загружает определения сервисов из конфигурационного файла YAML."""
     try:
         with open(path, encoding="utf-8") as f:
             return yaml.safe_load(f) or {}
@@ -43,7 +41,7 @@ def load_config(path: str = "config.yaml") -> Dict[str, Any]:
 
 
 def main():
-    # -- CLI argument parsing --
+    # -- Парсинг аргументов командной строки (CLI) --
     parser = argparse.ArgumentParser(
         description="Generate IP bypass list for Russian services (AmneziaVPN split tunneling)"
     )
@@ -73,7 +71,7 @@ def main():
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
 
-    # -- Load service definitions --
+    # -- Загрузка определений сервисов --
     config = load_config(args.config)
     services = config.get("services", [])
 
@@ -82,7 +80,7 @@ def main():
     errors = 0
     all_dns_warnings = []
 
-    # -- Process each service: resolve ASN prefixes + DNS records --
+    # -- Обработка каждого сервиса: получение префиксов ASN и DNS-записей --
     for service in tqdm(services, desc="Processing services", unit="svc"):
         name = service["name"]
         service_networks = []
@@ -91,7 +89,7 @@ def main():
         asns = service.get("asn") or []
         ip_ranges = service.get("ip_ranges") or []
 
-        # Step 1: Fetch all announced IP prefixes for each ASN via RIPE API
+        # Шаг 1: Получение всех анонсированных IP-префиксов для каждой ASN через RIPE API
         if asns:
             with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
                 future_to_asn = {executor.submit(resolve_asn, asn): asn for asn in asns}
@@ -105,7 +103,7 @@ def main():
                         logger.debug("Exception details:", exc_info=True)
                         errors += 1
 
-        # Step 2: Resolve domain A-records to supplement ASN data with /32 IPs
+        # Шаг 2: Резолв A-записей доменов для дополнения данных ASN IP-адресами /32
         if domains:
             try:
                 dns_networks, dns_warnings = resolve_domains(domains)
@@ -116,7 +114,7 @@ def main():
                 logger.debug("Exception details:", exc_info=True)
                 errors += 1
 
-        # Step 3: Append explicitly defined IP ranges
+        # Шаг 3: Добавление явно заданных IP-диапазонов
         if ip_ranges:
             for ip_str in ip_ranges:
                 try:
@@ -134,10 +132,10 @@ def main():
         })
         tqdm.write(f"  {name}: {count} prefixes")
 
-    # -- Write output file in the chosen format --
+    # -- Запись выходного файла в выбранном формате --
     aggregated = write_output(service_results, args.output, args.format)
 
-    # -- Print summary statistics --
+    # -- Вывод сводной статистики --
     print("\n" + "=" * 50)
     print("Statistics:")
     print("=" * 50)

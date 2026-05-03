@@ -1,11 +1,11 @@
 """
-Output formatter for AmneziaVPN and plain-text formats.
+Форматтер вывода для AmneziaVPN и простых текстовых форматов (plain-text).
 
-Takes per-service resolution results (domains + IP networks) and produces
-either an AmneziaVPN-compatible JSON file or a plain-text CIDR list.
+Принимает результаты резолвинга по сервисам (домены + IP-сети) и создает
+либо совместимый с AmneziaVPN JSON-файл, либо простой текстовый список CIDR.
 
-AmneziaVPN format:
-  A JSON array of objects: [{"hostname": "<domain_or_cidr>", "ip": ""}, ...]
+Формат AmneziaVPN:
+  Массив объектов JSON: [{"hostname": "<domain_or_cidr>", "ip": ""}, ...]
 """
 
 import json
@@ -15,10 +15,10 @@ from typing import Any, Dict, List
 
 
 def aggregate_networks(networks: List[IPv4Network]) -> List[IPv4Network]:
-    """Deduplicate and aggregate networks.
+    """Удаляет дубликаты и агрегирует сети.
 
-    Uses stdlib collapse_addresses() to merge overlapping/adjacent subnets
-    and remove individual IPs already covered by a wider prefix.
+    Использует collapse_addresses() из стандартной библиотеки для слияния перекрывающихся/смежных подсетей
+    и удаления отдельных IP-адресов, которые уже покрыты более широким префиксом.
     """
     if not networks:
         return []
@@ -26,16 +26,16 @@ def aggregate_networks(networks: List[IPv4Network]) -> List[IPv4Network]:
 
 
 def format_amnezia(sorted_nets: List[IPv4Network]) -> List[Dict[str, str]]:
-    """Build AmneziaVPN JSON structure from per-service results.
+    """Формирует JSON-структуру для AmneziaVPN из результатов по каждому сервису.
 
-    Output layout:
-      1. Aggregated CIDR entries (actual routing rules)
+    Структура вывода:
+      1. Агрегированные записи CIDR (фактические правила маршрутизации)
     """
     return [{"hostname": str(net), "ip": ""} for net in sorted_nets]
 
 
 def format_plain(sorted_nets: List[IPv4Network]) -> str:
-    """Build a plain-text CIDR list (one prefix per line)."""
+    """Формирует простой текстовый список CIDR (один префикс на строку)."""
     return "\n".join(str(n) for n in sorted_nets) + "\n"
 
 
@@ -44,23 +44,23 @@ def write_output(
     output_path: str,
     fmt: str = "amnezia"
 ) -> List[IPv4Network]:
-    """Write the formatted output to a file.
+    """Записывает отформатированный вывод в файл.
 
-    Supported formats:
-      - "amnezia": JSON array for AmneziaVPN import
-      - "plain":   one CIDR per line (for other VPN clients or firewalls)
+    Поддерживаемые форматы:
+      - "amnezia": массив JSON для импорта в AmneziaVPN
+      - "plain":   один CIDR на строку (для других VPN-клиентов или брандмауэров)
 
-    Returns the list of aggregated IPv4Network objects.
+    Возвращает список агрегированных объектов IPv4Network.
     """
     path = Path(output_path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Collect networks from all services
+    # Собираем сети со всех сервисов
     all_networks = []
     for svc in service_results:
         all_networks.extend(svc.get("networks", []))
 
-    # Aggregate all CIDR ranges across services and sort them
+    # Агрегируем все CIDR-диапазоны из всех сервисов и сортируем их
     aggregated = aggregate_networks(all_networks)
     sorted_nets = sorted(aggregated, key=lambda n: (n.network_address, n.prefixlen))
 
