@@ -1,8 +1,7 @@
-# amnezia-app-ru-list
+<img width="1584" height="672" alt="newimage" src="https://github.com/user-attachments/assets/4f7fabc9-c136-4bb8-9bfc-a15c7f206970" />
 
 [![Update](https://img.shields.io/github/actions/workflow/status/pincetgore/amnezia-app-ru-list/update.yml?style=for-the-badge&logo=github&label=UPDATE)](https://github.com/pincetgore/amnezia-app-ru-list/actions/workflows/update.yml)
 [![License](https://img.shields.io/badge/LICENSE-MIT-F6C25B?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=555555)](#)
-
 
 
 ## ⚠️ Юридическая информация
