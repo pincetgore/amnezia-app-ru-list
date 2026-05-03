@@ -19,10 +19,45 @@
 
 ---
 
+## Источники данных
+
+1. **RIPE NCC API** (основной) — все анонсированные IPv4-префиксы по ASN организации
+2. **DNS A-записи** (дополнительный) — многопоточный резолвинг доменов (через публичные DNS) для сервисов без выделенного ASN
+3. **bgp.he.net** (fallback) — если RIPE API не отвечает
+
+Скрипт собирает CIDR-диапазоны через ASN, дополняет их IP-адресами из DNS, агрегирует (убирает дубли и вложенные подсети), и формирует `ip-list.json` в формате AmneziaVPN.
+
+## Тестирование
+
+В проекте настроено автоматическое тестирование с помощью фреймворка `pytest`. Тесты защищают проект от публикации сломанных списков маршрутизации из-за опечаток в конфиге или сбоев логики.
+
+**Что проверяется:**
+1. **Агрегация IP-сетей**: алгоритм схлопывания подсетей (например, поглощение мелкой `10.1.0.0/16` более крупной `10.0.0.0/8`).
+2. **Структура `config.yaml`**:
+   - Конфиг является валидным словарем и содержит базовый ключ `services`.
+   - У каждого добавленного сервиса есть обязательное поле `name`.
+   - У сервиса обязательно присутствует хотя бы одно из полей `asn`, `domains` или `ip_ranges`.
+   - В полях `asn` содержатся строго числовые значения.
+3. **Валидность доменов**: в списке доменов нет частых опечаток:
+   - Отсутствует префикс протокола (например, `http://` или `https://`).
+   - Отсутствует закрывающий слеш (`/`) на конце.
+   - Нет случайных пробелов внутри строки.
+   - Не используются неподдерживаемые wildcard-записи (`*.domain.com`).
+
+## Автообновление
+
+GitHub Actions workflow запускается **каждый понедельник в 04:00 UTC** и автоматически:
+1. Прогоняет тесты (`pytest`), проверяя структуру `config.yaml`, валидность доменов и алгоритм склейки сетей.
+2. Запрашивает актуальные данные из RIPE и многопоточно резолвит DNS.
+3. Генерирует `ip-list.json` (для Amnezia) и `cidrs.txt` (простой список) с подробной статистикой и списком проблемных доменов (warnings) в логах.
+4. Создаёт/обновляет релиз и загружает в него сгенерированные файлы.
+
+---
+
 ## Как это работает
 
 ```
-          Ваше устройство
+           Ваше устройство
 ┌──────────────────────────────────┐
 │        Браузер / Приложение      │
 │                │                 │
@@ -37,65 +72,24 @@
 │         │             │          │
 │         ▼             ▼          │
 │    Напрямую      Через Amnezia   │
-│   (sberbank,    (telegram,       │
-│    rzd, wb)     youtube и др.)   │
+│  (Сбербанк,       (Telegram,     │
+│ РЖД, WB и др.)   Youtube и др.)  │
 └──────────────────────────────────┘
 ```
-
-### Источники данных
-
-1. **RIPE NCC API** (основной) — все анонсированные IPv4-префиксы по ASN организации
-2. **DNS A-записи** (дополнительный) — многопоточный резолвинг доменов (через публичные DNS) для сервисов без выделенного ASN
-3. **bgp.he.net** (fallback) — если RIPE API не отвечает
-
-Скрипт собирает CIDR-диапазоны через ASN, дополняет их IP-адресами из DNS, агрегирует (убирает дубли и вложенные подсети), и формирует `ip-list.json` в формате AmneziaVPN.
 
 ---
 
 ## Быстрый старт
 
-### Вариант 1: Скачать готовый файл
-
 1. Перейдите на страницу **Releases**.
 2. Скачайте файл `ip-list-<дата_время>.json` из последнего релиза.
 3. Импортируйте в AmneziaVPN (см. инструкцию ниже).
-
-### Вариант 2: Сгенерировать самостоятельно
-
-```bash
-git clone https://github.com/pincetgore/amnezia-app-ru-list.git
-cd amnezia-app-ru-list
-pip install -r requirements.txt
-python main.py
-```
-
-Результат — файл `ip-list.json` в текущей директории.
-
-### Параметры CLI
-
-| Флаг | Описание | По умолчанию |
-|------|----------|--------------|
-| `-o`, `--output` | Путь к выходному файлу | `ip-list.json` |
-| `-f`, `--format` | Формат: `amnezia` или `plain` | `amnezia` |
-| `-c`, `--config` | Путь к `config.yaml` | `config.yaml` |
-| `-v`, `--verbose` | Подробный лог (debug) | выключен |
-
-```bash
-# Сгенерировать в другой файл
-python main.py -o my-list.json
-
-# Простой текстовый формат (по одному CIDR на строку)
-python main.py -f plain -o cidrs.txt
-
-# Подробный лог для отладки
-python main.py -v
-```
 
 ---
 
 ## Импорт в AmneziaVPN
 
-### IP-маршрутизация (для браузера и веб-сервисов)
+### IP-маршрутизация (для iOS и MacOS)
 
 1. Откройте **AmneziaVPN**
 2. Перейдите в **Настройки** соединения
@@ -127,7 +121,7 @@ python main.py -v
 
 ---
 
-## Включённые сервисы (131 запись)
+## Включённые сервисы (117 записей)
 
 ### Локальные и служебные сети
 В список по умолчанию включены диапазоны частных сетей (LAN), CGNAT и Multicast. Это гарантирует, что при включенном VPN у вас не пропадет доступ к домашнему роутеру, локальным ресурсам и устройствам умного дома.
@@ -136,20 +130,19 @@ python main.py -v
 |--------|--------------|
 | Локальные сети (LAN, CGNAT, Multicast) | `10.0.0.0/8`, `100.64.0.0/10`, `169.254.0.0/16`, `172.16.0.0/12`, `192.168.0.0/16`, `224.0.0.0/4` |
 
-### Технологии / Поисковики / Суперапы
+### Бигтех / Супераппы
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Яндекс | AS13238, AS44534 и др. | `yandex.ru`, `yandex.net`, `ya.ru` и др. |
-| ВКонтакте | AS28709, AS47541 и др. | `vk.com`, `vk.ru`, `userapi.com` и др. |
-| Mail.ru + Одноклассники | AS47764 | `mail.ru`, `ok.ru`, `cloud.mail.ru` и др. |
-| Max | -- | `max.ru`, `apptracer.ru`, `mycdn.me` и др. |
+| Яндекс | AS13238, AS44534 и др. | `yandex.ru`, `ya.ru`, `kinopoisk.ru`, `dzen.ru` и др. |
+| ВКонтакте | AS28709, AS47541 и др. | `vk.com`, `mvk.com`, `vkvideo.ru`, `cloud.vk.com` и др. |
+| Mail.ru + Одноклассники | AS47764, AS49797 и др. | `mail.ru`, `ok.ru`, `cloud.mail.ru` и др. |
 
 ### Банки
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Сбербанк | AS33844, AS35237 и др. | `sberbank.ru`, `online.sberbank.ru`, `sber.ru` и др. |
-| Т-Банк | AS205638, AS12686 и др. | `tbank.ru`, `tinkoff.ru` и др. |
-| ВТБ | AS24823, AS34662 и др. | `vtb.ru`, `online.vtb.ru` |
+| Сбербанк | AS33844, AS35237 и др. | `sberbank.ru`, `sber.ru`, `sberinvestor.ru` и др. |
+| Т-Банк | AS12686, AS205638 и др. | `tbank.ru`, `tinkoff.ru`, `invest-gw.tinkoff.ru` и др. |
+| ВТБ | AS24823, AS39154 и др. | `vtb.ru`, `online.vtb.ru`, `invest.vtb.ru` |
 | Альфа-Банк | AS15632, AS34838 и др. | `alfabank.ru`, `alfadirect.ru`, `alfa.me` |
 | Газпромбанк | AS35022, AS48033 и др. | `gazprombank.ru`, `gpb.ru` |
 | Россельхозбанк | AS41615 | `rshb.ru`, `online.rshb.ru` |
@@ -166,14 +159,16 @@ python main.py -v
 | Ozon Банк | -- | `ozonbank.ru` |
 
 ### Телеком
+МТС (AS8359), МегаФон (AS31133), Билайн (AS3216), Ростелеком (AS12389) — это интернет-провайдеры с сотнями/тысячами IP-префиксов. Включение их полных ASN-диапазонов перегружает маршрутную таблицу Android (появляется восклицательный знак на иконке VPN) и может вызвать сбои. Для работы личных кабинетов операторов достаточно DNS-резолвинга их доменов.
+
 | Сервис | Домены |
 |--------|--------|
-| МТС | `mts.ru`, `payment.mts.ru`, `kion.ru` и др. |
+| МТС | `mts.ru`, `payment.mts.ru`, `login.mts.ru` |
 | МегаФон | `megafon.ru`, `lk.megafon.ru` |
-| Билайн / Вымпелком | `beeline.ru`, `my.beeline.ru` |
+| Билайн | `beeline.ru`, `my.beeline.ru` |
 | Теле2 | `tele2.ru`, `my.tele2.ru` |
-| Ростелеком | `rt.ru`, `rostelecom.ru`, `wink.ru` и др. |
-| Дом.ру / ЭР-Телеком | `domru.ru`, `lk.domru.ru` |
+| Ростелеком | `rt.ru`, `rostelecom.ru`, `lk.rt.ru` |
+| Дом.ру | `domru.ru`, `lk.domru.ru` |
 
 ### E-commerce / Маркетплейсы
 | Сервис | ASN | Домены |
@@ -181,8 +176,7 @@ python main.py -v
 | Wildberries | AS49053, AS57073 и др. | `wildberries.ru`, `wb.ru` и др. |
 | Ozon | AS207986, AS44386 | `ozon.ru`, `ozon.app`, `ozone.ru` и др. |
 | Авито | AS201012 | `avito.ru`, `avito.st` |
-| Яндекс.Маркет | -- | `market.yandex.ru`, `pokupki.market.yandex.ru` и др. |
-| KazanExpress / Магнит Маркет | AS57319, AS60691 | `kazanexpress.ru`, `magnit.market` и др. |
+| KazanExpress / Магнит Маркет | AS57319, AS60691 | `kazanexpress.ru`, `magnit.market`, `magnit.ru` и др. |
 | СберМегаМаркет | -- | `sbermegamarket.ru`, `megamarket.ru` |
 | Lamoda | AS57906 | `lamoda.ru`, `lamoda.co` |
 | DNS Shop | -- | `dns-shop.ru`, `dns-shop.net` |
@@ -193,12 +187,10 @@ python main.py -v
 | Детский мир | -- | `detmir.ru` |
 | Hoff | -- | `hoff.ru` |
 | Aliexpress | AS45102 | `aliexpress.ru` |
-| SPAR | -- | `myspar.ru`, `api.myspar.ru` и др. |
 
-### Еда / Доставка / Такси
+### Доставка / Логистика
 | Сервис | Домены |
 |--------|--------|
-| Яндекс Еда / Лавка / Такси | `eda.yandex.ru`, `lavka.yandex.ru`, `taxi.yandex.ru`, `go.yandex.ru` |
 | Самокат | `samokat.ru` |
 | Delivery Club | `delivery-club.ru` |
 | СДЭК | `cdek.ru`, `lk.cdek.ru` и др. |
@@ -207,29 +199,28 @@ python main.py -v
 ### Ритейл / Продукты
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Пятёрочка / X5 Group | AS198027, AS215810 и др. | `5ka.ru`, `perekrestok.ru`, `vprok.ru`, `x5.ru` и др. |
-| Магнит | AS57319, AS60691 | `magnit.ru`, `dostavka.magnit.ru` |
+| Пятёрочка / X5 Group | AS44704, AS215810 и др. | `5ka.ru`, `perekrestok.ru`, `vprok.ru`, `x5.ru` и др. |
 | Лента | -- | `lenta.com`, `online.lenta.com` |
 | Metro Cash and Carry | AS210756 | `metro-cc.ru`, `online.metro-cc.ru` |
 | FixPrice | -- | `fix-price.com`, `fix-price.ru` |
-| Светофор | -- | `svetofor.info` |
 | Дикси | AS202760, AS51115 | `dixy.ru` |
 | ВкусВилл | -- | `vkusvill.ru`, `online.vkusvill.ru` |
+| SPAR | -- | `myspar.ru`, `api.myspar.ru` и др. |
+| Rendez-vous | -- | `rendez-vous.ru`, `api.rendez-vous.ru` и др. |
+| One Price Coffee | -- | `onepricecoffee.com`, `premiumbonus.ru` и др. |
+| Best Benefits | -- | `bestbenefits.ru`, `app.bestbenefits.ru` и др. |
 
 ### Стриминг / Видео / Музыка
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Кинопоиск | -- | `kinopoisk.ru`, `hd.kinopoisk.ru`, `api.kinopoisk.ru` |
 | Rutube | AS207353 | `rutube.ru`, `static.rutube.ru` |
 | IVI | -- | `ivi.ru`, `ivi.tv`, `api.ivi.ru` |
 | Okko | -- | `okko.tv`, `api.okko.tv` |
-| KION (МТС) | -- | `kion.ru`, `api.kion.ru` |
-| Wink (Ростелеком) | -- | `wink.ru`, `api.wink.ru` |
+| KION | -- | `kion.ru`, `api.kion.ru` |
+| Wink | -- | `wink.ru`, `api.wink.ru` |
 | START | -- | `start.ru`, `start.video` |
 | Premier | -- | `premier.one`, `api.premier.one` |
-| Яндекс Музыка | -- | `music.yandex.ru`, `api.music.yandex.net` |
 | Звук (Сбер) | -- | `zvuk.com`, `sberaudio.ru` |
-| VK Видео | -- | `vkvideo.ru`, `video.vk.com` |
 
 ### Государственные сервисы
 | Сервис | ASN | Домены |
@@ -251,7 +242,6 @@ python main.py -v
 | Aviasales | -- | `aviasales.ru`, `aviasales.com` |
 | Tutu.ru | -- | `tutu.ru`, `api.tutu.ru` |
 | Островок | -- | `ostrovok.ru`, `api.ostrovok.ru` |
-| Яндекс.Путешествия | -- | `travel.yandex.ru` |
 | Суточно.ру | -- | `sutochno.ru` |
 | Московский метрополитен | -- | `mosmetro.ru`, `wi-fi.ru` |
 | Тройка | -- | `transport.mos.ru`, `troika.mos.ru` |
@@ -260,7 +250,7 @@ python main.py -v
 | Сервис | Домены |
 |--------|--------|
 | ЦИАН | `cian.ru`, `api.cian.ru` |
-| Домклик (Сбер) | `domclick.ru`, `api.domclick.ru` |
+| Домклик | `domclick.ru`, `api.domclick.ru` |
 | ДомРФ | `domrf.ru` |
 
 ### Работа / HR
@@ -281,8 +271,7 @@ python main.py -v
 ### Карты / Навигация / Гео
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| 2ГИС | AS197482 | `2gis.ru`, `api.2gis.ru`, `tile.2gis.com` и др. |
-| Яндекс.Карты | -- | `maps.yandex.ru`, `core-renderer-tiles.maps.yandex.net` |
+| 2ГИС | AS197482 | `2gis.com`, `2gis.ru`, `api.2gis.ru` и др. |
 
 ### Образование
 | Сервис | Домены |
@@ -307,8 +296,8 @@ python main.py -v
 ### Мессенджеры / Соцсети
 | Сервис | Домены |
 |--------|--------|
-| Дзен | `dzen.ru`, `zen.yandex.ru` |
 | TenChat | `tenchat.ru` |
+| MAX | `max.ru`, `apptracer.ru`, `mycdn.me` |
 
 ### Игры
 | Сервис | Домены |
@@ -316,20 +305,15 @@ python main.py -v
 | VK Play | `vkplay.ru`, `api.vkplay.ru` |
 | MY.GAMES | `my.games`, `api.my.games` |
 
-### Облака / Хостинг
+### Облака / Хостинги
 | Сервис | Домены |
 |--------|--------|
-| Яндекс.Облако | `cloud.yandex.ru`, `yandex.cloud`, `storage.yandexcloud.net` |
-| VK Cloud | `cloud.vk.com`, `mcs.mail.ru` |
 | Selectel | `selectel.ru` |
 | REG.RU | `reg.ru` |
 
-### Финтех / Инвестиции
+### Финтех
 | Сервис | Домены |
 |--------|--------|
-| Т-Инвестиции | `invest-gw.tinkoff.ru` |
-| СберИнвестиции | `sberinvestor.ru` |
-| ВТБ Мои Инвестиции | `invest.vtb.ru` |
 | Мосбиржа | `moex.com` |
 
 ### Другое
@@ -343,12 +327,21 @@ python main.py -v
 | Kaspersky | AS200187 | `kaspersky.ru`, `kaspersky.com` |
 | Dr.Web | -- | `drweb.ru`, `drweb.com` |
 | Профи.ру | AS60580 | `profi.ru` |
-| One Price Coffee | -- | `onepricecoffee.com`, `premiumbonus.ru` и др. |
-| Best Benefits | -- | `bestbenefits.ru`, `api.bestbenefits.ru` и др. |
 
 ---
 
-## Как добавить свой сервис
+## Локальное развертывание
+
+```bash
+git clone https://github.com/pincetgore/amnezia-app-ru-list.git
+cd amnezia-app-ru-list
+pip install -r requirements.txt
+python main.py
+```
+
+Результат — файл `ip-list.json` в текущей директории.
+
+### Как добавить свой сервис
 
 Добавьте запись в `config.yaml`:
 
@@ -371,43 +364,29 @@ python main.py -v
 python main.py
 ```
 
----
+## Как запустить тесты самостоятельно
 
-## Тестирование
-
-В проекте настроено автоматическое тестирование с помощью фреймворка `pytest`. Тесты защищают проект от публикации сломанных списков маршрутизации из-за опечаток в конфиге или сбоев логики.
-
-**Что проверяется:**
-1. **Агрегация IP-сетей**: алгоритм схлопывания подсетей (например, поглощение мелкой `10.1.0.0/16` более крупной `10.0.0.0/8`).
-2. **Структура `config.yaml`**:
-   - Конфиг является валидным словарем и содержит базовый ключ `services`.
-   - У каждого добавленного сервиса есть обязательное поле `name`.
-   - У сервиса обязательно присутствует хотя бы одно из полей `asn`, `domains` или `ip_ranges`.
-   - В полях `asn` содержатся строго числовые значения.
-3. **Валидность доменов**: в списке доменов нет частых опечаток:
-   - Отсутствует префикс протокола (например, `http://` или `https://`).
-   - Отсутствует закрывающий слеш (`/`) на конце.
-   - Нет случайных пробелов внутри строки.
-   - Не используются неподдерживаемые wildcard-записи (`*.domain.com`).
-
-**Как запустить тесты локально:**
 ```bash
 pip install pytest pyyaml
 pytest
 ```
 
----
+## Параметры CLI
 
-## Автообновление
+| Флаг | Описание | По умолчанию |
+|------|----------|--------------|
+| `-o`, `--output` | Путь к выходному файлу | `ip-list.json` |
+| `-f`, `--format` | Формат: `amnezia` или `plain` | `amnezia` |
+| `-c`, `--config` | Путь к `config.yaml` | `config.yaml` |
+| `-v`, `--verbose` | Подробный лог (debug) | выключен |
 
-GitHub Actions workflow запускается **каждый понедельник в 04:00 UTC** и автоматически:
-1. Прогоняет тесты (`pytest`), проверяя структуру `config.yaml`, валидность доменов и алгоритм склейки сетей.
-2. Запрашивает актуальные данные из RIPE и многопоточно резолвит DNS.
-3. Генерирует `ip-list.json` (для Amnezia) и `cidrs.txt` (простой список) с подробной статистикой и списком проблемных доменов (warnings) в логах.
-4. Создаёт/обновляет релиз `latest` и загружает в него сгенерированные файлы.
+```bash
+# Сгенерировать в другой файл
+python main.py -o my-list.json
 
----
+# Простой текстовый формат (по одному CIDR на строку)
+python main.py -f plain -o cidrs.txt
 
-## Почему без ASN для телекомов?
-
-МТС (AS8359), МегаФон (AS31133), Билайн (AS3216), Ростелеком (AS12389) — это интернет-провайдеры с сотнями/тысячами IP-префиксов. Включение их полных ASN-диапазонов перегружает маршрутную таблицу Android (появляется восклицательный знак на иконке VPN) и может вызвать сбои. Для работы личных кабинетов операторов достаточно DNS-резолвинга их доменов.
+# Подробный лог для отладки
+python main.py -v
+```

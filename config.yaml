@@ -14,7 +14,7 @@ services:
       - 224.0.0.0/4
 
   # ============================================================
-  # TECH / ПОИСКОВИКИ / СУПЕРАПЫ
+  # Бигтех / СУПЕРАПЫ
   # ============================================================
   - name: "Яндекс"
     asn:
@@ -51,6 +51,15 @@ services:
       - mc.yandex.ru
       - passport.yandex.ru
       - dostavka.yandex.ru
+      - cloud.yandex.ru
+      - yandex.cloud
+      - storage.yandexcloud.net
+      - api.music.yandex.net
+      - pokupki.market.yandex.ru
+      - travel.yandex.ru
+      - core-renderer-tiles.maps.yandex.net
+      - dzen.ru
+      - api.kinopoisk.ru
 
   - name: "ВКонтакте"
     asn:
@@ -93,6 +102,9 @@ services:
       - vkuservideo.net
       - vkuservideo.ru
       - vkvideo.ru
+      - video.vk.com
+      - cloud.vk.com
+      - mcs.mail.ru
       - youla.ru
 
   - name: "Mail.ru + Одноклассники"
@@ -117,13 +129,6 @@ services:
       - ok.ru
       - okcdn.ru
 
-  - name: "Max"
-    asn: []
-    domains:
-      - max.ru
-      - apptracer.ru
-      - mycdn.me
-
   # ============================================================
   # БАНКИ
   # ============================================================
@@ -147,6 +152,7 @@ services:
       - sber.ru
       - sbermarket.ru
       - spasibosberbank.ru
+      - sberinvestor.ru
 
   - name: "Т-Банк"
     asn:
@@ -160,6 +166,7 @@ services:
       - tcsbank.ru
       - tinkoffinsurance.ru
       - cdn-tinkoff.ru
+      - invest-gw.tinkoff.ru
 
   - name: "ВТБ"
     asn:
@@ -174,6 +181,7 @@ services:
       - vtb.ru
       - vtb-group.ru
       - online.vtb.ru
+      - invest.vtb.ru
 
   - name: "Альфа-Банк"
     asn:
@@ -289,7 +297,6 @@ services:
       - mts.ru
       - payment.mts.ru
       - login.mts.ru
-      - kion.ru
 
   - name: "МегаФон"
     asn: []
@@ -297,7 +304,7 @@ services:
       - megafon.ru
       - lk.megafon.ru
 
-  - name: "Билайн / Вымпелком"
+  - name: "Билайн"
     asn: []
     domains:
       - beeline.ru
@@ -314,10 +321,9 @@ services:
     domains:
       - rt.ru
       - rostelecom.ru
-      - wink.ru
       - lk.rt.ru
 
-  - name: "Дом.ру / ЭР-Телеком"
+  - name: "Дом.ру"
     asn: []
     domains:
       - domru.ru
@@ -360,12 +366,6 @@ services:
       - avito.ru
       - avito.st
 
-  - name: "Яндекс.Маркет"
-    asn: []
-    domains:
-      - market.yandex.ru
-      - pokupki.market.yandex.ru
-
   - name: "KazanExpress / Магнит Маркет"
     asn:
       - 57319
@@ -374,6 +374,7 @@ services:
       - kazanexpress.ru
       - magnit.market
       - magnit.ru
+      - dostavka.magnit.ru
 
   - name: "СберМегаМаркет"
     asn: []
@@ -432,24 +433,9 @@ services:
     domains:
       - aliexpress.ru
 
-  - name: "SPAR"
-    asn: []
-    domains:
-      - myspar.ru
-      - api.myspar.ru
-      - app.myspar.ru
-
   # ============================================================
-  # ЕДА / ДОСТАВКА / ТАКСИ
+  # Доставка / Логистика
   # ============================================================
-  - name: "Яндекс Еда / Лавка / Такси"
-    asn: []
-    domains:
-      - eda.yandex.ru
-      - lavka.yandex.ru
-      - taxi.yandex.ru
-      - go.yandex.ru
-
   - name: "Самокат"
     asn: []
     domains:
@@ -490,14 +476,6 @@ services:
       - x5paket.ru
       - myapelsin.ru
 
-  - name: "Магнит"
-    asn:
-      - 57319
-      - 60691
-    domains:
-      - magnit.ru
-      - dostavka.magnit.ru
-
   - name: "Лента"
     asn: []
     domains:
@@ -530,6 +508,13 @@ services:
       - vkusvill.ru
       - online.vkusvill.ru
 
+  - name: "SPAR"
+    asn: []
+    domains:
+      - myspar.ru
+      - api.myspar.ru
+      - app.myspar.ru
+
   - name: "Rendez-vous"
     asn: []
     domains:
@@ -537,16 +522,27 @@ services:
       - api.rendez-vous.ru
       - mobile.rendez-vous.ru
 
+  - name: "One Price Coffee"
+    asn: []
+    domains:
+      - onepricecoffee.com
+      - api.onepricecoffee.com
+      - app.onepricecoffee.com
+      - premiumbonus.ru
+      - api.premiumbonus.su
+      - cloud.onepricecoffee.com
+      - delivery.onepricecoffee.com
+
+  - name: "Best Benefits"
+    asn: []
+    domains:
+      - app.bestbenefits.ru
+      - bestbenefits.ru
+      - mobile.bestbenefits.ru
+
   # ============================================================
   # СТРИМИНГ / ВИДЕО / МУЗЫКА
   # ============================================================
-  - name: "Кинопоиск"
-    asn: []
-    domains:
-      - kinopoisk.ru
-      - hd.kinopoisk.ru
-      - api.kinopoisk.ru
-
   - name: "Rutube"
     asn:
       - 207353
@@ -567,13 +563,13 @@ services:
       - okko.tv
       - api.okko.tv
 
-  - name: "KION (МТС)"
+  - name: "KION"
     asn: []
     domains:
       - kion.ru
       - api.kion.ru
 
-  - name: "Wink (Ростелеком)"
+  - name: "Wink"
     asn: []
     domains:
       - wink.ru
@@ -591,23 +587,11 @@ services:
       - premier.one
       - api.premier.one
 
-  - name: "Яндекс Музыка"
-    asn: []
-    domains:
-      - music.yandex.ru
-      - api.music.yandex.net
-
   - name: "Звук (Сбер)"
     asn: []
     domains:
       - zvuk.com
       - sberaudio.ru
-
-  - name: "VK Видео"
-    asn: []
-    domains:
-      - vkvideo.ru
-      - video.vk.com
 
   # ============================================================
   # ГОСУДАРСТВЕННЫЕ СЕРВИСЫ
@@ -702,11 +686,6 @@ services:
       - ostrovok.ru
       - api.ostrovok.ru
 
-  - name: "Яндекс.Путешествия"
-    asn: []
-    domains:
-      - travel.yandex.ru
-
   - name: "Суточно.ру"
     asn: []
     domains:
@@ -733,7 +712,7 @@ services:
       - cian.ru
       - api.cian.ru
 
-  - name: "Домклик (Сбер)"
+  - name: "Домклик"
     asn: []
     domains:
       - domclick.ru
@@ -799,8 +778,6 @@ services:
     asn:
       - 197482
     domains:
-      - 2022.award.2gis.ru
-      - 2023-awards.2gis.ru
       - 2gis.com
       - 2gis.ru
       - account.2gis.com
@@ -1132,12 +1109,6 @@ services:
       - zb.2gis.ru
       - zima.otello.2gis.ru
 
-  - name: "Яндекс.Карты"
-    asn: []
-    domains:
-      - maps.yandex.ru
-      - core-renderer-tiles.maps.yandex.net
-
   # ============================================================
   # ОБРАЗОВАНИЕ
   # ============================================================
@@ -1217,16 +1188,17 @@ services:
   # ============================================================
   # МЕССЕНДЖЕРЫ / СОЦСЕТИ
   # ============================================================
-  - name: "Дзен"
-    asn: []
-    domains:
-      - dzen.ru
-      - zen.yandex.ru
-
   - name: "TenChat"
     asn: []
     domains:
       - tenchat.ru
+
+  - name: "MAX"
+    asn: []
+    domains:
+      - max.ru
+      - apptracer.ru
+      - mycdn.me
 
   # ============================================================
   # ИГРЫ
@@ -1244,21 +1216,8 @@ services:
       - api.my.games
 
   # ============================================================
-  # ОБЛАКА / ХОСТИНГ
+  # ОБЛАКА / ХОСТИНГИ
   # ============================================================
-  - name: "Яндекс.Облако"
-    asn: []
-    domains:
-      - cloud.yandex.ru
-      - yandex.cloud
-      - storage.yandexcloud.net
-
-  - name: "VK Cloud"
-    asn: []
-    domains:
-      - cloud.vk.com
-      - mcs.mail.ru
-
   - name: "Selectel"
     asn: []
     domains:
@@ -1270,23 +1229,8 @@ services:
       - reg.ru
 
   # ============================================================
-  # ФИНТЕХ / ИНВЕСТИЦИИ
+  # ФИНТЕХ
   # ============================================================
-  - name: "Т-Инвестиции"
-    asn: []
-    domains:
-      - invest-gw.tinkoff.ru
-
-  - name: "СберИнвестиции"
-    asn: []
-    domains:
-      - sberinvestor.ru
-
-  - name: "ВТБ Мои Инвестиции"
-    asn: []
-    domains:
-      - invest.vtb.ru
-
   - name: "Мосбиржа"
     asn: []
     domains:
@@ -1343,19 +1287,3 @@ services:
       - 60580
     domains:
       - profi.ru
-
-  - name: "One Price Coffee"
-    asn: []
-    domains:
-      - onepricecoffee.com
-      - api.onepricecoffee.com
-      - app.onepricecoffee.com
-      - premiumbonus.ru
-      - api.premiumbonus.su
-
-  - name: "Best Benefits"
-    asn: []
-    domains:
-      - bestbenefits.ru
-      - api.bestbenefits.ru
-      - app.bestbenefits.ru
