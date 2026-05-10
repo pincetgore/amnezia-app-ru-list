@@ -306,7 +306,6 @@ services:
       - payment.mts.ru
       - login.mts.ru
       - mymts.ru
-      - mts-ws.net
       - mtsmedia.ru
       - on-media.ru
 
