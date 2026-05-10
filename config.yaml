@@ -297,12 +297,22 @@ services:
       - mts.ru
       - payment.mts.ru
       - login.mts.ru
+      - mymts.ru
+      - mts-ws.net
 
   - name: "МегаФон"
     asn: []
     domains:
       - megafon.ru
       - lk.megafon.ru
+      - inplat.ru
+      - megafon.com
+      - megafonpro.ru
+      - mgfn.ru
+      - report-megafon.ru
+      - scartel.ru
+      - yota.ru
+      - yotagamer.ru
 
   - name: "Билайн"
     asn: []
@@ -313,8 +323,10 @@ services:
   - name: "Теле2"
     asn: []
     domains:
+      - t2.ru
       - tele2.ru
       - my.tele2.ru
+      - b2c-digest.ru
 
   - name: "Ростелеком"
     asn: []
