@@ -290,7 +290,7 @@ services:
       - mtsdengi.ru
       - tvoyodbo.online
 
-  - name: "МТС банк"
+  - name: "Ozon банк"
     asn: []
     domains:
       - ozonbank.ru
