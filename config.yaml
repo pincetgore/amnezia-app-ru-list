@@ -285,6 +285,14 @@ services:
   - name: "Ozon Банк"
     asn: []
     domains:
+      - dbo-dengi.online
+      - mtsbank.ru
+      - mtsdengi.ru
+      - tvoyodbo.online
+
+  - name: "МТС банк"
+    asn: []
+    domains:
       - ozonbank.ru
 
   # ============================================================
@@ -299,6 +307,8 @@ services:
       - login.mts.ru
       - mymts.ru
       - mts-ws.net
+      - mtsmedia.ru
+      - on-media.ru
 
   - name: "МегаФон"
     asn: []
