@@ -1217,6 +1217,10 @@ services:
       - api.medsi.ru
       - app.medsi.ru
       - smartmed.pro
+      - medsi.com
+      - medsi.pro
+      - medsi.ru
+      - medsi-premium.ru
 
   # ============================================================
   # МЕССЕНДЖЕРЫ / СОЦСЕТИ
