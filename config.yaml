@@ -282,7 +282,7 @@ services:
     domains:
       - wb-bank.ru
 
-  - name: "Ozon Банк"
+  - name: "МТС Банк"
     asn: []
     domains:
       - dbo-dengi.online
