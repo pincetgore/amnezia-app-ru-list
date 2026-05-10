@@ -604,6 +604,7 @@ services:
       - esia.gosuslugi.ru
       - pos.gosuslugi.ru
       - lk.gosuslugi.ru
+      - gu-st.ru
 
   - name: "ФНС / Налоговая"
     asn: []
@@ -1170,6 +1171,7 @@ services:
     domains:
       - emias.info
       - emias.ru
+      - mgfoms.ru
 
   - name: "Invitro"
     asn: []
