@@ -621,6 +621,7 @@ services:
       - 8901
     domains:
       - mos.ru
+      - mosreg.ru
       - my.mos.ru
       - uslugi.mos.ru
 
