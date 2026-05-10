@@ -612,6 +612,9 @@ services:
       - nalog.gov.ru
       - lkfl2.nalog.ru
       - lkip2.nalog.ru
+      - nalog.ru
+      - goskey.ru
+      - ebs.ru
 
   - name: "Мос.ру"
     asn:
@@ -632,6 +635,11 @@ services:
     domains:
       - pochta.ru
       - tracking.pochta.ru
+
+  - name: "Честный знак"
+    asn: []
+    domains:
+      - xn--80ajghhoc2aj1c8b.xn--p1ai
 
   # ============================================================
   # ТРАНСПОРТ / ПУТЕШЕСТВИЯ
