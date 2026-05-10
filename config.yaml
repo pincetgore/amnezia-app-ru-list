@@ -1203,6 +1203,8 @@ services:
       - emias.info
       - emias.ru
       - mgfoms.ru
+      - mosgorzdrav.ru
+      - lk.emias.mos.ru
 
   - name: "Invitro"
     asn: []
