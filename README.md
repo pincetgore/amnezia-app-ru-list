@@ -210,7 +210,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 |--------|-----|--------|
 | Госуслуги | AS12389, AS196747 и др. | `gosuslugi.ru`, `esia.gosuslugi.ru` и др. |
 | ФНС / Налоговая | -- | `nalog.gov.ru`, `lkfl2.nalog.ru`, `goskey.ru`, `ebs.ru` и др. |
-| Мос.ру | AS8901 | `mos.ru`, `my.mos.ru`, `uslugi.mos.ru` |
+| Мос.ру | AS8901 | `mos.ru`, `mosreg.ru`, `my.mos.ru`, `uslugi.mos.ru` |
 | ЦБ РФ | -- | `cbr.ru`, `finmarket.ru` |
 | Почта России | -- | `pochta.ru`, `tracking.pochta.ru` |
 | Честный знак | -- | `xn--80ajghhoc2aj1c8b.xn--p1ai` |
@@ -246,11 +246,12 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | Хабр | -- | `habr.com`, `career.habr.com` |
 
 ### Авто
-| Сервис | Домены |
-|--------|--------|
-| Авто.ру | `auto.ru`, `api.auto.ru` |
-| Drom.ru | `drom.ru`, `auto.drom.ru` |
-| Автотека | `autoteka.ru` |
+| Сервис | ASN | Домены |
+|--------|-----|--------|
+| Авто.ру | -- | `auto.ru`, `api.auto.ru` |
+| Drom.ru | -- | `drom.ru`, `auto.drom.ru` |
+| Автотека | -- | `autoteka.ru` |
+| Автодор | AS20698 | `avtodor-tr.ru` |
 
 ### Карты / Навигация / Гео
 | Сервис | ASN | Домены |
