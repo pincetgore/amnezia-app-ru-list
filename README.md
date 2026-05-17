@@ -116,7 +116,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | Сервис | ASN | Домены |
 |--------|-----|--------|
 | Яндекс | AS13238, AS44534 и др. | `yandex.ru`, `ya.ru`, `kinopoisk.ru`, `dzen.ru` и др. |
-| ВКонтакте | AS28709, AS47541 и др. | `vk.com`, `mvk.com`, `vkvideo.ru`, `cloud.vk.com` и др. |
+| VK | AS28709, AS47541 и др. | `vk.com`, `mvk.com`, `vkvideo.ru`, `cloud.vk.com` и др. |
 | Mail.ru + Одноклассники | AS47764, AS49797 и др. | `mail.ru`, `ok.ru`, `cloud.mail.ru` и др. |
 
 ### Банки
@@ -139,7 +139,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | СБП / НСПК | AS21292, AS41185 и др. | `nspk.ru`, `sbp.nspk.ru` |
 | Wildberries Банк | -- | `wb-bank.ru` |
 | МТС Банк | -- | `dbo-dengi.online`, `mtsbank.ru`, `mtsdengi.ru`, `tvoyodbo.online` |
-| Ozon Банк | -- | `ozonbank.ru` |
+| Ozon банк | -- | `ozonbank.ru` |
 
 ### Телеком
 МТС (AS8359), МегаФон (AS31133), Билайн (AS3216), Ростелеком (AS12389) — это интернет-провайдеры с сотнями/тысячами IP-префиксов. Включение их полных ASN-диапазонов перегружает маршрутную таблицу Android и может вызвать сбои. Для работы личных кабинетов операторов достаточно DNS-резолвинга их доменов.
@@ -278,7 +278,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | Invitro | -- | `invitro.ru`, `api.invitro.ru` и др. |
 | Медси | -- | `api.medsi.ru`, `app.medsi.ru` и др. |
 
-### Мессенджеры / Соцсети
+### Мессенджеры
 | Сервис | Домены |
 |--------|--------|
 | TenChat | `tenchat.ru` |
@@ -297,9 +297,9 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | REG.RU | `reg.ru` |
 
 ### Финтех
-| Сервис | Домены |
-|--------|--------|
-| Мосбиржа | `moex.com` |
+| Сервис | ASN | Домены |
+|--------|-----|--------|
+| Мосбиржа | AS48009 | `moex.com` |
 
 ### Другое
 | Сервис | ASN | Домены |
