@@ -124,7 +124,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 |--------|-----|--------|
 | Сбербанк | AS33844, AS35237 и др. | `sberbank.ru`, `sber.ru`, `sberinvestor.ru` и др. |
 | Т-Банк | AS12686, AS205638 и др. | `tbank.ru`, `tinkoff.ru`, `invest-gw.tinkoff.ru` и др. |
-| ВТБ | AS24823, AS39154 и др. | `vtb.ru`, `online.vtb.ru`, `invest.vtb.ru` |
+| ВТБ | AS24823, AS39154 и др. | `vtb.ru`, `online.vtb.ru`, `invest.vtb.ru` и др. |
 | Альфа-Банк | AS15632, AS34838 и др. | `alfabank.ru`, `alfadirect.ru`, `alfa.me` |
 | Газпромбанк | AS35022, AS48033 и др. | `gazprombank.ru`, `gpb.ru` |
 | Россельхозбанк | AS41615 | `rshb.ru`, `online.rshb.ru` |
@@ -146,10 +146,10 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 
 | Сервис | Домены |
 |--------|--------|
-| МТС | `mts.ru`, `payment.mts.ru`, `login.mts.ru` |
-| МегаФон | `megafon.ru`, `lk.megafon.ru` |
+| МТС | `mts.ru`, `payment.mts.ru`, `login.mts.ru` и др. |
+| МегаФон | `megafon.ru`, `yota.ru`, `lk.megafon.ru` и др. |
 | Билайн | `beeline.ru`, `my.beeline.ru` |
-| Теле2 | `tele2.ru`, `my.tele2.ru` |
+| Теле2 | `t2.ru`, `tele2.ru`, `my.tele2.ru` и др. |
 | Ростелеком | `rt.ru`, `rostelecom.ru`, `lk.rt.ru` |
 | Дом.ру | `domru.ru`, `lk.domru.ru` |
 
@@ -208,7 +208,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 ### Государственные сервисы
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Госуслуги | AS12389 | `gosuslugi.ru`, `esia.gosuslugi.ru` и др. |
+| Госуслуги | AS12389, AS196747 и др. | `gosuslugi.ru`, `esia.gosuslugi.ru` и др. |
 | ФНС / Налоговая | -- | `nalog.gov.ru`, `lkfl2.nalog.ru`, `goskey.ru`, `ebs.ru` и др. |
 | Мос.ру | AS8901 | `mos.ru`, `my.mos.ru`, `uslugi.mos.ru` |
 | ЦБ РФ | -- | `cbr.ru`, `finmarket.ru` |
@@ -269,11 +269,11 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 ### Медицина / Здоровье
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| ДокторНаРаботе / СберЗдоровье | -- | `sberhealth.ru`, `doctoronline.ru` |
+| СберЗдоровье | -- | `sberhealth.ru`, `doctoronline.ru` |
 | Аптека.ру | -- | `apteka.ru` |
 | Еаптека | -- | `eapteka.ru` |
 | Аптеки Столички | AS201706 | `stolichki.ru` |
-| ЕМИАС | AS209030 | `emias.info`, `emias.ru` |
+| ЕМИАС | AS209030 | `emias.info`, `emias.ru` и др. |
 | Invitro | -- | `invitro.ru`, `api.invitro.ru` и др. |
 | Медси | -- | `api.medsi.ru`, `app.medsi.ru` и др. |
 
