@@ -61,7 +61,7 @@ services:
       - dzen.ru
       - api.kinopoisk.ru
 
-  - name: "ВКонтакте"
+  - name: "VK"
     asn:
       - 28709
       - 47541
