@@ -544,8 +544,7 @@ services:
       - mobile.rendez-vous.ru
 
   - name: "One Price Coffee"
-    asn:
-      - 200350
+    asn: []
     domains:
       - onepricecoffee.com
       - api.onepricecoffee.com
