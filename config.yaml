@@ -620,6 +620,9 @@ services:
   - name: "Госуслуги"
     asn:
       - 12389
+      - 196747
+      - 48287
+      - 39494
     domains:
       - gosuslugi.ru
       - esia.gosuslugi.ru
