@@ -387,16 +387,6 @@ services:
       - avito.ru
       - avito.st
 
-  - name: "KazanExpress / Магнит Маркет"
-    asn:
-      - 57319
-      - 60691
-    domains:
-      - kazanexpress.ru
-      - magnit.market
-      - magnit.ru
-      - dostavka.magnit.ru
-
   - name: "СберМегаМаркет"
     asn: []
     domains:
@@ -691,7 +681,6 @@ services:
     asn: []
     domains:
       - s7.ru
-      - s7airlines.com
 
   - name: "Победа"
     asn: []
