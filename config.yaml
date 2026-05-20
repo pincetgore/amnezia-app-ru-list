@@ -980,43 +980,12 @@ services:
     domains:
       - litres.ru
 
-  - name: "1С"
-    asn: []
-    domains:
-      - 1c.ru
-      - 1c-bitrix.ru
-
-  - name: "Битрикс24"
-    asn: []
-    domains:
-      - bitrix24.ru
-      - b24.io
-
-  - name: "AmoCRM"
-    asn: []
-    domains:
-      - amocrm.ru
-      - amocrm.com
-
-  - name: "Контур"
-    asn: []
-    domains:
-      - kontur.ru
-      - extern.kontur.ru
-      - elba.kontur.ru
-
   - name: "Kaspersky"
     asn:
       - 200187
     domains:
       - kaspersky.ru
       - kaspersky.com
-
-  - name: "Dr.Web"
-    asn: []
-    domains:
-      - drweb.ru
-      - drweb.com
 
   - name: "Профи.ру"
     asn:
