@@ -539,8 +539,6 @@ services:
       - onepricecoffee.com
       - api.onepricecoffee.com
       - app.onepricecoffee.com
-      - premiumbonus.ru
-      - api.premiumbonus.su
       - cloud.onepricecoffee.com
       - delivery.onepricecoffee.com
 
