@@ -314,8 +314,6 @@ services:
     domains:
       - megafon.ru
       - lk.megafon.ru
-      - inplat.ru
-      - megafon.com
       - megafonpro.ru
       - mgfn.ru
       - report-megafon.ru
