@@ -159,7 +159,6 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | Wildberries | AS49053, AS57073 и др. | `wildberries.ru`, `wb.ru` и др. |
 | Ozon | AS207986, AS44386 | `ozon.ru`, `ozon.app`, `ozone.ru` и др. |
 | Авито | AS201012 | `avito.ru`, `avito.st` |
-| KazanExpress / Магнит Маркет | AS57319, AS60691 | `kazanexpress.ru`, `magnit.market`, `magnit.ru` и др. |
 | СберМегаМаркет | -- | `sbermegamarket.ru`, `megamarket.ru` |
 | Lamoda | AS57906 | `lamoda.ru`, `lamoda.co` |
 | DNS Shop | -- | `dns-shop.ru`, `dns-shop.net` |
@@ -220,7 +219,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 |--------|-----|--------|
 | РЖД | AS20702, AS28991 | `rzd.ru`, `ticket.rzd.ru`, `pass.rzd.ru` |
 | Аэрофлот | -- | `aeroflot.ru`, `api.aeroflot.ru`, `booking.aeroflot.ru` |
-| S7 Airlines | -- | `s7.ru`, `s7airlines.com` |
+| S7 Airlines | -- | `s7.ru` |
 | Победа | -- | `pobeda.aero`, `booking.pobeda.aero` |
 | Уральские авиалинии | -- | `uralairlines.ru` |
 | Aviasales | -- | `aviasales.ru`, `aviasales.com` |
@@ -305,12 +304,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | Сервис | ASN | Домены |
 |--------|-----|--------|
 | Литрес | -- | `litres.ru` |
-| 1С | -- | `1c.ru`, `1c-bitrix.ru` |
-| Битрикс24 | -- | `bitrix24.ru`, `b24.io` |
-| AmoCRM | -- | `amocrm.ru`, `amocrm.com` |
-| Контур | -- | `kontur.ru`, `extern.kontur.ru`, `elba.kontur.ru` |
 | Kaspersky | AS200187 | `kaspersky.ru`, `kaspersky.com` |
-| Dr.Web | -- | `drweb.ru`, `drweb.com` |
 | Профи.ру | AS60580 | `profi.ru` |
 
 ---
