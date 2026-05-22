@@ -978,10 +978,13 @@ services:
     asn: []
     domains:
       - agent.reso.ru
+      - j7h6i8.reso.ru
       - lms.reso.ru
       - reso.ru
       - sc.ya.reso.ru
       - secureportal.citrix.reso.ru
+      - www.lms.reso.ru
+      - www.reso.ru
       - ya.reso.ru
 
   - name: "Зоозавр"
