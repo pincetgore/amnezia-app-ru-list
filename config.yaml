@@ -995,7 +995,6 @@ services:
       - blog.zoozavr.ru
       - feedback.zoozavr.ru
       - info.zoozavr.ru
-      - info.zoozavr.ru
       - krasnodog.zoozavr.ru
       - mail.zoozavr.ru
       - mta-sts.mail.zoozavr.ru
