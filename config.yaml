@@ -992,3 +992,31 @@ services:
     asn: []
     domains:
       - zoozavr.ru
+
+  - name: "АГНИ"
+    asn: []
+    domains:
+      - beauty-forma.com
+
+  - name: "Dreamehome"
+    asn: 
+      - 137280
+    domains:
+      - ru.dreametech.com
+      - ru.iot.dreame.tech
+      - dreametech.com
+      - smarthome.dreame.tech
+      - api.dreametech.com
+      - account.dreametech.com
+      - iot.dreametech.com
+
+  - name: "Аптека Вита"
+    asn: []
+    domains:
+      - vitaexpress.ru
+
+  - name: "Мой умный дом (Уфанет)"
+    asn:
+      - 24955
+    domains:
+      - vitaexpress.ru
