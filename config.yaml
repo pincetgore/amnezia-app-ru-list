@@ -975,7 +975,8 @@ services:
       - profi.ru
 
   - name: "РЕСО"
-    asn: []
+    asn:
+      - 39266
     domains:
       - agent.reso.ru
       - j7h6i8.reso.ru
