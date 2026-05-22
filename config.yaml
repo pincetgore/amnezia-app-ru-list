@@ -987,3 +987,8 @@ services:
       - sc.ya.reso.ru
       - secureportal.citrix.reso.ru
       - ya.reso.ru
+
+  - name: "Зоозавр"
+    asn: []
+    domains:
+      - zoozavr.ru
