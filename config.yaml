@@ -994,9 +994,8 @@ services:
       - api.zoozavr.ru
       - blog.zoozavr.ru
       - feedback.zoozavr.ru
-      - www.feedback.zoozavr.ru
       - info.zoozavr.ru
-      - www.info.zoozavr.ru
+      - info.zoozavr.ru
       - krasnodog.zoozavr.ru
       - mail.zoozavr.ru
       - mta-sts.mail.zoozavr.ru
@@ -1004,13 +1003,9 @@ services:
       - api.new1.zoozavr.ru
       - promo.zoozavr.ru
       - services.zoozavr.ru
-      - www.services.zoozavr.ru
       - spz.zoozavr.ru
-      - www.spz.zoozavr.ru
       - welcome.zoozavr.ru
-      - www.welcome.zoozavr.ru
       - ws.zoozavr.ru
-      - www.zoozavr.ru
       - zoo-bonus.zoozavr.ru
 
   - name: "АГНИ"
@@ -1019,11 +1014,7 @@ services:
       - beauty-forma.com
       - lk.beauty-forma.com
       - lk-dev.beauty-forma.com
-      - www.lk-dev.beauty-forma.com
-      - www.lk.beauty-forma.com
       - shop.beauty-forma.com
-      - www.shop.beauty-forma.com
-      - www.beauty-forma.com
 
   - name: "Dreamehome"
     asn: 
@@ -1041,6 +1032,14 @@ services:
     asn: []
     domains:
       - vitaexpress.ru
+      - autodiscover.vitaexpress.ru
+      - blog.vitaexpress.ru
+      - cloud.vitaexpress.ru
+      - mailimage.vitaexpress.ru
+      - mobapp.vitaexpress.ru
+      - mx.vitaexpress.ru
+      - my.vitaexpress.ru
+      - static.vitaexpress.ru
 
   - name: "Мой умный дом (Уфанет)"
     asn:
