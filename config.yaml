@@ -418,7 +418,6 @@ services:
   - name: "Леруа Мерлен"
     asn: []
     domains:
-      - leroymerlin.ru
       - lemanapro.ru
 
   - name: "Золотое Яблоко"
@@ -815,10 +814,7 @@ services:
     domains:
       - 2gis.ru
       - 2gis.com
-      - 2gis.tech
-      - maps.2gis.com
       - tile3.maps.2gis.com
-      - api.2gis.com
       - static.2gis.com
       - cdn.2gis.ru
 
