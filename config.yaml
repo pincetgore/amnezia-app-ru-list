@@ -1050,6 +1050,7 @@ services:
     domains:
       - dreametech.com
       - ru.dreametech.com
+      - ru.api.dreame.tech
       - ru.iot.dreame.tech
       - smarthome.dreame.tech
       - api.dreametech.com
@@ -1061,6 +1062,10 @@ services:
       - 24955
     domains:
       - dom.ufanet.ru
+      - ufanet.ru
+      - secretapi.ufanet.ru
+      - ufanetgroup.com
+      - ru.ufanet.smarthome
 
   - name: "kojima.ru"
     asn: []
