@@ -922,6 +922,7 @@ services:
       - cloud.vitaexpress.ru
       - mailimage.vitaexpress.ru
       - mobapp.vitaexpress.ru
+      - mobapp-api.vitaexpress.ru
       - mx.vitaexpress.ru
       - my.vitaexpress.ru
       - static.vitaexpress.ru
