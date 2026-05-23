@@ -905,6 +905,29 @@ services:
       - medsi.ru
       - medsi-premium.ru
 
+  - name: "АГНИ"
+    asn: []
+    domains:
+      - beauty-forma.com
+      - lk.beauty-forma.com
+      - lk-dev.beauty-forma.com
+      - shop.beauty-forma.com
+
+  - name: "Аптека Вита"
+    asn:
+      - 42996
+    domains:
+      - vitaexpress.ru
+      - autodiscover.vitaexpress.ru
+      - blog.vitaexpress.ru
+      - cloud.vitaexpress.ru
+      - mailimage.vitaexpress.ru
+      - mobapp.vitaexpress.ru
+      - mx.vitaexpress.ru
+      - my.vitaexpress.ru
+      - static.vitaexpress.ru
+      - app.vitaexpress.ru
+
   # ============================================================
   # МЕССЕНДЖЕРЫ
   # ============================================================
@@ -1013,14 +1036,6 @@ services:
       - ws.zoozavr.ru
       - zoo-bonus.zoozavr.ru
 
-  - name: "АГНИ"
-    asn: []
-    domains:
-      - beauty-forma.com
-      - lk.beauty-forma.com
-      - lk-dev.beauty-forma.com
-      - shop.beauty-forma.com
-
   - name: "Dreamehome"
     asn: 
       - 137280
@@ -1034,21 +1049,6 @@ services:
       - account.dreametech.com
       - iot.dreametech.com
 
-  - name: "Аптека Вита"
-    asn:
-      - 42996
-    domains:
-      - vitaexpress.ru
-      - autodiscover.vitaexpress.ru
-      - blog.vitaexpress.ru
-      - cloud.vitaexpress.ru
-      - mailimage.vitaexpress.ru
-      - mobapp.vitaexpress.ru
-      - mx.vitaexpress.ru
-      - my.vitaexpress.ru
-      - static.vitaexpress.ru
-      - app.vitaexpress.ru
-
   - name: "Мой умный дом (Уфанет)"
     asn:
       - 24955
@@ -1056,6 +1056,7 @@ services:
       - dom.ufanet.ru
 
   - name: "kojima.ru"
-    asn: []
+    asn:
+      - 9123
     domains:
       - kojima.ru
