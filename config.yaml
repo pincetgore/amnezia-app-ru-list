@@ -326,6 +326,13 @@ services:
     domains:
       - beeline.ru
       - my.beeline.ru
+      - api.beeline.ru
+      - lk.beeline.ru
+      - vmp.beeline.ru
+      - id.beeline.ru
+      - singleidentity.ru
+      - beelinenew.cdnvideo.ru
+      - static.beeline.ru
 
   - name: "Теле2"
     asn: []
