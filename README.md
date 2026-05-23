@@ -308,9 +308,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | Профи.ру | AS60580 | `profi.ru` |
 | РЕСО | AS39266 | `reso.ru`, `agent.reso.ru` и др. |
 | Зоозавр | -- | `zoozavr.ru`, `api.zoozavr.ru` и др. |
-| АГНИ | -- | `beauty-forma.com`, `lk.beauty-forma.com` и др. |
 | Dreamehome | AS137280 | `ru.dreametech.com`, `ru.iot.dreame.tech` и др. |
-| Аптека Вита | AS42996 | `vitaexpress.ru`, `autodiscover.vitaexpress.ru` и др. |
 | Мой умный дом (Уфанет) | AS24955 | `dom.ufanet.ru` |
 | kojima.ru | -- | `kojima.ru` |
 
