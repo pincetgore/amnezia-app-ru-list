@@ -110,7 +110,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 
 | Сервис | IP-диапазоны |
 |--------|--------------|
-| Локальные сети (LAN, CGNAT, Multicast) | `10.0.0.0/8`, `100.64.0.0/10`, `169.254.0.0/16`, `172.16.0.0/12`, `192.168.0.0/16`, `224.0.0.0/4` |
+| Локальные сети (LAN, CGNAT, Multicast) | `10.0.0.0/8`, `100.64.0.0/10`, `169.254.0.0/16`, `172.16.0.0/12`, `192.168.0.0/16`, `224.0.0.0/4`, `127.0.0.0/32` |
 
 ### Бигтех / Супераппы
 | Сервис | ASN | Домены |
@@ -185,11 +185,11 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | Лента | -- | `lenta.com`, `online.lenta.com` |
 | Metro Cash and Carry | AS210756 | `metro-cc.ru`, `online.metro-cc.ru` |
 | FixPrice | -- | `fix-price.com`, `fix-price.ru` |
-| Дикси | AS202760, AS51115 | `dixy.ru` |
+| Дикси | AS202760 | `dixy.ru` |
 | ВкусВилл | -- | `vkusvill.ru`, `online.vkusvill.ru` |
 | SPAR | -- | `myspar.ru`, `api.myspar.ru` и др. |
 | Rendez-vous | -- | `rendez-vous.ru`, `api.rendez-vous.ru` и др. |
-| One Price Coffee | -- | `onepricecoffee.com`, `premiumbonus.ru` и др. |
+| One Price Coffee | -- | `onepricecoffee.com`, `api.onepricecoffee.com` и др. |
 | Best Benefits | -- | `bestbenefits.ru`, `app.bestbenefits.ru` и др. |
 
 ### Стриминг / Видео / Музыка
@@ -276,6 +276,8 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | ЕМИАС | AS209030 | `emias.info`, `emias.ru` и др. |
 | Invitro | -- | `invitro.ru`, `api.invitro.ru` и др. |
 | Медси | -- | `api.medsi.ru`, `app.medsi.ru` и др. |
+| АГНИ | -- | `beauty-forma.com`, `shop.beauty-forma.com` и др. |
+| Аптека Вита | AS42996 | `vitaexpress.ru`, `app.vitaexpress.ru` и др. |
 
 ### Мессенджеры
 | Сервис | Домены |
@@ -290,10 +292,11 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | MY.GAMES | `my.games`, `api.my.games` |
 
 ### Облака / Хостинги
-| Сервис | Домены |
-|--------|--------|
-| Selectel | `selectel.ru` |
-| REG.RU | `reg.ru` |
+| Сервис | ASN | Домены |
+|--------|-----|--------|
+| Selectel | AS49505 | `selectel.ru` |
+| REG.RU | AS197695 | `reg.ru` |
+| Timeweb | AS9123, AS51115 | `timeweb.cloud` |
 
 ### Финтех
 | Сервис | ASN | Домены |
