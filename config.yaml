@@ -1049,7 +1049,6 @@ services:
       - dreametech.com
       - ru.dreametech.com
       - ru.iot.dreame.tech
-      - dreametech.com
       - smarthome.dreame.tech
       - api.dreametech.com
       - account.dreametech.com
