@@ -148,7 +148,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 |--------|--------|
 | МТС | `mts.ru`, `payment.mts.ru`, `login.mts.ru` и др. |
 | МегаФон | `megafon.ru`, `yota.ru`, `lk.megafon.ru` и др. |
-| Билайн | `beeline.ru`, `my.beeline.ru` |
+| Билайн | `beeline.ru`, `my.beeline.ru` и др. |
 | Теле2 | `t2.ru`, `tele2.ru`, `my.tele2.ru` и др. |
 | Ростелеком | `rt.ru`, `rostelecom.ru`, `lk.rt.ru` |
 | Дом.ру | `domru.ru`, `lk.domru.ru` |
@@ -164,9 +164,9 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | DNS Shop | -- | `dns-shop.ru`, `dns-shop.net` |
 | М.Видео / Эльдорадо | -- | `mvideo.ru`, `eldorado.ru` |
 | Ситилинк | -- | `citilink.ru` |
-| Леруа Мерлен | -- | `leroymerlin.ru`, `lemanapro.ru` |
+| Леруа Мерлен | -- | `lemanapro.ru` |
 | Золотое Яблоко | -- | `goldapple.ru` |
-| Детский мир | -- | `detmir.ru` |
+| Детский мир | -- | `detmir.ru`, `detmist.st` и др. |
 | Hoff | -- | `hoff.ru` |
 | Aliexpress | AS45102 | `aliexpress.ru` |
 
@@ -211,7 +211,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | ФНС / Налоговая | -- | `nalog.gov.ru`, `lkfl2.nalog.ru`, `goskey.ru`, `ebs.ru` и др. |
 | Мос.ру | AS8901 | `mos.ru`, `mosreg.ru`, `my.mos.ru`, `uslugi.mos.ru` |
 | ЦБ РФ | -- | `cbr.ru`, `finmarket.ru` |
-| Почта России | -- | `pochta.ru`, `tracking.pochta.ru` |
+| Почта России | -- | `pochta.ru`, `tracking.pochta.ru` и др. |
 | Честный знак | -- | `xn--80ajghhoc2aj1c8b.xn--p1ai` |
 
 ### Транспорт / Путешествия
@@ -312,7 +312,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | РЕСО | AS39266 | `reso.ru`, `agent.reso.ru` и др. |
 | Зоозавр | -- | `zoozavr.ru`, `api.zoozavr.ru` и др. |
 | Dreamehome | AS137280 | `ru.dreametech.com`, `ru.iot.dreame.tech` и др. |
-| Мой умный дом (Уфанет) | AS24955 | `dom.ufanet.ru` |
+| Мой умный дом (Уфанет) | AS24955 | `dom.ufanet.ru`, `ufanet.ru` и др. |
 | kojima.ru | -- | `kojima.ru` |
 
 ---
