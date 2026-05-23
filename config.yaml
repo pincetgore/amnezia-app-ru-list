@@ -972,6 +972,13 @@ services:
     domains:
       - reg.ru
 
+  - name: "Timeweb"
+    asn:
+      - 9123
+      - 51115
+    domains:
+      - timeweb.cloud
+
   # ============================================================
   # ФИНТЕХ
   # ============================================================
@@ -1056,7 +1063,6 @@ services:
       - dom.ufanet.ru
 
   - name: "kojima.ru"
-    asn:
-      - 9123
+    asn: []
     domains:
       - kojima.ru
