@@ -1045,7 +1045,6 @@ services:
       - my.vitaexpress.ru
       - static.vitaexpress.ru
       - app.vitaexpress.ru
-      - static.vitaexpress.ru
 
   - name: "Мой умный дом (Уфанет)"
     asn:
