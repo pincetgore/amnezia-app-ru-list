@@ -429,6 +429,10 @@ services:
     asn: []
     domains:
       - detmir.ru
+      - detmist.st
+      - img.detmir.st
+      - go.detmir.st
+      - catalog-cdn.detmir.st
 
   - name: "Hoff"
     asn: []
@@ -1039,6 +1043,8 @@ services:
       - mobapp.vitaexpress.ru
       - mx.vitaexpress.ru
       - my.vitaexpress.ru
+      - static.vitaexpress.ru
+      - app.vitaexpress.ru
       - static.vitaexpress.ru
 
   - name: "Мой умный дом (Уфанет)"
