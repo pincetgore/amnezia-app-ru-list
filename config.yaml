@@ -1025,6 +1025,7 @@ services:
     asn: 
       - 137280
     domains:
+      - dreametech.com
       - ru.dreametech.com
       - ru.iot.dreame.tech
       - dreametech.com
