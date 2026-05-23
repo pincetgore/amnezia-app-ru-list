@@ -1052,3 +1052,8 @@ services:
       - 24955
     domains:
       - dom.ufanet.ru
+
+  - name: "kojima.ru"
+    asn: []
+    domains:
+      - kojima.ru
