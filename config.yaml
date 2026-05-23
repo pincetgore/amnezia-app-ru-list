@@ -1033,7 +1033,8 @@ services:
       - iot.dreametech.com
 
   - name: "Аптека Вита"
-    asn: []
+    asn:
+      - 42996
     domains:
       - vitaexpress.ru
       - autodiscover.vitaexpress.ru
