@@ -429,11 +429,13 @@ services:
       - lemanapro.ru
 
   - name: "Золотое Яблоко"
-    asn:
-      - 208629
-      - 210443
+    asn: []
     domains:
       - goldapple.ru
+      - pcdn.goldapple.ru
+      - gacdn.ru
+      - juicyscore.ru
+      - api.goldapple.ru
 
   - name: "Детский мир"
     asn: []
