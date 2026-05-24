@@ -165,7 +165,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | М.Видео / Эльдорадо | -- | `mvideo.ru`, `eldorado.ru` |
 | Ситилинк | -- | `citilink.ru` |
 | Леруа Мерлен | -- | `lemanapro.ru` |
-| Золотое Яблоко | -- | `goldapple.ru` |
+| Золотое Яблоко | -- | `goldapple.ru`, `api.goldapple.ru` и др. |
 | Детский мир | -- | `detmir.ru`, `detmist.st` и др. |
 | Hoff | -- | `hoff.ru` |
 | Aliexpress | AS45102 | `aliexpress.ru` |
@@ -255,7 +255,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 ### Карты / Навигация / Гео
 | Сервис | ASN | IP-диапазоны | Домены |
 |--------|-----|--------------|--------|
-| 2ГИС | AS197482 | `91.236.48.0/22`, `91.221.198.0/23` и др. | `2gis.com`, `2gis.ru`, `api.2gis.com` и др. |
+| 2ГИС | AS197482 | `91.236.48.0/22`, `91.221.198.0/23` и др. | `2gis.ru`, `2gis.com`, `tile3.maps.2gis.com` и др. |
 
 ### Образование
 | Сервис | Домены |
@@ -297,6 +297,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | Selectel | AS49505 | `selectel.ru` |
 | REG.RU | AS197695 | `reg.ru` |
 | Timeweb | AS9123, AS51115 | `timeweb.cloud` |
+| Ngenix.net | AS34879, AS204878 и др. | `ngenix.net` |
 
 ### Финтех
 | Сервис | ASN | Домены |
