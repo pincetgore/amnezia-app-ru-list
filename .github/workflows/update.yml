@@ -47,7 +47,7 @@ jobs:
       - name: Generate artifacts
         run: |
           python main.py -o ip-list-${{ env.CURRENT_DATETIME }}.json -f amnezia
-          python main.py -o cidrs-${{ env.CURRENT_DATETIME }}.txt -f plain
+          jq -r '.[].hostname' ip-list-${{ env.CURRENT_DATETIME }}.json > cidrs-${{ env.CURRENT_DATETIME }}.txt
 
       - name: Delete old release and tag
         run: |
