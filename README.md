@@ -181,7 +181,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 ### Ритейл / Продукты
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Пятёрочка / X5 Group | AS44704, AS215810 и др. | `5ka.ru`, `perekrestok.ru`, `vprok.ru`, `x5.ru` и др. |
+| Пятёрочка / X5 Group | AS215810, AS44704 | `5ka.ru`, `perekrestok.ru`, `vprok.ru`, `x5.ru` и др. |
 | Лента | -- | `lenta.com`, `online.lenta.com` |
 | Metro Cash and Carry | AS210756 | `metro-cc.ru`, `online.metro-cc.ru` |
 | FixPrice | -- | `fix-price.com`, `fix-price.ru` |
@@ -294,8 +294,8 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 ### Облака / Хостинги
 | Сервис | ASN | Домены |
 |--------|-----|--------|
-| Selectel | AS49505 | `selectel.ru` |
-| REG.RU | AS197695 | `reg.ru` |
+| Selectel | -- | `selectel.ru` |
+| REG.RU | -- | `reg.ru` |
 | Timeweb | AS9123, AS51115 | `timeweb.cloud` |
 | Ngenix.net | AS34879, AS204878 и др. | `ngenix.net` |
 
