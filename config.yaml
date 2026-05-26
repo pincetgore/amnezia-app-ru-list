@@ -530,6 +530,9 @@ services:
     domains:
       - vkusvill.ru
       - online.vkusvill.ru
+      - api-sd.vkusvill.ru
+      - api.vkusvill.ru
+      - app.vkusvill.ru
 
   - name: "SPAR"
     asn: []
