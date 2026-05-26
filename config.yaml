@@ -980,8 +980,7 @@ services:
       - selectel.ru
 
   - name: "REG.RU"
-    asn:
-      - 197695
+    asn: []
     domains:
       - reg.ru
 
