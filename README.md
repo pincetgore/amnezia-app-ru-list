@@ -186,7 +186,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | Metro Cash and Carry | AS210756 | `metro-cc.ru`, `online.metro-cc.ru` |
 | FixPrice | -- | `fix-price.com`, `fix-price.ru` |
 | Дикси | AS202760 | `dixy.ru` |
-| ВкусВилл | -- | `vkusvill.ru`, `online.vkusvill.ru` |
+| ВкусВилл | -- | `vkusvill.ru`, `online.vkusvill.ru` и др. |
 | SPAR | -- | `myspar.ru`, `api.myspar.ru` и др. |
 | Rendez-vous | -- | `rendez-vous.ru`, `api.rendez-vous.ru` и др. |
 | One Price Coffee | -- | `onepricecoffee.com`, `api.onepricecoffee.com` и др. |
