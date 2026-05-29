@@ -164,10 +164,6 @@ services:
     domains:
       - tbank.ru
       - tinkoff.ru
-      - tcsbank.ru
-      - tinkoffinsurance.ru
-      - cdn-tinkoff.ru
-      - invest-gw.tinkoff.ru
 
   - name: "ВТБ"
     asn:
