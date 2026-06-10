@@ -8,6 +8,7 @@
 import argparse
 import concurrent.futures
 import logging
+import signal
 import sys
 from typing import Any, Dict, List
 
@@ -40,6 +41,12 @@ def load_config(path: str = "config.yaml") -> Dict[str, Any]:
         sys.exit(1)
 
 
+def _handle_sigint(sig, frame):
+    """Graceful shutdown при Ctrl+C."""
+    logger.info("Received interrupt signal, shutting down...")
+    sys.exit(0)
+
+
 def main():
     """Главная функция: загружает сервисы из config.yaml, резолвит их IP через ASN/DNS и генерирует список.
     
@@ -52,6 +59,9 @@ def main():
     6. Записывает результат в JSON/plain формат
     7. Выводит статистику
     """
+    # Регистрация обработчика для graceful shutdown
+    signal.signal(signal.SIGINT, _handle_sigint)
+    
     # -- Парсинг аргументов командной строки (CLI) --
     parser = argparse.ArgumentParser(
         description="Generate IP bypass list for Russian services (AmneziaVPN split tunneling)"
@@ -172,18 +182,17 @@ def main():
         print(f"  Errors:             {errors}")
     if all_dns_warnings:
         print(f"  DNS warnings:       {len(all_dns_warnings)}")
-        print("\nDNS Resolution Warnings (domains that could not be resolved):")
+        print("\nDomains that could not be resolved:")
         for domain in sorted(set(all_dns_warnings)):
             print(f"  ⚠️  {domain}")
-    if all_dns_warnings:
-        print(f"  DNS Warnings:       {len(all_dns_warnings)}")
-        print("\nDomains with DNS warnings:")
-        for w in sorted(set(all_dns_warnings)):
-            print(f"  - {w}")
+    
+    # Проверка на полный отказ в сборе данных
+    if not aggregated:
+        logger.warning("No IP prefixes were collected. Check logs for errors.")
+        if errors > 0:
+            sys.exit(1)
+    
     print(f"\nOutput: {args.output}")
-
-    # Опционально: Для строгих CI/CD пайплайнов можно возвращать код ошибки,
-    # если произошли сбои: if errors > 0: sys.exit(1)
 
 
 if __name__ == "__main__":
