@@ -68,38 +68,26 @@ def test_no_duplicate_domains():
                 
     assert not duplicates, "Найдены дублирующиеся домены:\n" + "\n".join(duplicates)
 
-def test_no_duplicate_asns():
-    """Проверяет отсутствие дубликатов ASN во всем config.yaml."""
-    with open("config.yaml", "r", encoding="utf-8") as f:
-        config = yaml.safe_load(f)
-    
-    seen_asns = {}
-    duplicates = []
-    
-    for service in config.get("services", []):
-        service_name = service.get("name", "Unknown")
-        for asn in service.get("asn") or []:
-            if asn in seen_asns:
-                duplicates.append(f"AS{asn} (в '{service_name}' и '{seen_asns[asn]}')")
-            else:
-                seen_asns[asn] = service_name
-                
-    assert not duplicates, "Найдены дублирующиеся ASN:\n" + "\n".join(duplicates)
 
-def test_no_duplicate_ip_ranges():
-    """Проверяет отсутствие точных дубликатов ip_ranges во всем config.yaml."""
+@pytest.mark.parametrize("field_name,item_type", [
+    ("asn", "ASN"),
+    ("ip_ranges", "IP range"),
+])
+def test_no_duplicates_config(field_name, item_type):
+    """Проверяет отсутствие дубликатов в конфигурации (ASN, IP ranges)."""
     with open("config.yaml", "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
     
-    seen_ips = {}
+    seen_items = {}
     duplicates = []
     
     for service in config.get("services", []):
         service_name = service.get("name", "Unknown")
-        for ip in service.get("ip_ranges") or []:
-            if ip in seen_ips:
-                duplicates.append(f"{ip} (в '{service_name}' и '{seen_ips[ip]}')")
+        for item in service.get(field_name) or []:
+            item_str = f"AS{item}" if field_name == "asn" else str(item)
+            if item in seen_items:
+                duplicates.append(f"{item_str} (в '{service_name}' и '{seen_items[item]}')")
             else:
-                seen_ips[ip] = service_name
+                seen_items[item] = service_name
                 
-    assert not duplicates, "Найдены дублирующиеся ip_ranges:\n" + "\n".join(duplicates)
+    assert not duplicates, f"Найдены дублирующиеся {item_type}:\n" + "\n".join(duplicates)
