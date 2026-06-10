@@ -10,13 +10,14 @@
 import logging
 import concurrent.futures
 from ipaddress import IPv4Network
+from typing import List, Optional, Tuple
 
 import dns.resolver
 
 logger = logging.getLogger(__name__)
 
 
-def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> tuple[list[IPv4Network], str | None]:
+def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> Tuple[List[IPv4Network], Optional[str]]:
     """Вспомогательная функция для получения IP-адресов одного домена."""
     networks = []
     warning = None
@@ -42,8 +43,19 @@ def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> tupl
     return networks, warning
 
 
-def resolve_domains(domains: list[str], timeout: int = 10, max_workers: int = 20) -> tuple[list[IPv4Network], list[str]]:
+def resolve_domains(
+    domains: List[str],
+    timeout: int = 10,
+    max_workers: int = 20,
+    nameservers: Optional[List[str]] = None,
+) -> Tuple[List[IPv4Network], List[str]]:
     """Получает IPv4-сети /32 для списка доменов и возвращает предупреждения.
+
+    Параметры:
+    - domains: список доменов для резолвинга
+    - timeout: таймаут в секундах
+    - max_workers: макс количество параллельных воркеров
+    - nameservers: список DNS серверов (если None, использует Яндекс.DNS)
 
     Ошибки для отдельных доменов логируются и пропускаются — функция
     возвращает кортеж (сети, домены_с_предупреждениями) без вызова исключений.
@@ -52,7 +64,7 @@ def resolve_domains(domains: list[str], timeout: int = 10, max_workers: int = 20
     resolver = dns.resolver.Resolver()
     # Используем Яндекс.DNS первыми, так как многие RU-домены (ВТБ, VK, X5) 
     # блокируют запросы от зарубежных DNS (Google/Cloudflare) для защиты от DDoS
-    resolver.nameservers = ['77.88.8.8', '77.88.8.1', '8.8.8.8', '1.1.1.1']
+    resolver.nameservers = nameservers or ['77.88.8.8', '77.88.8.1', '8.8.8.8', '1.1.1.1']
     
     # Таймаут на один сервер делаем пропорциональным количеству серверов (2.5 сек)
     resolver.timeout = timeout / len(resolver.nameservers)
