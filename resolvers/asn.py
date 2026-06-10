@@ -71,11 +71,11 @@ def _rate_limit():
         _last_request_time = time.time()
 
 
-def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network] | None:
-    """Получает все анонсированные IPv4-префиксы для AOptional[List[IPv4Network]]
+def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]]:
+    """Получает все анонсированные IPv4-префиксы для ASN из RIPE NCC API.
 
-    Возвращает пустой список при сбое (сетевая ошибка, неверный ответ и т.д.),
-    чтобы вызывающая функция могла перейти к резервному варианту bgp.he.net.
+    Возвращает None при сбое сетевого запроса, чтобы вызывающая функция
+    могла перейти к резервному варианту bgp.he.net.
     """
     _rate_limit()
     try:
