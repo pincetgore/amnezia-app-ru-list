@@ -9,7 +9,7 @@ import argparse
 import concurrent.futures
 import logging
 import sys
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 import yaml
 from tqdm import tqdm
@@ -41,6 +41,17 @@ def load_config(path: str = "config.yaml") -> Dict[str, Any]:
 
 
 def main():
+    """Главная функция: загружает сервисы из config.yaml, резолвит их IP через ASN/DNS и генерирует список.
+    
+    Алгоритм:
+    1. Загружает конфигурацию сервисов из config.yaml
+    2. Для каждого сервиса получает IP-префиксы через RIPE API/bgp.he.net по ASN
+    3. Резолвит A-записи доменов параллельно
+    4. Добавляет явно заданные IP-диапазоны
+    5. Агрегирует все CIDR-диапазоны (удаляет дубли и вложенные подсети)
+    6. Записывает результат в JSON/plain формат
+    7. Выводит статистику
+    """
     # -- Парсинг аргументов командной строки (CLI) --
     parser = argparse.ArgumentParser(
         description="Generate IP bypass list for Russian services (AmneziaVPN split tunneling)"
@@ -74,6 +85,12 @@ def main():
     # -- Загрузка определений сервисов --
     config = load_config(args.config)
     services = config.get("services", [])
+    
+    # -- Загрузка DNS конфигурации --
+    dns_config = config.get("dns", {})
+    dns_nameservers = dns_config.get("nameservers", ['77.88.8.8', '77.88.8.1', '8.8.8.8', '1.1.1.1'])
+    dns_timeout = dns_config.get("timeout", 10)
+    dns_max_workers = dns_config.get("max_workers", 20)
 
     service_results = []
     stats = []
@@ -106,7 +123,12 @@ def main():
         # Шаг 2: Резолв A-записей доменов для дополнения данных ASN IP-адресами /32
         if domains:
             try:
-                dns_networks, dns_warnings = resolve_domains(domains)
+                dns_networks, dns_warnings = resolve_domains(
+                    domains,
+                    timeout=dns_timeout,
+                    max_workers=dns_max_workers,
+                    nameservers=dns_nameservers,
+                )
                 service_networks.extend(dns_networks)
                 all_dns_warnings.extend(dns_warnings)
             except Exception as e:
@@ -148,6 +170,11 @@ def main():
     print(f"  Total entries:      {len(aggregated)}")
     if errors:
         print(f"  Errors:             {errors}")
+    if all_dns_warnings:
+        print(f"  DNS warnings:       {len(all_dns_warnings)}")
+        print("\nDNS Resolution Warnings (domains that could not be resolved):")
+        for domain in sorted(set(all_dns_warnings)):
+            print(f"  ⚠️  {domain}")
     if all_dns_warnings:
         print(f"  DNS Warnings:       {len(all_dns_warnings)}")
         print("\nDomains with DNS warnings:")
