@@ -66,7 +66,12 @@ def resolve_domains(
     # блокируют запросы от зарубежных DNS (Google/Cloudflare) для защиты от DDoS
     resolver.nameservers = nameservers or ['77.88.8.8', '77.88.8.1', '8.8.8.8', '1.1.1.1']
     
-    # Таймаут на один сервер делаем пропорциональным количеству серверов (2.5 сек)
+    # Валидация: убедиться что есть хотя бы один DNS сервер
+    if not resolver.nameservers:
+        logger.error("No nameservers configured for DNS resolution")
+        return [], []
+    
+    # Таймаут на один сервер делаем пропорциональным количеству серверов
     resolver.timeout = timeout / len(resolver.nameservers)
     # Общее время на все попытки резолвинга
     resolver.lifetime = timeout
