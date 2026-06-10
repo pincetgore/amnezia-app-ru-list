@@ -14,8 +14,11 @@ import re
 import threading
 import time
 from ipaddress import IPv4Network
+from typing import List, Optional
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 logger = logging.getLogger(__name__)
 
@@ -28,12 +31,35 @@ HE_BGP_URL = "https://bgp.he.net/AS{asn}#_prefixes4"
 # Временная метка последнего запроса к API (используется для ограничения скорости)
 _last_request_time = 0.0
 
-# Переиспользование соединения для производительности
-_session = requests.Session()
-_session.headers.update({"User-Agent": "Mozilla/5.0 (ru-bypass-list generator)"})
-
 # Мьютекс для потокобезопасного ограничения скорости запросов
 _rate_limit_lock = threading.Lock()
+
+def _create_session_with_retries() -> requests.Session:
+    """Создает requests.Session с автоматическим retry для сетевых сбоев.
+    
+    Конфигурирует exponential backoff для повторных попыток при:
+    - 429 (Too Many Requests)
+    - 500, 502, 503, 504 (Server errors)
+    """
+    session = requests.Session()
+    session.headers.update({"User-Agent": "Mozilla/5.0 (ru-bypass-list generator)"})
+    
+    # Настройка retry стратегии
+    retry_strategy = Retry(
+        total=3,                                    # Максимум 3 попытки
+        backoff_factor=0.5,                         # Экспоненциальный backoff: 0.5s, 1s, 2s
+        status_forcelist=[429, 500, 502, 503, 504],  # Коды для повтора
+        allowed_methods=["GET"],                    # Только GET запросы
+    )
+    
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+    
+    return session
+
+# Переиспользование соединения для производительности (с retry логикой)
+_session = _create_session_with_retries()
 
 def _rate_limit():
     """Обеспечивает минимальный интервал в 1 секунду между последовательными запросами к API."""
@@ -46,7 +72,7 @@ def _rate_limit():
 
 
 def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network] | None:
-    """Получает все анонсированные IPv4-префиксы для ASN из RIPE NCC API.
+    """Получает все анонсированные IPv4-префиксы для AOptional[List[IPv4Network]]
 
     Возвращает пустой список при сбое (сетевая ошибка, неверный ответ и т.д.),
     чтобы вызывающая функция могла перейти к резервному варианту bgp.he.net.
@@ -79,7 +105,7 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network] | None:
         return None
 
 
-def get_prefixes_he(asn: int, timeout: int = 30) -> list[IPv4Network]:
+def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
     """Парсит анонсированные IPv4-префиксы с bgp.he.net (резервный вариант).
 
     Извлекает строки в формате CIDR из HTML-ответа с помощью регулярного выражения.
@@ -110,7 +136,7 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> list[IPv4Network]:
         return []
 
 
-def resolve_asn(asn: int) -> list[IPv4Network]:
+def resolve_asn(asn: int) -> List[IPv4Network]:
     """Получает все IPv4-префиксы для ASN.
 
     Сначала пытается использовать RIPE NCC; если RIPE не возвращает результаты, переключается на bgp.he.net.
