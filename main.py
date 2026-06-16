@@ -93,14 +93,14 @@ def main():
         logging.getLogger().setLevel(logging.DEBUG)
 
     # -- Загрузка определений сервисов --
-    config = load_config(args.config)
-    services = config.get("services", [])
+    config = load_config(args.config) or {}
+    services = config.get("services") or []
     
     # -- Загрузка DNS конфигурации --
-    dns_config = config.get("dns", {})
-    dns_nameservers = dns_config.get("nameservers", ['77.88.8.8', '77.88.8.1', '8.8.8.8', '1.1.1.1'])
-    dns_timeout = dns_config.get("timeout", 10)
-    dns_max_workers = dns_config.get("max_workers", 20)
+    dns_config = config.get("dns") or {}
+    dns_nameservers = dns_config.get("nameservers") or ['77.88.8.8', '77.88.8.1', '8.8.8.8', '1.1.1.1']
+    dns_timeout = dns_config.get("timeout") or 10
+    dns_max_workers = dns_config.get("max_workers") or 20
 
     service_results = []
     stats = []
@@ -118,17 +118,14 @@ def main():
 
         # Шаг 1: Получение всех анонсированных IP-префиксов для каждой ASN через RIPE API
         if asns:
-            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-                future_to_asn = {executor.submit(resolve_asn, asn): asn for asn in asns}
-                for future in concurrent.futures.as_completed(future_to_asn):
-                    asn = future_to_asn[future]
-                    try:
-                        prefixes = future.result()
-                        service_networks.extend(prefixes)
-                    except Exception as e:
-                        logger.error("Failed to resolve AS%d for %s: %s", asn, name, e)
-                        logger.debug("Exception details:", exc_info=True)
-                        errors += 1
+            for asn in asns:
+                try:
+                    prefixes = resolve_asn(asn)
+                    service_networks.extend(prefixes)
+                except Exception as e:
+                    logger.error("Failed to resolve AS%s for %s: %s", asn, name, e)
+                    logger.debug("Exception details:", exc_info=True)
+                    errors += 1
 
         # Шаг 2: Резолв A-записей доменов для дополнения данных ASN IP-адресами /32
         if domains:
