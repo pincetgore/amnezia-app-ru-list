@@ -16,6 +16,13 @@ from resolvers.asn import get_prefixes_ripe, get_prefixes_he, resolve_asn
 from resolvers.dns import resolve_domains, _resolve_single_domain
 
 
+@pytest.fixture(autouse=True)
+def mock_rate_limit():
+    """Предотвращает искусственные задержки (sleep) во время тестирования."""
+    with patch("resolvers.asn._rate_limit", return_value=None):
+        yield
+
+
 class TestASNResolver:
     """Тесты для ASN резолвера."""
 
@@ -102,6 +109,23 @@ class TestASNResolver:
         # Должны использоваться данные RIPE, не HE
         assert IPv4Network("1.0.0.0/8") in result
         assert IPv4Network("2.0.0.0/8") not in result
+
+    @pytest.mark.parametrize("asn_input,expected_call", [
+        ("AS12389", 12389),
+        ("as12389 ", 12389),
+        (" 12389", 12389),
+        (12389, 12389),
+    ])
+    def test_resolve_asn_normalization(self, asn_input, expected_call):
+        """Проверяет правильность нормализации входных данных ASN (строк и чисел)."""
+        with patch("resolvers.asn.get_prefixes_ripe", return_value=[]) as mock_ripe:
+            resolve_asn(asn_input)
+            mock_ripe.assert_called_once_with(expected_call)
+
+    def test_resolve_asn_normalization_invalid(self):
+        """Проверяет обработку некорректных форматов ASN."""
+        assert resolve_asn("invalid_asn") == []
+        assert resolve_asn(None) == []
 
 
 class TestDNSResolver:
