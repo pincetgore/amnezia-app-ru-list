@@ -468,10 +468,12 @@ services:
       - hoff.ru
 
   - name: "Aliexpress"
-    asn:
-      - 45102
+    asn: []
     domains:
       - aliexpress.ru
+      - api.aliexpress.ru
+      - alicdn.com
+      - static.alicdn.com
 
   # ============================================================
   # Доставка / Логистика
@@ -523,11 +525,11 @@ services:
       - online.lenta.com
 
   - name: "Metro Cash and Carry"
-    asn:
-      - 210756
+    asn: []
     domains:
       - metro-cc.ru
       - online.metro-cc.ru
+      - api.metro-cc.ru
 
   - name: "FixPrice"
     asn: []
@@ -638,7 +640,6 @@ services:
   # ============================================================
   - name: "Госуслуги"
     asn:
-      - 12389
       - 196747
       - 48287
       - 39494
@@ -902,14 +903,13 @@ services:
       - eapteka.ru
 
   - name: "Аптеки Столички"
-    asn:
-      - 201706
+    asn: []
     domains:
       - stolichki.ru
+      - api.stolichki.ru
 
   - name: "ЕМИАС"
-    asn:
-      - 209030
+    asn: []
     domains:
       - emias.info
       - emias.ru
@@ -1004,7 +1004,6 @@ services:
 
   - name: "Timeweb"
     asn:
-      - 9123
       - 51115
     domains:
       - timeweb.cloud
@@ -1095,8 +1094,7 @@ services:
       - iot.dreametech.com
 
   - name: "Мой умный дом (Уфанет)"
-    asn:
-      - 24955
+    asn: []
     domains:
       - dom.ufanet.ru
       - ufanet.ru
