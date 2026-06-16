@@ -14,7 +14,7 @@ import re
 import threading
 import time
 from ipaddress import IPv4Network
-from typing import List, Optional
+from typing import Any, List, Optional
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -64,11 +64,18 @@ _session = _create_session_with_retries()
 def _rate_limit():
     """Обеспечивает минимальный интервал в 1 секунду между последовательными запросами к API."""
     global _last_request_time
+    sleep_time = 0.0
     with _rate_limit_lock:
-        elapsed = time.time() - _last_request_time
+        now = time.time()
+        elapsed = now - _last_request_time
         if elapsed < 1.0:
-            time.sleep(1.0 - elapsed)
-        _last_request_time = time.time()
+            sleep_time = 1.0 - elapsed
+            _last_request_time = now + sleep_time
+        else:
+            _last_request_time = now
+
+    if sleep_time > 0.0:
+        time.sleep(sleep_time)
 
 
 def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]]:
@@ -136,11 +143,24 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
         return []
 
 
-def resolve_asn(asn: int) -> List[IPv4Network]:
+def resolve_asn(asn: Any) -> List[IPv4Network]:
     """Получает все IPv4-префиксы для ASN.
 
     Сначала пытается использовать RIPE NCC; если RIPE не возвращает результаты, переключается на bgp.he.net.
+    Принимает как целые числа, так и строки (например, "12345" или "AS12345"), нормализуя их.
     """
+    if isinstance(asn, str):
+        # Удаляем "AS" префикс в любом регистре и пробелы
+        asn_clean = asn.upper().replace("AS", "").strip()
+        try:
+            asn = int(asn_clean)
+        except ValueError:
+            logger.error("Invalid ASN format: '%s'", asn)
+            return []
+    elif not isinstance(asn, int):
+        logger.error("ASN must be an int or a string, got: %s", type(asn))
+        return []
+
     prefixes = get_prefixes_ripe(asn)
     if prefixes is None:
         prefixes = get_prefixes_he(asn)
