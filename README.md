@@ -154,29 +154,29 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 В список по умолчанию включены диапазоны частных сетей (LAN), CGNAT и Multicast. Это гарантирует, что при включенном VPN у вас не пропадет доступ к домашнему роутеру, локальным ресурсам и устройствам умного дома.
 
 | Сервис | IP-диапазоны |
-|--------|--------------|
+| ------ | ------------ |
 | Локальные сети (LAN, CGNAT, Multicast) | `10.0.0.0/8`, `100.64.0.0/10`, `169.254.0.0/16`, `172.16.0.0/12`, `192.168.0.0/16`, `224.0.0.0/4`, `127.0.0.0/32` |
 
 ### Бигтех / Супераппы
 | Сервис | ASN | Домены |
-|--------|-----|--------|
-| Яндекс | AS13238, AS44534 и др. | `yandex.ru`, `ya.ru`, `kinopoisk.ru`, `dzen.ru` и др. |
-| VK | AS28709, AS47541 и др. | `vk.com`, `mvk.com`, `vkvideo.ru`, `cloud.vk.com` и др. |
-| Mail.ru + Одноклассники | AS47764, AS49797 и др. | `mail.ru`, `ok.ru`, `cloud.mail.ru` и др. |
+| ------ | --- | ------ |
+| Яндекс | AS13238, AS44534 и др. | `yandex.ru`, `yandex.net`, `ya.ru`, `yastatic.net` и др. |
+| VK | AS28709, AS47541 и др. | `mvk.com`, `userapi.com`, `vk-apps.com`, `vk-apps.ru` и др. |
+| Mail.ru + Одноклассники | AS47764, AS49797 и др. | `my.mail.ru`, `cloud.mail.ru`, `hc.mail.ru`, `games.mail.ru` и др. |
 
 ### Банки
 | Сервис | ASN | Домены |
-|--------|-----|--------|
-| Сбербанк | AS33844, AS35237 и др. | `sberbank.ru`, `sber.ru`, `sberinvestor.ru` и др. |
-| Т-Банк | AS12686, AS205638 и др. | `tbank.ru`, `tinkoff.ru`, `invest-gw.tinkoff.ru` и др. |
-| ВТБ | AS24823, AS39154 и др. | `vtb.ru`, `online.vtb.ru`, `invest.vtb.ru` и др. |
+| ------ | --- | ------ |
+| Сбербанк | AS33844, AS35237 и др. | `sberbank.ru`, `online.sberbank.ru`, `sber.ru`, `sbermarket.ru` и др. |
+| Т-Банк | AS205638, AS12686 и др. | `tbank.ru`, `tinkoff.ru` |
+| ВТБ | AS24823, AS39154 и др. | `vtb.ru`, `vtb-group.ru`, `online.vtb.ru`, `invest.vtb.ru` |
 | Альфа-Банк | AS15632, AS34838 и др. | `alfabank.ru`, `alfadirect.ru`, `alfa.me` |
 | Газпромбанк | AS35022, AS48033 и др. | `gazprombank.ru`, `gpb.ru` |
 | Россельхозбанк | AS41615 | `rshb.ru`, `online.rshb.ru` |
 | Промсвязьбанк | -- | `psbank.ru` |
 | Совкомбанк | AS51136, AS197258 и др. | `sovcombank.ru`, `halvacard.ru` |
 | Райффайзен Банк | -- | `raiffeisen.ru`, `online.raiffeisen.ru` |
-| Московский Кредитный Банк | AS39267, AS50464, AS202273 | `mkb.ru`, `online.mkb.ru` |
+| Московский Кредитный Банк | AS39267, AS50464 и др. | `mkb.ru`, `online.mkb.ru` |
 | Открытие | AS5589 | `open.ru` |
 | Росбанк | -- | `rosbank.ru` |
 | Банк Россия | AS50640, AS196796 и др. | `abr.ru` |
@@ -190,19 +190,19 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 МТС (AS8359), МегаФон (AS31133), Билайн (AS3216), Ростелеком (AS12389) — это интернет-провайдеры с сотнями/тысячами IP-префиксов. Включение их полных ASN-диапазонов перегружает маршрутную таблицу Android и может вызвать сбои. Для работы личных кабинетов операторов достаточно DNS-резолвинга их доменов.
 
 | Сервис | Домены |
-|--------|--------|
-| МТС | `mts.ru`, `payment.mts.ru`, `login.mts.ru` и др. |
-| МегаФон | `megafon.ru`, `yota.ru`, `lk.megafon.ru` и др. |
-| Билайн | `beeline.ru`, `my.beeline.ru` и др. |
-| Теле2 | `t2.ru`, `tele2.ru`, `my.tele2.ru` и др. |
+| ------ | ------ |
+| МТС | `mts.ru`, `payment.mts.ru`, `login.mts.ru`, `mymts.ru` и др. |
+| МегаФон | `megafon.ru`, `lk.megafon.ru`, `megafonpro.ru`, `mgfn.ru` и др. |
+| Билайн | `beeline.ru`, `my.beeline.ru`, `api.beeline.ru`, `lk.beeline.ru` и др. |
+| Теле2 | `t2.ru`, `tele2.ru`, `my.tele2.ru`, `b2c-digest.ru` |
 | Ростелеком | `rt.ru`, `rostelecom.ru`, `lk.rt.ru` |
 | Дом.ру | `domru.ru`, `lk.domru.ru` |
 
 ### E-commerce / Маркетплейсы
 | Сервис | ASN | Домены |
-|--------|-----|--------|
-| Wildberries | AS49053, AS57073 и др. | `wildberries.ru`, `wb.ru` и др. |
-| Ozon | AS207986, AS44386 | `ozon.ru`, `ozon.app`, `ozone.ru` и др. |
+| ------ | --- | ------ |
+| Wildberries | AS49053, AS57073 и др. | `wildberries.ru`, `wb.ru`, `wbstatic.net`, `wbx-auth.wildberries.ru` |
+| Ozon | AS207986, AS44386 | `ozon.ru`, `ozon.app`, `ozon.com`, `ozon.dev` и др. |
 | Авито | AS201012 | `avito.ru`, `avito.st` |
 | СберМегаМаркет | -- | `sbermegamarket.ru`, `megamarket.ru` |
 | Lamoda | AS57906 | `lamoda.ru`, `lamoda.co` |
@@ -210,36 +210,36 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | М.Видео / Эльдорадо | -- | `mvideo.ru`, `eldorado.ru` |
 | Ситилинк | -- | `citilink.ru` |
 | Леруа Мерлен | -- | `lemanapro.ru` |
-| Золотое Яблоко | -- | `goldapple.ru`, `api.goldapple.ru` и др. |
-| Детский мир | -- | `detmir.ru`, `detmist.st` и др. |
+| Золотое Яблоко | -- | `goldapple.ru`, `pcdn.goldapple.ru`, `gacdn.ru`, `juicyscore.ru` и др. |
+| Детский мир | -- | `detmir.ru`, `detmist.st`, `img.detmir.st`, `go.detmir.st` и др. |
 | Hoff | -- | `hoff.ru` |
-| Aliexpress | AS45102 | `aliexpress.ru` |
+| Aliexpress | -- | `aliexpress.ru`, `api.aliexpress.ru`, `alicdn.com`, `static.alicdn.com` |
 
 ### Доставка / Логистика
 | Сервис | Домены |
-|--------|--------|
+| ------ | ------ |
 | Самокат | `samokat.ru` |
 | Delivery Club | `delivery-club.ru` |
-| СДЭК | `cdek.ru`, `lk.cdek.ru` и др. |
+| СДЭК | `cdek.ru`, `lk.cdek.ru`, `ad-cdek.ru`, `cdek.shopping` |
 | Boxberry | `boxberry.ru` |
 
 ### Ритейл / Продукты
 | Сервис | ASN | Домены |
-|--------|-----|--------|
+| ------ | --- | ------ |
 | Пятёрочка / X5 Group | AS215810, AS44704 | `5ka.ru`, `perekrestok.ru`, `vprok.ru`, `x5.ru` и др. |
 | Лента | -- | `lenta.com`, `online.lenta.com` |
-| Metro Cash and Carry | AS210756 | `metro-cc.ru`, `online.metro-cc.ru` |
+| Metro Cash and Carry | -- | `metro-cc.ru`, `online.metro-cc.ru`, `api.metro-cc.ru` |
 | FixPrice | -- | `fix-price.com`, `fix-price.ru` |
 | Дикси | AS202760 | `dixy.ru` |
-| ВкусВилл | -- | `vkusvill.ru`, `online.vkusvill.ru` и др. |
-| SPAR | -- | `myspar.ru`, `api.myspar.ru` и др. |
-| Rendez-vous | -- | `rendez-vous.ru`, `api.rendez-vous.ru` и др. |
-| One Price Coffee | -- | `onepricecoffee.com`, `api.onepricecoffee.com` и др. |
-| Best Benefits | -- | `bestbenefits.ru`, `app.bestbenefits.ru` и др. |
+| ВкусВилл | -- | `vkusvill.ru`, `online.vkusvill.ru`, `api-sd.vkusvill.ru`, `api.vkusvill.ru` и др. |
+| SPAR | -- | `myspar.ru`, `api.myspar.ru`, `app.myspar.ru` |
+| Rendez-vous | -- | `rendez-vous.ru`, `api.rendez-vous.ru`, `mobile.rendez-vous.ru` |
+| One Price Coffee | -- | `onepricecoffee.com`, `api.onepricecoffee.com`, `app.onepricecoffee.com`, `cloud.onepricecoffee.com` и др. |
+| Best Benefits | -- | `app.bestbenefits.ru`, `bestbenefits.ru`, `mobile.bestbenefits.ru` |
 
 ### Стриминг / Видео / Музыка
 | Сервис | ASN | Домены |
-|--------|-----|--------|
+| ------ | --- | ------ |
 | Rutube | AS207353 | `rutube.ru`, `static.rutube.ru` |
 | IVI | -- | `ivi.ru`, `ivi.tv`, `api.ivi.ru` |
 | Okko | -- | `okko.tv`, `api.okko.tv` |
@@ -251,17 +251,17 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 
 ### Государственные сервисы
 | Сервис | ASN | Домены |
-|--------|-----|--------|
-| Госуслуги | AS12389, AS196747 и др. | `gosuslugi.ru`, `esia.gosuslugi.ru` и др. |
-| ФНС / Налоговая | -- | `nalog.gov.ru`, `lkfl2.nalog.ru`, `goskey.ru`, `ebs.ru` и др. |
+| ------ | --- | ------ |
+| Госуслуги | AS196747, AS48287 и др. | `gosuslugi.ru`, `esia.gosuslugi.ru`, `pos.gosuslugi.ru`, `lk.gosuslugi.ru` и др. |
+| ФНС / Налоговая | -- | `nalog.gov.ru`, `lkfl2.nalog.ru`, `lkip2.nalog.ru`, `gov.ru` и др. |
 | Мос.ру | AS8901 | `mos.ru`, `mosreg.ru`, `my.mos.ru`, `uslugi.mos.ru` |
 | ЦБ РФ | -- | `cbr.ru`, `finmarket.ru` |
-| Почта России | -- | `pochta.ru`, `tracking.pochta.ru` и др. |
+| Почта России | -- | `pochta.ru`, `tracking.pochta.ru`, `mobileapp.russianpost.ru`, `1018213540.rsc.cdn77.org` |
 | Честный знак | -- | `xn--80ajghhoc2aj1c8b.xn--p1ai` |
 
 ### Транспорт / Путешествия
 | Сервис | ASN | Домены |
-|--------|-----|--------|
+| ------ | --- | ------ |
 | РЖД | AS20702, AS28991 | `rzd.ru`, `ticket.rzd.ru`, `pass.rzd.ru` |
 | Аэрофлот | -- | `aeroflot.ru`, `api.aeroflot.ru`, `booking.aeroflot.ru` |
 | S7 Airlines | -- | `s7.ru` |
@@ -276,14 +276,14 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 
 ### Недвижимость
 | Сервис | Домены |
-|--------|--------|
+| ------ | ------ |
 | ЦИАН | `cian.ru`, `api.cian.ru` |
 | Домклик | `domclick.ru`, `api.domclick.ru` |
 | ДомРФ | `domrf.ru` |
 
 ### Работа / HR
 | Сервис | ASN | Домены |
-|--------|-----|--------|
+| ------ | --- | ------ |
 | HeadHunter | AS47724, AS59601 | `hh.ru`, `api.hh.ru`, `headhunter.ru` |
 | SuperJob | -- | `superjob.ru` |
 | Работа.ру | -- | `rabota.ru` |
@@ -291,7 +291,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 
 ### Авто
 | Сервис | ASN | Домены |
-|--------|-----|--------|
+| ------ | --- | ------ |
 | Авто.ру | -- | `auto.ru`, `api.auto.ru` |
 | Drom.ru | -- | `drom.ru`, `auto.drom.ru` |
 | Автотека | -- | `autoteka.ru` |
@@ -299,12 +299,12 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 
 ### Карты / Навигация / Гео
 | Сервис | ASN | IP-диапазоны | Домены |
-|--------|-----|--------------|--------|
-| 2ГИС | AS197482 | `91.236.48.0/22`, `91.221.198.0/23` и др. | `2gis.ru`, `2gis.com`, `tile3.maps.2gis.com` и др. |
+| ------ | --- | ------------ | ------ |
+| 2ГИС | AS197482 | `91.236.48.0/22`, `91.221.198.0/23` и др. | `2gis.ru`, `2gis.com`, `tile3.maps.2gis.com`, `static.2gis.com` и др. |
 
 ### Образование
 | Сервис | Домены |
-|--------|--------|
+| ------ | ------ |
 | Яндекс Практикум | `practicum.yandex.ru` |
 | Skillbox | `skillbox.ru` |
 | GeekBrains | `geekbrains.ru`, `gb.ru` |
@@ -313,52 +313,52 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 
 ### Медицина / Здоровье
 | Сервис | ASN | Домены |
-|--------|-----|--------|
+| ------ | --- | ------ |
 | СберЗдоровье | -- | `sberhealth.ru`, `doctoronline.ru` |
 | Аптека.ру | -- | `apteka.ru` |
 | Еаптека | -- | `eapteka.ru` |
-| Аптеки Столички | AS201706 | `stolichki.ru` |
-| ЕМИАС | AS209030 | `emias.info`, `emias.ru` и др. |
-| Invitro | -- | `invitro.ru`, `api.invitro.ru` и др. |
-| Медси | -- | `api.medsi.ru`, `app.medsi.ru` и др. |
-| АГНИ | -- | `beauty-forma.com`, `shop.beauty-forma.com` и др. |
-| Аптека Вита | AS42996 | `vitaexpress.ru`, `app.vitaexpress.ru` и др. |
+| Аптеки Столички | -- | `stolichki.ru`, `api.stolichki.ru` |
+| ЕМИАС | -- | `emias.info`, `emias.ru`, `mgfoms.ru`, `mosgorzdrav.ru` и др. |
+| Invitro | -- | `invitro.ru`, `api.invitro.ru`, `lk.invitro.ru` |
+| Медси | -- | `api.medsi.ru`, `app.medsi.ru`, `smartmed.pro`, `medsi.com` и др. |
+| АГНИ | -- | `beauty-forma.com`, `lk.beauty-forma.com`, `lk-dev.beauty-forma.com`, `shop.beauty-forma.com` |
+| Аптека Вита | AS42996 | `vitaexpress.ru`, `autodiscover.vitaexpress.ru`, `blog.vitaexpress.ru`, `cloud.vitaexpress.ru` и др. |
 
 ### Мессенджеры
 | Сервис | Домены |
-|--------|--------|
+| ------ | ------ |
 | TenChat | `tenchat.ru` |
 | MAX | `max.ru`, `apptracer.ru`, `mycdn.me` |
 
 ### Игры
 | Сервис | Домены |
-|--------|--------|
+| ------ | ------ |
 | VK Play | `vkplay.ru`, `api.vkplay.ru` |
 | MY.GAMES | `my.games`, `api.my.games` |
 
 ### Облака / Хостинги
 | Сервис | ASN | Домены |
-|--------|-----|--------|
+| ------ | --- | ------ |
 | Selectel | -- | `selectel.ru` |
 | REG.RU | -- | `reg.ru` |
-| Timeweb | AS9123, AS51115 | `timeweb.cloud` |
+| Timeweb | AS51115 | `timeweb.cloud` |
 | Ngenix.net | AS34879, AS204878 и др. | `ngenix.net` |
 
 ### Финтех
 | Сервис | ASN | Домены |
-|--------|-----|--------|
+| ------ | --- | ------ |
 | Мосбиржа | AS48009 | `moex.com` |
 
 ### Другое
 | Сервис | ASN | Домены |
-|--------|-----|--------|
+| ------ | --- | ------ |
 | Литрес | -- | `litres.ru` |
 | Kaspersky | AS200187 | `kaspersky.ru`, `kaspersky.com` |
 | Профи.ру | AS60580 | `profi.ru` |
-| РЕСО | AS39266 | `reso.ru`, `agent.reso.ru` и др. |
-| Зоозавр | -- | `zoozavr.ru`, `api.zoozavr.ru` и др. |
-| Dreamehome | AS137280 | `ru.dreametech.com`, `ru.iot.dreame.tech` и др. |
-| Мой умный дом (Уфанет) | AS24955 | `dom.ufanet.ru`, `ufanet.ru` и др. |
+| РЕСО | AS39266 | `agent.reso.ru`, `j7h6i8.reso.ru`, `lms.reso.ru`, `reso.ru` и др. |
+| Зоозавр | -- | `zoozavr.ru`, `api.zoozavr.ru`, `blog.zoozavr.ru`, `feedback.zoozavr.ru` и др. |
+| Dreamehome | AS137280 | `dreametech.com`, `ru.dreametech.com`, `ru.api.dreame.tech`, `ru.iot.dreame.tech` и др. |
+| Мой умный дом (Уфанет) | -- | `dom.ufanet.ru`, `ufanet.ru`, `secretapi.ufanet.ru`, `ufanetgroup.com` и др. |
 | kojima.ru | -- | `kojima.ru` |
 
 ---
