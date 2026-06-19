@@ -162,7 +162,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 
 | Сервис | Домены |
 | ------ | ------ |
-| Проверка IP на признак включения VPN | `checkip.amazonaws.com`, `eu.2gis.com`, `ifconfig.me`, `ipify.org`, `x5static.net` |
+| Проверка IP на признак включения VPN | `2ip.io`, `checkip.amazonaws.com`, `ifconfig.me`, `ipify.org`, `ipinfo.io`, `whoer.net` и др. |
 
 ### Бигтех / Супераппы
 | Сервис | ASN | Домены |
