@@ -54,7 +54,6 @@ services:
       - country.is
       - curlmyip.net
       - db-ip.com
-      - eu.2gis.com
       - extreme-ip-lookup.com
       - find-my-ip.com
       - find-my-ip.net
@@ -84,7 +83,6 @@ services:
       - ip-api.com
       - ip-api.io
       - ip-check.info
-      - ip-score.com
       - ip.comss.net
       - ip.hetzner.com
       - ip.me
@@ -97,7 +95,6 @@ services:
       - ip2ruscity.com
       - ip4.me
       - ip6.me
-      - ip6only.me
       - ip8.com
       - ipaddr.site
       - ipaddress.com
@@ -136,11 +133,6 @@ services:
       - ipv4-check-perf.radar.cloudflare.com
       - ipv4-internet.yandex.net
       - ipv4.internet.yandex.net
-      - ipv6-check-perf.radar.cloudflare.com
-      - ipv6-internet.yandex.net
-      - ipv6.internet.yandex.net
-      - ipverify.com
-      - ipw.cn
       - ipwho.is
       - ipwhois.io
       - ipxapi.com
@@ -191,7 +183,6 @@ services:
       - whoisxmlapi.com
       - wieistmeineip.de
       - wtfismyip.com
-      - x5static.net
 
   # ============================================================
   # Бигтех / СУПЕРАПЫ
