@@ -334,6 +334,11 @@ services:
     domains:
       - tbank.ru
       - tinkoff.ru
+      - api.tinkoff.ru
+      - id.t-bank-app.ru
+      - cdn.t-bank-app.ru
+      - lps-public-api.t-bank-app.ru
+      - as.t-bank-app.ru
 
   - name: "ВТБ"
     asn:
