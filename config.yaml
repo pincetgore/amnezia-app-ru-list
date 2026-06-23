@@ -710,7 +710,6 @@ services:
       - api.vkusvill.ru
       - app.vkusvill.ru
       - mobile.vkusvill.ru
-      - mobile-logs.vkusvill.ru
       - mobile-advrep.vkusvill.ru
       - mobile-alt.fullstack.vkusvill.ru
       - mobile-logs.vkusvill.ru
