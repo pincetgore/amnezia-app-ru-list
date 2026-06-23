@@ -706,6 +706,12 @@ services:
       - api-sd.vkusvill.ru
       - api.vkusvill.ru
       - app.vkusvill.ru
+      - mobile-advrep.vkusvill.ru
+      - mobile-alt.fullstack.vkusvill.ru
+      - mobile-logs.vkusvill.ru
+      - mobile-longpoll.vkusvill.ru
+      - mobile.fullstack.vkusvill.ru
+      - mobile.vkusvill.ru
 
   - name: "SPAR"
     asn: []
