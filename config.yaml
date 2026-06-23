@@ -339,6 +339,9 @@ services:
       - cdn.t-bank-app.ru
       - lps-public-api.t-bank-app.ru
       - as.t-bank-app.ru
+      - certs.t-bank-app.su
+      - certs.t-bank-app.ru
+      - sage-collector.tbank.ru
 
   - name: "ВТБ"
     asn:
