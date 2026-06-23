@@ -334,7 +334,7 @@ services:
     domains:
       - tbank.ru
       - tinkoff.ru
-      - api.tinkoff.ru
+      - api.t-bank-app.ru
       - id.t-bank-app.ru
       - cdn.t-bank-app.ru
       - lps-public-api.t-bank-app.ru
@@ -710,6 +710,7 @@ services:
       - api.vkusvill.ru
       - app.vkusvill.ru
       - mobile.vkusvill.ru
+      - mobile-logs.vkusvill.ru
       - mobile-advrep.vkusvill.ru
       - mobile-alt.fullstack.vkusvill.ru
       - mobile-logs.vkusvill.ru
