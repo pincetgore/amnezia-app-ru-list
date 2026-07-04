@@ -1272,3 +1272,12 @@ services:
     asn: []
     domains:
       - kojima.ru
+
+  - name: "yclients"
+    asn: []
+    domains:
+      - yclients.com
+      - api.yclients.com
+      - app.yclients.com
+      - assets.yclients.com
+      - b1.yclients.com
