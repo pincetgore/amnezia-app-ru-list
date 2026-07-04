@@ -369,6 +369,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 | Dreamehome | AS137280 | `dreametech.com`, `ru.dreametech.com`, `ru.api.dreame.tech`, `ru.iot.dreame.tech` и др. |
 | Мой умный дом (Уфанет) | -- | `dom.ufanet.ru`, `ufanet.ru`, `secretapi.ufanet.ru`, `ufanetgroup.com` и др. |
 | kojima.ru | -- | `kojima.ru` |
+| yclients | -- | `yclients.com`, `api.yclients.com`, `app.yclients.com` и др. |
 
 ---
 
