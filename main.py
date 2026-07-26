@@ -20,11 +20,6 @@ from output.formatter import write_output
 from resolvers.asn import resolve_asn
 from resolvers.dns import resolve_domains
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    datefmt="%H:%M:%S",
-)
 logger = logging.getLogger(__name__)
 
 
@@ -89,8 +84,13 @@ def main():
     )
     args = parser.parse_args()
 
-    if args.verbose:
-        logging.getLogger().setLevel(logging.DEBUG)
+    log_level = logging.DEBUG if args.verbose else logging.INFO
+    logging.basicConfig(
+        level=log_level,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        datefmt="%H:%M:%S",
+        force=True,
+    )
 
     # -- Загрузка определений сервисов --
     config = load_config(args.config) or {}

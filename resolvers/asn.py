@@ -17,6 +17,7 @@ from ipaddress import IPv4Network
 from typing import Any, List, Optional
 
 import requests
+from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
@@ -115,7 +116,7 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]
 def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
     """Парсит анонсированные IPv4-префиксы с bgp.he.net (резервный вариант).
 
-    Извлекает строки в формате CIDR из HTML-ответа с помощью регулярного выражения.
+    Извлекает CIDR-префиксы из элементов HTML-страницы с использованием BeautifulSoup.
     Менее надежен, чем RIPE, но полезен, когда RIPE возвращает пустой результат.
     """
     _rate_limit()
@@ -126,15 +127,29 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
         )
         resp.raise_for_status()
 
-        # Извлекаем все IPv4 CIDR-строки из HTML-кода страницы
-        pattern = r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2})'
-        raw = re.findall(pattern, resp.text)
+        soup = BeautifulSoup(resp.text, "html.parser")
         prefixes = []
-        for p in raw:
-            try:
-                prefixes.append(IPv4Network(p, strict=False))
-            except ValueError:
-                pass
+        cidr_pattern = r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2}$'
+
+        # Извлекаем префиксы из ссылок и ячеек таблиц
+        elements = soup.find_all(["a", "td"])
+        for elem in elements:
+            text = elem.get_text().strip()
+            if re.match(cidr_pattern, text):
+                try:
+                    prefixes.append(IPv4Network(text, strict=False))
+                except ValueError:
+                    pass
+
+        # Если не нашли элементы через теги a/td, используем паттерн во всём тексте в качестве запасного сценария
+        if not prefixes:
+            raw = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2})', resp.text)
+            for p in raw:
+                try:
+                    prefixes.append(IPv4Network(p, strict=False))
+                except ValueError:
+                    pass
+
         logger.info("AS%d: got %d prefixes from bgp.he.net (fallback)", asn, len(prefixes))
         return prefixes
 
@@ -146,7 +161,7 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
 def resolve_asn(asn: Any) -> List[IPv4Network]:
     """Получает все IPv4-префиксы для ASN.
 
-    Сначала пытается использовать RIPE NCC; если RIPE не возвращает результаты, переключается на bgp.he.net.
+    Сначала пытается использовать RIPE NCC; если RIPE не возвращает результаты (None или []), переключается на bgp.he.net.
     Принимает как целые числа, так и строки (например, "12345" или "AS12345"), нормализуя их.
     """
     if isinstance(asn, str):
@@ -162,6 +177,7 @@ def resolve_asn(asn: Any) -> List[IPv4Network]:
         return []
 
     prefixes = get_prefixes_ripe(asn)
-    if prefixes is None:
+    if not prefixes:
         prefixes = get_prefixes_he(asn)
     return prefixes or []
+

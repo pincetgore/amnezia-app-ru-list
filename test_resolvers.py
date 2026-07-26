@@ -86,10 +86,6 @@ class TestASNResolver:
 
     def test_get_prefixes_he_fallback(self):
         """Проверяет fallback когда RIPE возвращает None."""
-        mock_ripe_response = MagicMock()
-        mock_he_response = MagicMock()
-        mock_he_response.text = "<tr><td>1.2.3.0/24</td></tr>"
-
         with patch("resolvers.asn.get_prefixes_ripe", return_value=None):
             with patch("resolvers.asn.get_prefixes_he", return_value=[IPv4Network("1.2.3.0/24")]):
                 result = resolve_asn(12389)
@@ -97,8 +93,17 @@ class TestASNResolver:
         assert len(result) == 1
         assert IPv4Network("1.2.3.0/24") in result
 
+    def test_get_prefixes_he_fallback_on_empty_ripe(self):
+        """Проверяет fallback когда RIPE возвращает пустой список []."""
+        with patch("resolvers.asn.get_prefixes_ripe", return_value=[]):
+            with patch("resolvers.asn.get_prefixes_he", return_value=[IPv4Network("1.2.3.0/24")]):
+                result = resolve_asn(12389)
+
+        assert len(result) == 1
+        assert IPv4Network("1.2.3.0/24") in result
+
     def test_resolve_asn_fallback_with_data(self):
-        """Проверяет что fallback работает только когда RIPE возвращает None."""
+        """Проверяет что fallback не вызывется, если RIPE вернул непустые данные."""
         ripe_data = [IPv4Network("1.0.0.0/8")]
         he_data = [IPv4Network("2.0.0.0/8")]
 
