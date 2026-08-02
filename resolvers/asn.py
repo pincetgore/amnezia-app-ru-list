@@ -12,6 +12,7 @@
 import logging
 import re
 import threading
+from collections.abc import Mapping
 import time
 from ipaddress import IPv4Network
 from typing import Any, List, Optional
@@ -47,10 +48,11 @@ def _create_session_with_retries() -> requests.Session:
     
     # Настройка retry стратегии
     retry_strategy = Retry(
-        total=3,                                    # Максимум 3 попытки
-        backoff_factor=0.5,                         # Экспоненциальный backoff: 0.5s, 1s, 2s
-        status_forcelist=[429, 500, 502, 503, 504],  # Коды для повтора
-        allowed_methods=["GET"],                    # Только GET запросы
+        total=3,
+        backoff_factor=0.5,
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=["GET"],
+        respect_retry_after_header=True,
     )
     
     adapter = HTTPAdapter(max_retries=retry_strategy)
@@ -93,11 +95,33 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]
             timeout=timeout,
         )
         resp.raise_for_status()
-        data = resp.json()
+        try:
+            data = resp.json()
+        except (ValueError, TypeError) as e:
+            logger.warning("Invalid JSON from RIPE for AS%d: %s", asn, e)
+            return None
+
+        if not isinstance(data, Mapping):
+            logger.warning("Unexpected RIPE response for AS%d: expected object", asn)
+            return None
+        payload = data.get("data")
+        if not isinstance(payload, Mapping):
+            logger.warning("Unexpected RIPE response for AS%d: missing data", asn)
+            return None
+        raw_prefixes = payload.get("prefixes", [])
+        if not isinstance(raw_prefixes, list):
+            logger.warning("Unexpected RIPE response for AS%d: invalid prefixes", asn)
+            return None
 
         prefixes = []
-        for entry in data.get("data", {}).get("prefixes", []):
+        for entry in raw_prefixes:
+            if not isinstance(entry, Mapping):
+                logger.warning("Invalid prefix entry from RIPE for AS%d: %r", asn, entry)
+                continue
             prefix = entry.get("prefix", "")
+            if not isinstance(prefix, str):
+                logger.warning("Invalid prefix from RIPE for AS%d: %r", asn, prefix)
+                continue
             # Пропускаем IPv6-префиксы (содержат двоеточия)
             if ":" in prefix:
                 continue
@@ -108,7 +132,7 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]
         logger.info("AS%d: got %d prefixes from RIPE", asn, len(prefixes))
         return prefixes
 
-    except requests.RequestException as e:
+    except (requests.RequestException, ValueError, TypeError, AttributeError) as e:
         logger.warning("RIPE API failed for AS%d: %s", asn, e)
         return None
 
@@ -150,10 +174,11 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
                 except ValueError:
                     pass
 
+        prefixes = sorted(set(prefixes), key=lambda network: (int(network.network_address), network.prefixlen))
         logger.info("AS%d: got %d prefixes from bgp.he.net (fallback)", asn, len(prefixes))
         return prefixes
 
-    except requests.RequestException as e:
+    except (requests.RequestException, ValueError, TypeError) as e:
         logger.warning("bgp.he.net failed for AS%d: %s", asn, e)
         return []
 
@@ -164,16 +189,22 @@ def resolve_asn(asn: Any) -> List[IPv4Network]:
     Сначала пытается использовать RIPE NCC; если RIPE не возвращает результаты (None или []), переключается на bgp.he.net.
     Принимает как целые числа, так и строки (например, "12345" или "AS12345"), нормализуя их.
     """
+    original_asn = asn
+    if isinstance(asn, bool):
+        logger.error("ASN must not be boolean: %r", asn)
+        return []
     if isinstance(asn, str):
-        # Удаляем "AS" префикс в любом регистре и пробелы
-        asn_clean = asn.upper().replace("AS", "").strip()
-        try:
-            asn = int(asn_clean)
-        except ValueError:
+        asn_clean = asn.strip()
+        if not re.fullmatch(r"(?i:AS)?[0-9]+", asn_clean):
             logger.error("Invalid ASN format: '%s'", asn)
             return []
+        asn = int(asn_clean[2:] if asn_clean[:2].upper() == "AS" else asn_clean)
     elif not isinstance(asn, int):
         logger.error("ASN must be an int or a string, got: %s", type(asn))
+        return []
+
+    if not 0 <= asn <= 4294967295:
+        logger.error("ASN out of range: %r", original_asn)
         return []
 
     prefixes = get_prefixes_ripe(asn)

@@ -46,14 +46,11 @@ jobs:
       - name: Generate artifacts
         run: |
           python main.py -o ip-list-${{ env.CURRENT_DATETIME }}.json -f amnezia
-          jq -r '.[].hostname' ip-list-${{ env.CURRENT_DATETIME }}.json > cidrs-${{ env.CURRENT_DATETIME }}.txt
-
-      - name: Delete old release and tag
-        run: |
-          gh release delete latest -y || echo "No 'latest' release to delete"
-          git push origin --delete latest || echo "No 'latest' tag to delete"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          python main.py -o cidrs-${{ env.CURRENT_DATETIME }}.txt -f plain
+          test -s ip-list-${{ env.CURRENT_DATETIME }}.json
+          test -s cidrs-${{ env.CURRENT_DATETIME }}.txt
+          jq -e 'type == "array" and length > 0 and all(.[]; (.hostname | type == "string"))' \
+            ip-list-${{ env.CURRENT_DATETIME }}.json
 
       - name: Create Release and Upload Artifacts
         uses: softprops/action-gh-release@v3
@@ -62,6 +59,7 @@ jobs:
             ip-list-*.json
             cidrs-*.txt
           tag_name: latest
+          overwrite_files: true
           name: "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]"
           body: |
             Автоматически сгенерированный список IP-адресов и доменов российских сервисов.
