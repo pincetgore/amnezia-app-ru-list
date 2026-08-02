@@ -1,7 +1,7 @@
 requests==2.34.2
 dnspython==2.8.0
 pyyaml==6.0.3
-tqdm==4.69.0
+tqdm==4.70.0
 pytest==9.1.1
 beautifulsoup4==4.15.0
 
