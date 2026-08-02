@@ -6,10 +6,11 @@
 """
 
 import argparse
+import concurrent.futures
 import logging
 import signal
 import sys
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 import yaml
 from tqdm import tqdm
@@ -26,27 +27,19 @@ def load_config(path: str = "config.yaml") -> Dict[str, Any]:
     """Загружает определения сервисов из конфигурационного файла YAML."""
     try:
         with open(path, encoding="utf-8") as f:
-            config = yaml.safe_load(f)
-            if config is None:
-                return {}
-            if not isinstance(config, dict):
-                raise ValueError("Top-level YAML value must be a mapping")
-            return config
+            return yaml.safe_load(f) or {}
     except FileNotFoundError:
         logger.critical("Config file '%s' not found.", path)
         sys.exit(1)
     except yaml.YAMLError as e:
         logger.critical("Failed to parse YAML in '%s': %s", path, e)
         sys.exit(1)
-    except ValueError as e:
-        logger.critical("Invalid configuration in '%s': %s", path, e)
-        sys.exit(1)
 
 
 def _handle_sigint(sig, frame):
     """Graceful shutdown при Ctrl+C."""
     logger.info("Received interrupt signal, shutting down...")
-    sys.exit(130)
+    sys.exit(0)
 
 
 def main():
@@ -102,38 +95,12 @@ def main():
     # -- Загрузка определений сервисов --
     config = load_config(args.config) or {}
     services = config.get("services") or []
-    if not isinstance(services, list):
-        logger.critical("'services' must be a list")
-        sys.exit(1)
-    for index, service in enumerate(services):
-        if not isinstance(service, dict):
-            logger.critical("Service #%d must be a mapping", index + 1)
-            sys.exit(1)
-        if not any(key in service for key in ("asn", "domains", "ip_ranges")):
-            logger.critical("Service #%d must define asn, domains or ip_ranges", index + 1)
-            sys.exit(1)
-        for key in ("asn", "domains", "ip_ranges"):
-            if key in service and service[key] is not None and not isinstance(service[key], list):
-                logger.critical("Service #%d field '%s' must be a list", index + 1, key)
-                sys.exit(1)
-
+    
     # -- Загрузка DNS конфигурации --
     dns_config = config.get("dns") or {}
-    if not isinstance(dns_config, dict):
-        logger.critical("'dns' must be a mapping")
-        sys.exit(1)
-    dns_nameservers = dns_config.get("nameservers", ['77.88.8.8', '77.88.8.1', '8.8.8.8', '1.1.1.1'])
-    dns_timeout = dns_config.get("timeout", 10)
-    dns_max_workers = dns_config.get("max_workers", 20)
-    if not isinstance(dns_nameservers, list) or not dns_nameservers:
-        logger.critical("DNS nameservers must be a non-empty list")
-        sys.exit(1)
-    if not isinstance(dns_timeout, (int, float)) or dns_timeout <= 0:
-        logger.critical("DNS timeout must be greater than zero")
-        sys.exit(1)
-    if not isinstance(dns_max_workers, int) or isinstance(dns_max_workers, bool) or dns_max_workers < 1:
-        logger.critical("DNS max_workers must be at least 1")
-        sys.exit(1)
+    dns_nameservers = dns_config.get("nameservers") or ['77.88.8.8', '77.88.8.1', '8.8.8.8', '1.1.1.1']
+    dns_timeout = dns_config.get("timeout") or 10
+    dns_max_workers = dns_config.get("max_workers") or 20
 
     service_results = []
     stats = []
@@ -218,8 +185,9 @@ def main():
     
     # Проверка на полный отказ в сборе данных
     if not aggregated:
-        logger.error("No IP prefixes were collected. Check logs for errors.")
-        sys.exit(1)
+        logger.warning("No IP prefixes were collected. Check logs for errors.")
+        if errors > 0:
+            sys.exit(1)
     
     print(f"\nOutput: {args.output}")
 
