@@ -1,8 +1,12 @@
+from pathlib import Path
+
 import pytest
 import yaml
-import ipaddress
 from ipaddress import IPv4Network
-from output.formatter import aggregate_networks
+
+import main as app
+from main import validate_config
+from output.formatter import aggregate_networks, write_output
 
 
 def test_aggregate_cidrs_removes_subnets():
@@ -19,6 +23,69 @@ def test_aggregate_cidrs_removes_subnets():
     assert "10.1.0.0/16" not in result_strs, "Вложенная подсеть 10.1.0.0/16 не была удалена!"
     assert "192.168.1.1/32" in result_strs
 
+@pytest.mark.parametrize(
+    "config",
+    [
+        {},
+        {"services": [{"name": "Service", "domains": "example.com"}]},
+        {"services": [{"name": "Service", "ip_ranges": ["not-a-network"]}]},
+        {"services": [], "dns": {"nameservers": []}},
+        {"services": [], "dns": {"timeout": 0}},
+    ],
+)
+def test_validate_config_rejects_invalid_values(config):
+    """Ошибочная конфигурация должна быть отклонена до сетевых запросов."""
+    with pytest.raises(ValueError):
+        validate_config(config)
+
+
+def test_partial_collection_does_not_write_output(tmp_path: Path, monkeypatch):
+    """Ошибка хотя бы одного DNS-домена не заменяет предыдущий список частичным."""
+    config_path = tmp_path / "config.yaml"
+    config_path.write_text(
+        "services:\n  - name: Service\n    domains:\n      - example.com\n",
+        encoding="utf-8",
+    )
+    output_path = tmp_path / "ip-list.json"
+
+    class TqdmStub:
+        def __call__(self, services, **_):
+            return services
+
+        @staticmethod
+        def write(_message):
+            pass
+
+    monkeypatch.setattr(app.sys, "argv", ["main.py", "-c", str(config_path), "-o", str(output_path)])
+    monkeypatch.setattr(app, "tqdm", TqdmStub())
+    monkeypatch.setattr(
+        app,
+        "resolve_domains",
+        lambda *args, **kwargs: ([IPv4Network("192.0.2.1/32")], ["example.com"]),
+    )
+
+    with pytest.raises(SystemExit, match="1"):
+        app.main()
+
+    assert not output_path.exists()
+
+
+def test_write_output_replaces_existing_file_atomically(tmp_path: Path):
+    """Успешная запись заменяет старое содержимое корректным полным JSON."""
+    output_path = tmp_path / "ip-list.json"
+    output_path.write_text("old and invalid content", encoding="utf-8")
+
+    write_output(
+        [{"networks": [IPv4Network("192.0.2.1/32")]}],
+        str(output_path),
+    )
+
+    assert yaml.safe_load(output_path.read_text(encoding="utf-8")) == [
+        {"hostname": "192.0.2.1/32", "ip": ""}
+    ]
+    assert not list(tmp_path.glob(".ip-list.json.*.tmp"))
+
+
 def test_config_yaml_is_valid():
     """Проверяет, что рабочий config.yaml имеет правильную структуру."""
     with open("config.yaml", "r", encoding="utf-8") as f:
@@ -28,7 +95,8 @@ def test_config_yaml_is_valid():
     assert "services" in config, "Конфиг должен содержать ключ 'services'"
     services = config["services"]
     assert isinstance(services, list), "services должен быть списком"
-    
+    validate_config(config)
+
     for entry in services:
         assert "name" in entry, f"Отсутствует 'name' в записи: {entry}"
         assert "asn" in entry or "domains" in entry or "ip_ranges" in entry, f"Запись {entry['name']} должна иметь asn, domains или ip_ranges"

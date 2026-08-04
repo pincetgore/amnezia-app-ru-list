@@ -30,7 +30,8 @@ def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> Tupl
             logger.debug("DNS %s -> %s", domain, ip)
         logger.info("DNS %s: resolved %d A records", domain, len(answers))
     except dns.resolver.NXDOMAIN:
-        logger.debug("DNS domain does not exist (NXDOMAIN) for %s", domain)
+        logger.warning("DNS domain does not exist (NXDOMAIN) for %s", domain)
+        warning = domain
     except (dns.resolver.NoAnswer, dns.resolver.NoNameservers) as e:
         logger.warning("DNS resolution failed for %s: %s", domain, e)
         warning = domain
@@ -61,16 +62,19 @@ def resolve_domains(
     возвращает кортеж (сети, домены_с_предупреждениями) без вызова исключений.
     Запросы выполняются параллельно с использованием пула потоков.
     """
+    if timeout <= 0:
+        raise ValueError("DNS timeout must be positive")
+    if max_workers <= 0:
+        raise ValueError("DNS max_workers must be positive")
+
     resolver = dns.resolver.Resolver()
-    # Используем Яндекс.DNS первыми, так как многие RU-домены (ВТБ, VK, X5) 
-    # блокируют запросы от зарубежных DNS (Google/Cloudflare) для защиты от DDoS
-    resolver.nameservers = nameservers or ['77.88.8.8', '77.88.8.1', '8.8.8.8', '1.1.1.1']
-    
-    # Валидация: убедиться что есть хотя бы один DNS сервер
+    # Используем Яндекс.DNS первыми, так как многие RU-домены (ВТБ, VK, X5)
+    # блокируют запросы от зарубежных DNS (Google/Cloudflare) для защиты от DDoS.
+    resolver.nameservers = nameservers if nameservers is not None else ["77.88.8.8", "77.88.8.1", "8.8.8.8", "1.1.1.1"]
+
     if not resolver.nameservers:
-        logger.error("No nameservers configured for DNS resolution")
-        return [], []
-    
+        raise ValueError("At least one DNS nameserver must be configured")
+
     # Таймаут на один сервер делаем пропорциональным количеству серверов
     resolver.timeout = timeout / len(resolver.nameservers)
     # Общее время на все попытки резолвинга

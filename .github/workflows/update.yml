@@ -16,10 +16,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        # v7.0.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: '3.11'
 
@@ -56,18 +58,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release and Upload Artifacts
-        uses: softprops/action-gh-release@v3
-        with:
-          files: |
-            ip-list-*.json
-            cidrs-*.txt
-          tag_name: latest
-          name: "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]"
-          body: |
-            Автоматически сгенерированный список IP-адресов и доменов российских сервисов.
-            
-            📅 **Дата генерации:** ${{ env.CURRENT_DATETIME }}
-            🏷 **Тип запуска:** ${{ env.RELEASE_LABEL }}
+        run: |
+          cat > release-notes.md <<'EOF'
+          Автоматически сгенерированный список IP-адресов и доменов российских сервисов.
 
-            - `ip-list-${{ env.CURRENT_DATETIME }}.json` — для импорта в AmneziaVPN.
-            - `cidrs-${{ env.CURRENT_DATETIME }}.txt` — простой список CIDR-диапазонов.
+          📅 **Дата генерации:** ${{ env.CURRENT_DATETIME }}
+          🏷 **Тип запуска:** ${{ env.RELEASE_LABEL }}
+
+          - `ip-list-${{ env.CURRENT_DATETIME }}.json` — для импорта в AmneziaVPN.
+          - `cidrs-${{ env.CURRENT_DATETIME }}.txt` — простой список CIDR-диапазонов.
+          EOF
+          gh release create latest ip-list-*.json cidrs-*.txt \
+            --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
+            --notes-file release-notes.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

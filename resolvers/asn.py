@@ -38,7 +38,8 @@ _rate_limit_lock = threading.Lock()
 def _create_session_with_retries() -> requests.Session:
     """Создает requests.Session с автоматическим retry для сетевых сбоев.
     
-    Конфигурирует exponential backoff для повторных попыток при:
+    Выполняет до трёх повторных запросов (до четырёх суммарных попыток)
+    с exponential backoff при:
     - 429 (Too Many Requests)
     - 500, 502, 503, 504 (Server errors)
     """
@@ -47,7 +48,7 @@ def _create_session_with_retries() -> requests.Session:
     
     # Настройка retry стратегии
     retry_strategy = Retry(
-        total=3,                                    # Максимум 3 попытки
+        total=3,                                    # До 3 повторов после первоначального запроса
         backoff_factor=0.5,                         # Экспоненциальный backoff: 0.5s, 1s, 2s
         status_forcelist=[429, 500, 502, 503, 504],  # Коды для повтора
         allowed_methods=["GET"],                    # Только GET запросы

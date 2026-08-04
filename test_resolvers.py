@@ -12,6 +12,7 @@ import pytest
 from unittest.mock import patch, MagicMock
 from ipaddress import IPv4Network
 
+import dns.resolver
 from resolvers.asn import get_prefixes_ripe, get_prefixes_he, resolve_asn
 from resolvers.dns import resolve_domains, _resolve_single_domain
 
@@ -151,6 +152,16 @@ class TestDNSResolver:
         assert IPv4Network("1.2.3.4/32") in networks
         assert warning is None
 
+    def test_resolve_single_domain_nxdomain_is_warning(self):
+        """NXDOMAIN не должен молча исключаться из отчёта об ошибках."""
+        mock_resolver = MagicMock()
+        mock_resolver.resolve.side_effect = dns.resolver.NXDOMAIN()
+
+        networks, warning = _resolve_single_domain("missing.example", mock_resolver)
+
+        assert networks == []
+        assert warning == "missing.example"
+
     def test_resolve_single_domain_multiple_ips(self):
         """Проверяет резолвинг домена с несколькими A-записями."""
         mock_resolver = MagicMock()
@@ -184,6 +195,15 @@ class TestDNSResolver:
 
             # Проверяем что nameservers был установлен на resolver
             assert mock_resolver_instance.nameservers == custom_nameservers
+
+    @pytest.mark.parametrize(
+        "kwargs",
+        [{"nameservers": []}, {"timeout": 0}, {"max_workers": 0}],
+    )
+    def test_resolve_domains_rejects_invalid_settings(self, kwargs):
+        """Пустые и нулевые параметры не подменяются значениями по умолчанию."""
+        with pytest.raises(ValueError):
+            resolve_domains([], **kwargs)
 
     def test_resolve_domains_with_timeout(self):
         """Проверяет что timeout и max_workers используются правильно."""

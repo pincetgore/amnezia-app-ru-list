@@ -9,6 +9,8 @@
 """
 
 import json
+import os
+import tempfile
 from ipaddress import IPv4Network, collapse_addresses
 from pathlib import Path
 from typing import Any, Dict, List
@@ -65,12 +67,23 @@ def write_output(
     sorted_nets = sorted(aggregated, key=lambda n: (n.network_address, n.prefixlen))
 
     if fmt == "amnezia":
-        data = format_amnezia(sorted_nets)
-        path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+        content = json.dumps(format_amnezia(sorted_nets), indent=2, ensure_ascii=False) + "\n"
     elif fmt == "plain":
-        text = format_plain(sorted_nets)
-        path.write_text(text)
+        content = format_plain(sorted_nets)
     else:
         raise ValueError(f"Unknown format: {fmt}")
+
+    # Записываем во временный файл в той же директории, затем атомарно заменяем цель.
+    # Это не оставляет частично записанный список при прерывании процесса или ошибке I/O.
+    fd, temporary_path = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as temporary_file:
+            temporary_file.write(content)
+            temporary_file.flush()
+            os.fsync(temporary_file.fileno())
+        os.replace(temporary_path, path)
+    except BaseException:
+        Path(temporary_path).unlink(missing_ok=True)
+        raise
 
     return aggregated
