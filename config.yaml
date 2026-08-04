@@ -244,7 +244,6 @@ services:
       - userapi.com
       - vk-apps.com
       - vk-apps.ru
-      - vk-cdn.me
       - vk-portal.net
       - vk.cc
       - vk.com
@@ -254,7 +253,6 @@ services:
       - vk.me
       - vk.ru
       - vk.team
-      - vkcache.com
       - vkclips.app
       - vkcloud-static.ru
       - vkgo.app
@@ -323,7 +321,6 @@ services:
       - sber.ru
       - sbermarket.ru
       - spasibosberbank.ru
-      - sberinvestor.ru
 
   - name: "Т-Банк"
     asn:
@@ -491,7 +488,6 @@ services:
       - lk.megafon.ru
       - megafonpro.ru
       - mgfn.ru
-      - report-megafon.ru
       - scartel.ru
       - yota.ru
       - yotagamer.ru
@@ -503,10 +499,7 @@ services:
       - my.beeline.ru
       - api.beeline.ru
       - lk.beeline.ru
-      - vmp.beeline.ru
       - id.beeline.ru
-      - singleidentity.ru
-      - beelinenew.cdnvideo.ru
       - static.beeline.ru
 
   - name: "Теле2"
@@ -615,7 +608,6 @@ services:
     asn: []
     domains:
       - detmir.ru
-      - detmist.st
       - img.detmir.st
       - go.detmir.st
       - catalog-cdn.detmir.st
@@ -730,14 +722,12 @@ services:
     domains:
       - rendez-vous.ru
       - api.rendez-vous.ru
-      - mobile.rendez-vous.ru
 
   - name: "One Price Coffee"
     asn: []
     domains:
       - onepricecoffee.com
       - api.onepricecoffee.com
-      - app.onepricecoffee.com
       - cloud.onepricecoffee.com
       - delivery.onepricecoffee.com
 
@@ -775,13 +765,11 @@ services:
     asn: []
     domains:
       - kion.ru
-      - api.kion.ru
 
   - name: "Wink"
     asn: []
     domains:
       - wink.ru
-      - api.wink.ru
 
   - name: "START"
     asn: []
@@ -793,13 +781,11 @@ services:
     asn: []
     domains:
       - premier.one
-      - api.premier.one
 
   - name: "Звук (Сбер)"
     asn: []
     domains:
       - zvuk.com
-      - sberaudio.ru
 
   # ============================================================
   # ГОСУДАРСТВЕННЫЕ СЕРВИСЫ
@@ -848,7 +834,6 @@ services:
       - pochta.ru
       - tracking.pochta.ru
       - mobileapp.russianpost.ru
-      - 1018213540.rsc.cdn77.org
 
   - name: "Честный знак"
     asn: []
@@ -872,7 +857,6 @@ services:
     domains:
       - aeroflot.ru
       - api.aeroflot.ru
-      - booking.aeroflot.ru
 
   - name: "S7 Airlines"
     asn: []
@@ -883,7 +867,6 @@ services:
     asn: []
     domains:
       - pobeda.aero
-      - booking.pobeda.aero
 
   - name: "Уральские авиалинии"
     asn: []
@@ -900,7 +883,6 @@ services:
     asn: []
     domains:
       - tutu.ru
-      - api.tutu.ru
 
   - name: "Островок"
     asn: []
@@ -980,7 +962,6 @@ services:
     asn: []
     domains:
       - auto.ru
-      - api.auto.ru
 
   - name: "Drom.ru"
     asn: []
@@ -1017,7 +998,6 @@ services:
       - 2gis.com
       - tile3.maps.2gis.com
       - static.2gis.com
-      - cdn.2gis.ru
 
   # ============================================================
   # ОБРАЗОВАНИЕ
@@ -1087,14 +1067,11 @@ services:
     asn: []
     domains:
       - invitro.ru
-      - api.invitro.ru
       - lk.invitro.ru
 
   - name: "Медси"
     asn: []
     domains:
-      - api.medsi.ru
-      - app.medsi.ru
       - smartmed.pro
       - medsi.com
       - medsi.pro
@@ -1123,7 +1100,6 @@ services:
       - mx.vitaexpress.ru
       - my.vitaexpress.ru
       - static.vitaexpress.ru
-      - app.vitaexpress.ru
 
   # ============================================================
   # МЕССЕНДЖЕРЫ
@@ -1252,12 +1228,8 @@ services:
     domains:
       - dreametech.com
       - ru.dreametech.com
-      - ru.api.dreame.tech
       - ru.iot.dreame.tech
       - smarthome.dreame.tech
-      - api.dreametech.com
-      - account.dreametech.com
-      - iot.dreametech.com
 
   - name: "Мой умный дом (Уфанет)"
     asn: []
@@ -1266,7 +1238,6 @@ services:
       - ufanet.ru
       - secretapi.ufanet.ru
       - ufanetgroup.com
-      - ru.ufanet.smarthome
 
   - name: "kojima.ru"
     asn: []
