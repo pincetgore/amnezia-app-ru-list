@@ -360,7 +360,6 @@ services:
       - 15632
       - 34838
       - 59840
-      - 208811
     domains:
       - alfabank.ru
       - alfadirect.ru
@@ -846,7 +845,6 @@ services:
   - name: "РЖД"
     asn:
       - 20702
-      - 28991
     domains:
       - rzd.ru
       - ticket.rzd.ru
