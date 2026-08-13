@@ -39,11 +39,11 @@ def test_validate_config_rejects_invalid_values(config):
         validate_config(config)
 
 
-def test_partial_collection_does_not_write_output(tmp_path: Path, monkeypatch):
-    """Ошибка хотя бы одного DNS-домена не заменяет предыдущий список частичным."""
+def test_dns_warning_writes_output_and_reports_domain(tmp_path: Path, monkeypatch, capsys):
+    """Недоступный DNS-домен выводится как предупреждение и не останавливает выпуск."""
     config_path = tmp_path / "config.yaml"
     config_path.write_text(
-        "services:\n  - name: Service\n    domains:\n      - example.com\n",
+        "services:\n  - name: Service\n    domains:\n      - example.com\n    ip_ranges:\n      - 192.0.2.1/32\n",
         encoding="utf-8",
     )
     output_path = tmp_path / "ip-list.json"
@@ -61,13 +61,14 @@ def test_partial_collection_does_not_write_output(tmp_path: Path, monkeypatch):
     monkeypatch.setattr(
         app,
         "resolve_domains",
-        lambda *args, **kwargs: ([IPv4Network("192.0.2.1/32")], ["example.com"]),
+        lambda *args, **kwargs: ([], ["example.com"]),
     )
 
-    with pytest.raises(SystemExit, match="1"):
-        app.main()
-
-    assert not output_path.exists()
+    app.main()
+    captured = capsys.readouterr()
+    assert output_path.exists()
+    assert "Domains that could not be resolved:" in captured.out
+    assert "example.com" in captured.out
 
 
 def test_write_output_replaces_existing_file_atomically(tmp_path: Path):

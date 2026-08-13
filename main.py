@@ -206,8 +206,9 @@ def main():
                     nameservers=dns_nameservers,
                 )
                 service_networks.extend(dns_networks)
+                # Недоступность отдельного домена не должна прерывать выпуск:
+                # список проблемных доменов выводится в итоговой статистике.
                 all_dns_warnings.extend(dns_warnings)
-                errors += len(dns_warnings)
             except Exception as e:
                 logger.error("Failed DNS resolution for %s: %s", name, e)
                 logger.debug("Exception details:", exc_info=True)
@@ -248,7 +249,9 @@ def main():
         for domain in sorted(set(all_dns_warnings)):
             print(f"  ⚠️  {domain}")
     
-    # Не публикуем частичный список: он может заменить корректный предыдущий релиз.
+    # Ошибки ASN и некорректные диапазоны делают результат неполным.
+    # Предупреждения DNS сюда не входят: недоступные домены перечислены выше,
+    # а список из остальных успешно полученных данных всё равно публикуется.
     if errors:
         logger.error("Collection completed with errors; output was not written.")
         sys.exit(1)
