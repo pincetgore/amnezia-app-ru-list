@@ -88,7 +88,6 @@ services:
       - ip.me
       - ip.pe.kr
       - ip.sb
-      - ip.tyk.nu
       - ip2c.org
       - ip2location.com
       - ip2location.io
