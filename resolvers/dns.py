@@ -28,7 +28,7 @@ def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> Tupl
             net = IPv4Network(f"{ip}/32", strict=False)
             networks.append(net)
             logger.debug("DNS %s -> %s", domain, ip)
-        logger.info("DNS %s: resolved %d A records", domain, len(answers))
+        logger.debug("DNS %s: resolved %d A records", domain, len(answers))
     except dns.resolver.NXDOMAIN:
         logger.warning("DNS domain does not exist (NXDOMAIN) for %s", domain)
         warning = domain

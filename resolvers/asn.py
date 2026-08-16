@@ -106,7 +106,7 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]
                 prefixes.append(IPv4Network(prefix, strict=False))
             except ValueError:
                 logger.warning("Invalid prefix from RIPE for AS%d: %s", asn, prefix)
-        logger.info("AS%d: got %d prefixes from RIPE", asn, len(prefixes))
+        logger.debug("AS%d: got %d prefixes from RIPE", asn, len(prefixes))
         return prefixes
 
     except requests.RequestException as e:
@@ -151,7 +151,7 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
                 except ValueError:
                     pass
 
-        logger.info("AS%d: got %d prefixes from bgp.he.net (fallback)", asn, len(prefixes))
+        logger.debug("AS%d: got %d prefixes from bgp.he.net (fallback)", asn, len(prefixes))
         return prefixes
 
     except requests.RequestException as e:

@@ -149,6 +149,7 @@ def main():
         level=log_level,
         format="%(asctime)s [%(levelname)s] %(message)s",
         datefmt="%H:%M:%S",
+        stream=sys.stdout,
         force=True,
     )
 
@@ -174,7 +175,7 @@ def main():
     all_dns_warnings = []
 
     # -- Обработка каждого сервиса: получение префиксов ASN и DNS-записей --
-    for service in tqdm(services, desc="Processing services", unit="svc"):
+    for service in tqdm(services, desc="Processing services", unit="svc", disable=not sys.stdout.isatty()):
         name = service["name"]
         service_networks = []
         # Безопасное извлечение: защищает от случаев, когда в YAML указано 'domains: null'
@@ -230,7 +231,6 @@ def main():
             "domains": domains,
             "networks": service_networks,
         })
-        tqdm.write(f"  {name}: {count} prefixes")
 
     # -- Вывод сводной статистики --
     print("\n" + "=" * 50)
