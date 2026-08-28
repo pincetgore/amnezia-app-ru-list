@@ -46,10 +46,8 @@ htmlcov/
 .DS_Store
 
 # Generated output
-*.json
-ip-list-*.json
-cidrs-*.txt
-output/
+ip-list*.json
+cidrs*.txt
 
 # Project-specific
 config.local.yaml

@@ -35,6 +35,8 @@ class TestASNResolver:
                 "prefixes": [
                     {"prefix": "1.2.3.0/24"},
                     {"prefix": "4.5.6.0/24"},
+                    {"prefix": "0.0.0.0/0"},      # Default route - должно пропуститься
+                    {"prefix": "0.0.0.0/8"},      # Unspecified / broad - должно пропуститься
                     {"prefix": "2001:db8::/32"},  # IPv6 - должно пропуститься
                 ]
             }
@@ -46,6 +48,7 @@ class TestASNResolver:
         assert len(result) == 2
         assert IPv4Network("1.2.3.0/24") in result
         assert IPv4Network("4.5.6.0/24") in result
+        assert IPv4Network("0.0.0.0/0") not in result
 
     def test_get_prefixes_ripe_empty_data(self):
         """Проверяет обработку пустого ответа от RIPE."""
@@ -69,10 +72,11 @@ class TestASNResolver:
         assert result is None
 
     def test_get_prefixes_he_success(self):
-        """Проверяет успешный парсинг bgp.he.net."""
+        """Проверяет успешный парсинг bgp.he.net с фильтрацией 0.0.0.0/0."""
         mock_response = MagicMock()
         mock_response.text = """
             <table>
+                <tr><td>0.0.0.0/0</td></tr>
                 <tr><td>1.2.3.0/24</td></tr>
                 <tr><td>4.5.6.0/25</td></tr>
             </table>
@@ -84,6 +88,7 @@ class TestASNResolver:
         assert len(result) == 2
         assert IPv4Network("1.2.3.0/24") in result
         assert IPv4Network("4.5.6.0/25") in result
+        assert IPv4Network("0.0.0.0/0") not in result
 
     def test_get_prefixes_he_fallback(self):
         """Проверяет fallback когда RIPE возвращает None."""

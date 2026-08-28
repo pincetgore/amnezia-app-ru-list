@@ -21,10 +21,15 @@ def aggregate_networks(networks: List[IPv4Network]) -> List[IPv4Network]:
 
     Использует collapse_addresses() из стандартной библиотеки для слияния перекрывающихся/смежных подсетей
     и удаления отдельных IP-адресов, которые уже покрыты более широким префиксом.
+    Исключает 0.0.0.0/0 и некорректные суперсети, чтобы не схлопнуть весь интернет в 1 маршрут.
     """
     if not networks:
         return []
-    return list(collapse_addresses(networks))
+    valid_networks = [
+        net for net in networks
+        if net.prefixlen > 0 and not net.is_unspecified
+    ]
+    return list(collapse_addresses(valid_networks))
 
 
 def format_amnezia(sorted_nets: List[IPv4Network]) -> List[Dict[str, str]]:

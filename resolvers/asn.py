@@ -80,6 +80,24 @@ def _rate_limit():
         time.sleep(sleep_time)
 
 
+def _is_valid_prefix(net: IPv4Network) -> bool:
+    """Проверяет валидность полученного BGP IPv4-префикса.
+
+    Исключает:
+    - Default route (0.0.0.0/0) и чрезмерно широкие суперсети (маска < 8)
+    - Неопределенные адреса (0.0.0.0/8)
+    - Loopback адреса (127.0.0.0/8)
+    - Multicast / Class E (>= 224.0.0.0/4)
+    """
+    if net.prefixlen < 8 or net.prefixlen > 32:
+        return False
+    if net.is_unspecified or net.is_loopback or net.is_multicast:
+        return False
+    if str(net.network_address).startswith("0."):
+        return False
+    return True
+
+
 def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]]:
     """Получает все анонсированные IPv4-префиксы для ASN из RIPE NCC API.
 
@@ -103,7 +121,11 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]
             if ":" in prefix:
                 continue
             try:
-                prefixes.append(IPv4Network(prefix, strict=False))
+                net = IPv4Network(prefix, strict=False)
+                if _is_valid_prefix(net):
+                    prefixes.append(net)
+                else:
+                    logger.warning("Ignoring broad/invalid prefix from RIPE for AS%d: %s", asn, prefix)
             except ValueError:
                 logger.warning("Invalid prefix from RIPE for AS%d: %s", asn, prefix)
         logger.debug("AS%d: got %d prefixes from RIPE", asn, len(prefixes))
@@ -138,7 +160,9 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
             text = elem.get_text().strip()
             if re.match(cidr_pattern, text):
                 try:
-                    prefixes.append(IPv4Network(text, strict=False))
+                    net = IPv4Network(text, strict=False)
+                    if _is_valid_prefix(net):
+                        prefixes.append(net)
                 except ValueError:
                     pass
 
@@ -147,7 +171,9 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
             raw = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2})', resp.text)
             for p in raw:
                 try:
-                    prefixes.append(IPv4Network(p, strict=False))
+                    net = IPv4Network(p, strict=False)
+                    if _is_valid_prefix(net):
+                        prefixes.append(net)
                 except ValueError:
                     pass
 

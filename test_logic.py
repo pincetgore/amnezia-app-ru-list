@@ -23,6 +23,22 @@ def test_aggregate_cidrs_removes_subnets():
     assert "10.1.0.0/16" not in result_strs, "Вложенная подсеть 10.1.0.0/16 не была удалена!"
     assert "192.168.1.1/32" in result_strs
 
+
+def test_aggregate_cidrs_ignores_default_route():
+    """Проверяет, что 0.0.0.0/0 отфильтровывается и не схлопывает все подсети в 1."""
+    ips = [
+        IPv4Network("0.0.0.0/0"),
+        IPv4Network("10.0.0.0/8"),
+        IPv4Network("77.88.0.0/18"),
+    ]
+    result = aggregate_networks(ips)
+    result_strs = [str(net) for net in result]
+
+    assert "0.0.0.0/0" not in result_strs
+    assert "10.0.0.0/8" in result_strs
+    assert "77.88.0.0/18" in result_strs
+    assert len(result) == 2
+
 @pytest.mark.parametrize(
     "config",
     [
