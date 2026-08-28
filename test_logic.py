@@ -87,6 +87,38 @@ def test_dns_warning_writes_output_and_reports_domain(tmp_path: Path, monkeypatc
     assert "example.com" in captured.out
 
 
+def test_asn_warning_writes_output_and_reports_asn(tmp_path: Path, monkeypatch, capsys):
+    """Недоступный или пустой ASN выводится как предупреждение и не останавливает выпуск."""
+    config_path = tmp_path / "config.yaml"
+    config_path.write_text(
+        "services:\n  - name: TestService\n    asn:\n      - 12345\n    ip_ranges:\n      - 192.0.2.1/32\n",
+        encoding="utf-8",
+    )
+    output_path = tmp_path / "ip-list.json"
+
+    class TqdmStub:
+        def __call__(self, services, **_):
+            return services
+
+        @staticmethod
+        def write(_message):
+            pass
+
+    monkeypatch.setattr(app.sys, "argv", ["main.py", "-c", str(config_path), "-o", str(output_path)])
+    monkeypatch.setattr(app, "tqdm", TqdmStub())
+    monkeypatch.setattr(
+        app,
+        "resolve_asn",
+        lambda _asn: [],
+    )
+
+    app.main()
+    captured = capsys.readouterr()
+    assert output_path.exists()
+    assert "ASNs that could not be resolved or returned no prefixes:" in captured.out
+    assert "AS12345 (TestService)" in captured.out
+
+
 def test_write_output_replaces_existing_file_atomically(tmp_path: Path):
     """Успешная запись заменяет старое содержимое корректным полным JSON."""
     output_path = tmp_path / "ip-list.json"

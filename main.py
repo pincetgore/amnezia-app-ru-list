@@ -171,7 +171,7 @@ def main():
 
     service_results = []
     stats = []
-    errors = 0
+    all_asn_warnings = []
     all_dns_warnings = []
 
     # -- Обработка каждого сервиса: получение префиксов ASN и DNS-записей --
@@ -183,19 +183,20 @@ def main():
         asns = service.get("asn") or []
         ip_ranges = service.get("ip_ranges") or []
 
-        # Шаг 1: Получение всех анонсированных IP-префиксов для каждой ASN через RIPE API
+        # Шаг 1: Получение всех анонсированных IP-префиксов для каждой ASN через RIPE API / bgp.he.net
         if asns:
             for asn in asns:
                 try:
                     prefixes = resolve_asn(asn)
                     if not prefixes:
-                        logger.error("No prefixes resolved for AS%s (%s)", asn, name)
-                        errors += 1
-                    service_networks.extend(prefixes)
+                        logger.warning("No prefixes resolved for AS%s (%s)", asn, name)
+                        all_asn_warnings.append(f"AS{asn} ({name})")
+                    else:
+                        service_networks.extend(prefixes)
                 except Exception as e:
-                    logger.error("Failed to resolve AS%s for %s: %s", asn, name, e)
+                    logger.warning("Failed to resolve AS%s for %s: %s", asn, name, e)
                     logger.debug("Exception details:", exc_info=True)
-                    errors += 1
+                    all_asn_warnings.append(f"AS{asn} ({name}) - error: {e}")
 
         # Шаг 2: Резолв A-записей доменов для дополнения данных ASN IP-адресами /32
         if domains:
@@ -211,9 +212,9 @@ def main():
                 # список проблемных доменов выводится в итоговой статистике.
                 all_dns_warnings.extend(dns_warnings)
             except Exception as e:
-                logger.error("Failed DNS resolution for %s: %s", name, e)
+                logger.warning("Failed DNS resolution for %s: %s", name, e)
                 logger.debug("Exception details:", exc_info=True)
-                errors += 1
+                all_dns_warnings.append(f"{name} (DNS error: {e})")
 
         # Шаг 3: Добавление явно заданных IP-диапазонов
         if ip_ranges:
@@ -221,8 +222,7 @@ def main():
                 try:
                     service_networks.append(IPv4Network(ip_str, strict=False))
                 except ValueError as e:
-                    logger.error("Invalid IP range '%s' for %s: %s", ip_str, name, e)
-                    errors += 1
+                    logger.warning("Invalid IP range '%s' for %s: %s", ip_str, name, e)
 
         count = len(service_networks)
         stats.append((name, count))
@@ -241,20 +241,16 @@ def main():
     print("-" * 50)
     print(f"  Services processed: {len(stats)}")
     print(f"  Total raw prefixes: {sum(c for _, c in stats)}")
-    if errors:
-        print(f"  Errors:             {errors}")
+    if all_asn_warnings:
+        print(f"  ASN warnings:       {len(all_asn_warnings)}")
+        print("\nASNs that could not be resolved or returned no prefixes:")
+        for item in sorted(set(all_asn_warnings)):
+            print(f"  ⚠️  {item}")
     if all_dns_warnings:
         print(f"  DNS warnings:       {len(all_dns_warnings)}")
         print("\nDomains that could not be resolved:")
         for domain in sorted(set(all_dns_warnings)):
             print(f"  ⚠️  {domain}")
-    
-    # Ошибки ASN и некорректные диапазоны делают результат неполным.
-    # Предупреждения DNS сюда не входят: недоступные домены перечислены выше,
-    # а список из остальных успешно полученных данных всё равно публикуется.
-    if errors:
-        logger.error("Collection completed with errors; output was not written.")
-        sys.exit(1)
 
     # Не создаём даже пустой выходной файл при полном отсутствии данных.
     aggregated = aggregate_networks(
