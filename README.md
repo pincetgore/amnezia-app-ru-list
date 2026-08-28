@@ -149,9 +149,9 @@ dns:
 | Точка Банк | — | `api.tochka.com`, `enter.tochka.com`, `tochka.com` |
 | Модульбанк | — | `modulbank.ru` |
 | Бланк Банк | — | `blank.ru` |
-| Почта Банк | AS43126, AS200424 | `pochtabank.ru` |
+| Почта Банк | AS200424 | `pochtabank.ru` |
 | Банк Санкт-Петербург | AS34978 | `bspb.ru` |
-| Уралсиб | AS29076 | `bankuralsib.ru`, `uralsib.ru` |
+| Уралсиб | AS29076 | `uralsib.ru` |
 | Ак Барс Банк | AS31200 | `akbars.ru` |
 | Банк ДОМ.РФ | — | `domrfbank.ru` |
 | Ренессанс Банк | AS41703 | `rencredit.ru` |
@@ -195,7 +195,7 @@ dns:
 | ВсеИнструменты.ру | — | `vseinstrumenti.ru` |
 | Петрович | — | `petrovich.ru` |
 | Максидом | — | `maxidom.ru` |
-| Спортмастер | AS41885 | `api.sportmaster.ru`, `sportmaster.ru` |
+| Спортмастер | AS41885 | `sportmaster.ru` |
 | Л'Этуаль | — | `api.letu.ru`, `letu.ru` |
 | Рив Гош | — | `rivegauche.ru` |
 | Ostin | — | `ostin.com`, `ostin.ru` |
@@ -235,8 +235,8 @@ dns:
 | One Price Coffee | — | `api.onepricecoffee.com`, `cloud.onepricecoffee.com`, `delivery.onepricecoffee.com`, `onepricecoffee.com` |
 | Best Benefits | — | `app.bestbenefits.ru`, `bestbenefits.ru`, `mobile.bestbenefits.ru` |
 | Зоозавр | — | `api.new1.zoozavr.ru`, `api.zoozavr.ru`, `blog.zoozavr.ru`, `feedback.zoozavr.ru` и др. |
-| Ашан | — | `auchan.ru`, `online.auchan.ru` |
-| Азбука Вкуса | — | `api.av.ru`, `av.ru`, `azbukavkusa.ru` |
+| Ашан | — | `auchan.ru` |
+| Азбука Вкуса | — | `av.ru`, `azbukavkusa.ru` |
 | Глобус | — | `globus.ru`, `online.globus.ru` |
 | О'КЕЙ | — | `okmarket.ru` |
 | Красное & Белое | — | `k-b.ru`, `krasnoeibeloe.ru` |
@@ -246,10 +246,10 @@ dns:
 
 | Сервис | Домены |
 | ------ | ------ |
-| Вкусно — и точка | `api.vkusnoitochka.ru`, `vkusnoitochka.ru` |
-| Додо Пицца | `dodoengineering.com`, `dodois.io`, `dodopizza.com`, `dodopizza.ru` |
+| Вкусно — и точка | `vkusnoitochka.ru` |
+| Додо Пицца | `dodopizza.com`, `dodopizza.ru` |
 | Ростикс | `kfc.ru`, `rostics.ru` |
-| Бургер Кинг | `api.burgerking.ru`, `burgerking.ru`, `burgerkingrus.ru` |
+| Бургер Кинг | `burgerking.ru`, `burgerkingrus.ru` |
 | Тануки / Якитория | `tanuki.ru`, `yakitoriya.ru` |
 
 ### Стриминг, видео и музыка
@@ -337,16 +337,16 @@ dns:
 | Ситидрайв / Ситимобил | — | `city-mobil.ru`, `citydrive.ru` |
 | Drivee | — | `drivee.ru` |
 | Uber Russia | — | `uber.ru` |
-| Парковки России | — | `app.parking.mos.ru`, `parking.mos.ru`, `parkingrussia.ru` |
-| ЦППК и Аэроэкспресс | — | `aeroexpress.ru`, `app.central-ppk.ru`, `central-ppk.ru` |
+| Парковки России | — | `parking.mos.ru` |
+| ЦППК и Аэроэкспресс | — | `aeroexpress.ru`, `central-ppk.ru` |
 | BelkaCar | — | `api.belkacar.ru`, `belkacar.ru` |
 | Whoosh | — | `api.whoosh.bike`, `whoosh.bike`, `whoosh.ru` |
 | Юрент | — | `api.urent.ru`, `urent.city`, `urent.ru` |
 | Лукойл (АЗС / Ликард) | — | `auto.lukoil.ru`, `licard.ru`, `lukoil.ru` |
-| Газпромнефть (АЗС / ОПТИ 24) | — | `gazprom-neft.ru`, `gpn-card.com`, `gpnbonus.ru` |
+| Газпромнефть (АЗС / ОПТИ 24) | — | `gazprom-neft.ru`, `opti-24.com`, `gpnbonus.ru` |
 | Роснефть (Семейная команда) | — | `komandacard.ru`, `rn-card.ru`, `rosneft.ru` |
 | Татнефть | — | `club.tatneft.ru`, `tatneft.ru` |
-| Utair | — | `api.utair.ru`, `utair.ru` |
+| Utair | — | `utair.ru` |
 | Smartavia | — | `flysmartavia.com`, `smartavia.ru` |
 | Red Wings | — | `flyredwings.com` |
 | Nordwind Airlines | — | `nordwindairlines.ru` |
@@ -355,8 +355,8 @@ dns:
 
 | Сервис | ASN | Домены |
 | ------ | ------ | ------ |
-| StarLine | AS44117 | `api.starline.ru`, `starline-online.ru`, `starline.ru` |
-| Pandora | — | `p-on.ru`, `pandora-info.com`, `pro.p-on.ru` |
+| StarLine | AS44117 | `starline-online.ru`, `starline.ru` |
+| Pandora | — | `p-on.ru`, `alarmtrade.ru`, `pandora.ru`, `pro.p-on.ru` |
 
 ### Недвижимость
 
@@ -411,7 +411,7 @@ dns:
 | Invitro | — | `invitro.ru`, `lk.invitro.ru` |
 | Медси | — | `medsi-premium.ru`, `medsi.com`, `medsi.pro`, `medsi.ru` и др. |
 | АГНИ | — | `beauty-forma.com`, `lk-dev.beauty-forma.com`, `lk.beauty-forma.com`, `shop.beauty-forma.com` |
-| Аптека Вита | AS42996 | `autodiscover.vitaexpress.ru`, `blog.vitaexpress.ru`, `cloud.vitaexpress.ru`, `mailimage.vitaexpress.ru` и др. |
+| Аптека Вита | AS42996 | `autodiscover.vitaexpress.ru`, `cloud.vitaexpress.ru`, `mailimage.vitaexpress.ru`, `mobapp-api.vitaexpress.ru` и др. |
 | ПроДокторов | — | `medtochka.ru`, `prodoctorov.ru` |
 | Здравсити | — | `zdravcity.ru` |
 | Аптека 36.6 / Горздрав | — | `366.ru`, `gorzdrav.org` |
@@ -426,7 +426,7 @@ dns:
 | ------ | ------ | ------ |
 | Ингосстрах | — | `ingos.ru` |
 | РЕСО | AS39266 | `agent.reso.ru`, `j7h6i8.reso.ru`, `lms.reso.ru`, `reso.ru` и др. |
-| РСА (Российский союз автостраховщиков) | — | `autoins.ru`, `dkbm-web.autoins.ru` |
+| РСА (Российский союз автостраховщиков) | — | `autoins.ru`, `nsis.ru` |
 | ВСК | AS43644 | `shop.vsk.ru`, `vsk.ru` |
 | Росгосстрах | AS21396 | `my.rgs.ru`, `rgs.ru` |
 | Согласие | — | `soglasie.ru` |

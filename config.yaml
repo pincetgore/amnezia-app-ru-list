@@ -521,7 +521,6 @@ services:
 
   - name: "Почта Банк"
     asn:
-      - 43126
       - 200424
     domains:
       - pochtabank.ru
@@ -536,7 +535,6 @@ services:
     asn:
       - 29076
     domains:
-      - bankuralsib.ru
       - uralsib.ru
 
   - name: "Ак Барс Банк"
@@ -788,7 +786,6 @@ services:
     asn:
       - 41885
     domains:
-      - api.sportmaster.ru
       - sportmaster.ru
 
   - name: "Л'Этуаль"
@@ -1018,12 +1015,10 @@ services:
     asn: []
     domains:
       - auchan.ru
-      - online.auchan.ru
 
   - name: "Азбука Вкуса"
     asn: []
     domains:
-      - api.av.ru
       - av.ru
       - azbukavkusa.ru
 
@@ -1055,14 +1050,11 @@ services:
   - name: "Вкусно — и точка"
     asn: []
     domains:
-      - api.vkusnoitochka.ru
       - vkusnoitochka.ru
 
   - name: "Додо Пицца"
     asn: []
     domains:
-      - dodoengineering.com
-      - dodois.io
       - dodopizza.com
       - dodopizza.ru
 
@@ -1075,7 +1067,6 @@ services:
   - name: "Бургер Кинг"
     asn: []
     domains:
-      - api.burgerking.ru
       - burgerking.ru
       - burgerkingrus.ru
 
@@ -1492,15 +1483,12 @@ services:
   - name: "Парковки России"
     asn: []
     domains:
-      - app.parking.mos.ru
       - parking.mos.ru
-      - parkingrussia.ru
 
   - name: "ЦППК и Аэроэкспресс"
     asn: []
     domains:
       - aeroexpress.ru
-      - app.central-ppk.ru
       - central-ppk.ru
 
   - name: "BelkaCar"
@@ -1534,7 +1522,7 @@ services:
     asn: []
     domains:
       - gazprom-neft.ru
-      - gpn-card.com
+      - opti-24.com
       - gpnbonus.ru
 
   - name: "Роснефть (Семейная команда)"
@@ -1553,7 +1541,6 @@ services:
   - name: "Utair"
     asn: []
     domains:
-      - api.utair.ru
       - utair.ru
 
   - name: "Smartavia"
@@ -1579,7 +1566,6 @@ services:
     asn:
       - 44117
     domains:
-      - api.starline.ru
       - starline-online.ru
       - starline.ru
 
@@ -1587,7 +1573,8 @@ services:
     asn: []
     domains:
       - p-on.ru
-      - pandora-info.com
+      - alarmtrade.ru
+      - pandora.ru
       - pro.p-on.ru
 
   # ============================================================
@@ -1803,7 +1790,6 @@ services:
       - 42996
     domains:
       - autodiscover.vitaexpress.ru
-      - blog.vitaexpress.ru
       - cloud.vitaexpress.ru
       - mailimage.vitaexpress.ru
       - mobapp-api.vitaexpress.ru
@@ -1877,7 +1863,7 @@ services:
     asn: []
     domains:
       - autoins.ru
-      - dkbm-web.autoins.ru
+      - nsis.ru
 
   - name: "ВСК"
     asn:
