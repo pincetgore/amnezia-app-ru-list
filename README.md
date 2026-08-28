@@ -146,6 +146,23 @@ dns:
 | Ozon банк | — | `ozonbank.ru` |
 | Мосбиржа | AS48009 | `moex.com` |
 | Яндекс Банк / Яндекс Пэй | — | `bank.yandex.ru`, `pay.yandex.ru` |
+| Точка Банк | — | `api.tochka.com`, `enter.tochka.com`, `tochka.com` |
+| Модульбанк | — | `modulbank.ru` |
+| Бланк Банк | — | `blank.ru` |
+| Почта Банк | AS43126, AS200424 | `pochtabank.ru` |
+| Банк Санкт-Петербург | AS34978 | `bspb.ru` |
+| Уралсиб | AS29076 | `bankuralsib.ru`, `uralsib.ru` |
+| Ак Барс Банк | AS31200 | `akbars.ru` |
+| Банк ДОМ.РФ | — | `domrfbank.ru` |
+| Ренессанс Банк | AS41703 | `rencredit.ru` |
+| ОТП Банк | — | `otpbank.ru` |
+| Центр-инвест | — | `centrinvest.ru` |
+| БКС Мир Инвестиций | — | `bcs.ru`, `bcsexpress.ru` |
+| Финам | — | `finam.ru` |
+| Банки.ру | — | `banki.ru` |
+| Сравни.ру | — | `sravni.ru` |
+| Финуслуги | — | `finuslugi.ru` |
+| Золотая Корона (KoronaPay) | — | `korona.ru`, `koronapay.com`, `rnko.ru` |
 
 ### Телеком и связь
 
@@ -175,6 +192,21 @@ dns:
 | Детский мир | — | `catalog-cdn.detmir.st`, `detmir.ru`, `go.detmir.st`, `img.detmir.st` |
 | Hoff | — | `hoff.ru` |
 | Aliexpress | — | `alicdn.com`, `aliexpress.ru`, `api.aliexpress.ru`, `static.alicdn.com` |
+| ВсеИнструменты.ру | — | `vseinstrumenti.ru` |
+| Петрович | — | `petrovich.ru` |
+| Максидом | — | `maxidom.ru` |
+| Спортмастер | AS41885 | `api.sportmaster.ru`, `sportmaster.ru` |
+| Л'Этуаль | — | `api.letu.ru`, `letu.ru` |
+| Рив Гош | — | `rivegauche.ru` |
+| Ostin | — | `ostin.com`, `ostin.ru` |
+| Gloria Jeans | — | `gloria-jeans.ru` |
+| Melon Fashion Group (Befree, Zarina, Love Republic, Sela) | — | `befree.ru`, `loverepublic.ru`, `melonfashion.ru`, `sela.ru` и др. |
+| ОнлайнТрейд | — | `onlinetrade.ru` |
+| Регард | — | `regard.ru` |
+| Холодильник.ру | — | `holodilnik.ru` |
+| Четыре Лапы | — | `4lapy.ru`, `api.4lapy.ru` |
+| Читай-город / Буквоед | — | `bookvoed.ru`, `chitai-gorod.ru` |
+| Лабиринт | — | `labirint.ru` |
 
 ### Доставка и логистика
 
@@ -203,6 +235,22 @@ dns:
 | One Price Coffee | — | `api.onepricecoffee.com`, `cloud.onepricecoffee.com`, `delivery.onepricecoffee.com`, `onepricecoffee.com` |
 | Best Benefits | — | `app.bestbenefits.ru`, `bestbenefits.ru`, `mobile.bestbenefits.ru` |
 | Зоозавр | — | `api.new1.zoozavr.ru`, `api.zoozavr.ru`, `blog.zoozavr.ru`, `feedback.zoozavr.ru` и др. |
+| Ашан | — | `auchan.ru`, `online.auchan.ru` |
+| Азбука Вкуса | — | `api.av.ru`, `av.ru`, `azbukavkusa.ru` |
+| Глобус | — | `globus.ru`, `online.globus.ru` |
+| О'КЕЙ | — | `okmarket.ru` |
+| Красное & Белое | — | `k-b.ru`, `krasnoeibeloe.ru` |
+| Винлаб | — | `winelab.ru` |
+
+### Рестораны и доставка еды
+
+| Сервис | Домены |
+| ------ | ------ |
+| Вкусно — и точка | `api.vkusnoitochka.ru`, `vkusnoitochka.ru` |
+| Додо Пицца | `dodoengineering.com`, `dodois.io`, `dodopizza.com`, `dodopizza.ru` |
+| Ростикс | `kfc.ru`, `rostics.ru` |
+| Бургер Кинг | `api.burgerking.ru`, `burgerking.ru`, `burgerkingrus.ru` |
+| Тануки / Якитория | `tanuki.ru`, `yakitoriya.ru` |
 
 ### Стриминг, видео и музыка
 
@@ -216,6 +264,34 @@ dns:
 | START | — | `start.ru`, `start.video` |
 | Premier | — | `premier.one` |
 | Звук (Сбер) | — | `zvuk.com`, `zvuk.ru` |
+| Матч ТВ | — | `matchpremier.ru`, `matchtv.ru` |
+| Смотрим / ВГТРК | — | `russia.tv`, `smotrim.ru`, `vgtrk.ru` |
+| Первый канал | — | `1tv.ru`, `stream.1tv.ru` |
+| Триколор Кино и ТВ | — | `kino.tricolor.tv`, `tricolor.tv` |
+| НТВ | — | `ntv.ru`, `ntvplus.ru`, `ntvplus.tv` |
+| СТС | — | `ctc.ru`, `domashniy.ru` |
+
+### СМИ, пресса и медиа
+
+| Сервис | Домены |
+| ------ | ------ |
+| РБК | `quote.ru`, `rbc.ru`, `rbcplus.ru` |
+| ТАСС | `tass.ru` |
+| РИА Новости | `1prime.ru`, `ria.ru`, `rossiyasegodnya.com` |
+| Коммерсантъ | `kommersant.ru` |
+| Ведомости | `vedomosti.ru` |
+| Рамблер (Lenta, Gazeta, Чемпионат) | `championat.com`, `gazeta.ru`, `lenta.ru`, `rambler.ru` |
+| Пикабу | `cs.pikabu.ru`, `pikabu.ru` |
+| ИД Комитет (VC.ru, DTF) | `cmtt.ru`, `dtf.ru`, `vc.ru` |
+
+### Билеты и афиша
+
+| Сервис | Домены |
+| ------ | ------ |
+| Кассир.ру | `api.kassir.ru`, `kassir.ru` |
+| Ticketland | `live.mts.ru`, `ticketland.ru` |
+| Афиша | `afisha.ru` |
+| Кинотеатры (Формула Кино, Синема Парк, КАРО) | `karofilm.ru`, `kinoteatr.ru` |
 
 ### Государственные сервисы
 
@@ -229,6 +305,14 @@ dns:
 | ЦБ РФ | — | `cbr.ru`, `finmarket.ru` |
 | Почта России | — | `mobileapp.russianpost.ru`, `pochta.ru`, `tracking.pochta.ru` |
 | Честный знак | — | `xn--80ajghhoc2aj1c8b.xn--p1ai` |
+| Суды и правосудие (ГАС Правосудие, Мой Арбитр, Мосгорсуд) | — | `arbitr.ru`, `ej.sudrf.ru`, `kad.arbitr.ru`, `mos-gorsud.ru` и др. |
+| ФССП (Судебные приставы) | — | `fssp.gov.ru`, `fssprus.ru` |
+| Росреестр | — | `pkk.rosreestr.ru`, `rosreestr.gov.ru`, `rosreestr.ru` |
+| ГИБДД / Госавтоинспекция | — | `gibdd.ru`, `xn--90adear.xn--p1ai` |
+| ФНП / Нотариат | — | `notariat.ru`, `reestr-dover.ru` |
+| ГИС ЖКХ и коммунальные услуги | — | `dom.gosuslugi.ru`, `kvartplata.ru`, `lkk.mosoblgaz.ru`, `mosenergosbyt.ru` и др. |
+| Региональные Госуслуги (СПб) | — | `gu.spb.ru` |
+| ФТС (Таможенная служба) | — | `customs.gov.ru` |
 
 ### Транспорт, авто и каршеринг
 
@@ -253,6 +337,26 @@ dns:
 | Ситидрайв / Ситимобил | — | `city-mobil.ru`, `citydrive.ru` |
 | Drivee | — | `drivee.ru` |
 | Uber Russia | — | `uber.ru` |
+| Парковки России | — | `app.parking.mos.ru`, `parking.mos.ru`, `parkingrussia.ru` |
+| ЦППК и Аэроэкспресс | — | `aeroexpress.ru`, `app.central-ppk.ru`, `central-ppk.ru` |
+| BelkaCar | — | `api.belkacar.ru`, `belkacar.ru` |
+| Whoosh | — | `api.whoosh.bike`, `whoosh.bike`, `whoosh.ru` |
+| Юрент | — | `api.urent.ru`, `urent.city`, `urent.ru` |
+| Лукойл (АЗС / Ликард) | — | `auto.lukoil.ru`, `licard.ru`, `lukoil.ru` |
+| Газпромнефть (АЗС / ОПТИ 24) | — | `gazprom-neft.ru`, `gpn-card.com`, `gpnbonus.ru` |
+| Роснефть (Семейная команда) | — | `komandacard.ru`, `rn-card.ru`, `rosneft.ru` |
+| Татнефть | — | `club.tatneft.ru`, `tatneft.ru` |
+| Utair | — | `api.utair.ru`, `utair.ru` |
+| Smartavia | — | `flysmartavia.com`, `smartavia.ru` |
+| Red Wings | — | `flyredwings.com` |
+| Nordwind Airlines | — | `nordwindairlines.ru` |
+
+### Автосигнализации и телематика
+
+| Сервис | ASN | Домены |
+| ------ | ------ | ------ |
+| StarLine | AS44117 | `api.starline.ru`, `starline-online.ru`, `starline.ru` |
+| Pandora | — | `p-on.ru`, `pandora-info.com`, `pro.p-on.ru` |
 
 ### Недвижимость
 
@@ -279,7 +383,7 @@ dns:
 | ------ | ------ | ------ | ------ |
 | 2ГИС | AS197482 | `91.236.48.0/22`, `91.221.198.0/23`, `91.236.49.0/24` и др. | `2gis.com`, `2gis.dev`, `2gis.ru`, `api.2gis.ru` и др. |
 
-### Образование
+### Образование и школы
 
 | Сервис | Домены |
 | ------ | ------ |
@@ -288,6 +392,12 @@ dns:
 | GeekBrains | `gb.ru`, `geekbrains.ru` |
 | Нетология | `netology.ru` |
 | Skyeng | `skyeng.ru`, `student.skyeng.ru` |
+| МЭШ (Московская электронная школа) | `dnevnik.mos.ru`, `school.mos.ru`, `uchebnik.mos.ru` |
+| Дневник.ру | `dnevnik.me`, `dnevnik.ru` |
+| Сферум | `sferum.ru` |
+| Учи.ру | `uchi.ru` |
+| Фоксфорд | `foxford.ru` |
+| Научные библиотеки (eLibrary, КиберЛенинка) | `cyberleninka.ru`, `elibrary.ru` |
 
 ### Медицина и здоровье
 
@@ -302,6 +412,13 @@ dns:
 | Медси | — | `medsi-premium.ru`, `medsi.com`, `medsi.pro`, `medsi.ru` и др. |
 | АГНИ | — | `beauty-forma.com`, `lk-dev.beauty-forma.com`, `lk.beauty-forma.com`, `shop.beauty-forma.com` |
 | Аптека Вита | AS42996 | `autodiscover.vitaexpress.ru`, `blog.vitaexpress.ru`, `cloud.vitaexpress.ru`, `mailimage.vitaexpress.ru` и др. |
+| ПроДокторов | — | `medtochka.ru`, `prodoctorov.ru` |
+| Здравсити | — | `zdravcity.ru` |
+| Аптека 36.6 / Горздрав | — | `366.ru`, `gorzdrav.org` |
+| Ригла / Будь Здоров | — | `budzdorov.ru`, `rigla.ru` |
+| Планета Здоровья | — | `planetazdorovo.ru` |
+| Гемотест | — | `gemotest.ru` |
+| Хеликс | — | `helix.ru` |
 
 ### Страхование
 
@@ -309,6 +426,11 @@ dns:
 | ------ | ------ | ------ |
 | Ингосстрах | — | `ingos.ru` |
 | РЕСО | AS39266 | `agent.reso.ru`, `j7h6i8.reso.ru`, `lms.reso.ru`, `reso.ru` и др. |
+| РСА (Российский союз автостраховщиков) | — | `autoins.ru`, `dkbm-web.autoins.ru` |
+| ВСК | AS43644 | `shop.vsk.ru`, `vsk.ru` |
+| Росгосстрах | AS21396 | `my.rgs.ru`, `rgs.ru` |
+| Согласие | — | `soglasie.ru` |
+| АльфаСтрахование | — | `alfastrah.ru` |
 
 ### Мессенджеры и игры
 
@@ -319,7 +441,7 @@ dns:
 | VK Play | `api.vkplay.ru`, `vkplay.ru` |
 | MY.GAMES | `api.my.games`, `my.games` |
 
-### Облака и хостинги
+### Облака, хостинги и репозитории
 
 | Сервис | ASN | Домены |
 | ------ | ------ | ------ |
@@ -327,6 +449,15 @@ dns:
 | REG.RU | — | `reg.ru` |
 | Timeweb | AS51115 | `timeweb.cloud` |
 | Ngenix.net | AS34879, AS204878 и др. | `ngenix.net` |
+| Gitverse | — | `gitverse.ru` |
+| GitFlic | — | `gitflic.ru` |
+| Beget | — | `beget.com`, `beget.ru` |
+| FirstVDS / ISPsystem | — | `firstvds.ru`, `ispsystem.com`, `ispsystem.ru` |
+| SpaceWeb | — | `sweb.ru` |
+| RUVDS | — | `ruvds.com` |
+| Cloud.ru | — | `cloud.ru`, `console.cloud.ru` |
+| DDoS-Guard | — | `ddos-guard.net` |
+| Qrator Labs | — | `qrator.net` |
 
 ### Прочее
 

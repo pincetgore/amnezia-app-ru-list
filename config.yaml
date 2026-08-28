@@ -502,6 +502,103 @@ services:
       - bank.yandex.ru
       - pay.yandex.ru
 
+  - name: "Точка Банк"
+    asn: []
+    domains:
+      - api.tochka.com
+      - enter.tochka.com
+      - tochka.com
+
+  - name: "Модульбанк"
+    asn: []
+    domains:
+      - modulbank.ru
+
+  - name: "Бланк Банк"
+    asn: []
+    domains:
+      - blank.ru
+
+  - name: "Почта Банк"
+    asn:
+      - 43126
+      - 200424
+    domains:
+      - pochtabank.ru
+
+  - name: "Банк Санкт-Петербург"
+    asn:
+      - 34978
+    domains:
+      - bspb.ru
+
+  - name: "Уралсиб"
+    asn:
+      - 29076
+    domains:
+      - bankuralsib.ru
+      - uralsib.ru
+
+  - name: "Ак Барс Банк"
+    asn:
+      - 31200
+    domains:
+      - akbars.ru
+
+  - name: "Банк ДОМ.РФ"
+    asn: []
+    domains:
+      - domrfbank.ru
+
+  - name: "Ренессанс Банк"
+    asn:
+      - 41703
+    domains:
+      - rencredit.ru
+
+  - name: "ОТП Банк"
+    asn: []
+    domains:
+      - otpbank.ru
+
+  - name: "Центр-инвест"
+    asn: []
+    domains:
+      - centrinvest.ru
+
+  - name: "БКС Мир Инвестиций"
+    asn: []
+    domains:
+      - bcs.ru
+      - bcsexpress.ru
+
+  - name: "Финам"
+    asn: []
+    domains:
+      - finam.ru
+
+  - name: "Банки.ру"
+    asn: []
+    domains:
+      - banki.ru
+
+  - name: "Сравни.ру"
+    asn: []
+    domains:
+      - sravni.ru
+
+  - name: "Финуслуги"
+    asn: []
+    domains:
+      - finuslugi.ru
+
+  - name: "Золотая Корона (KoronaPay)"
+    asn: []
+    domains:
+      - korona.ru
+      - koronapay.com
+      - rnko.ru
+
   # ============================================================
   # ТЕЛЕКОМ И СВЯЗЬ
   # ============================================================
@@ -672,6 +769,91 @@ services:
       - api.aliexpress.ru
       - static.alicdn.com
 
+  - name: "ВсеИнструменты.ру"
+    asn: []
+    domains:
+      - vseinstrumenti.ru
+
+  - name: "Петрович"
+    asn: []
+    domains:
+      - petrovich.ru
+
+  - name: "Максидом"
+    asn: []
+    domains:
+      - maxidom.ru
+
+  - name: "Спортмастер"
+    asn:
+      - 41885
+    domains:
+      - api.sportmaster.ru
+      - sportmaster.ru
+
+  - name: "Л'Этуаль"
+    asn: []
+    domains:
+      - api.letu.ru
+      - letu.ru
+
+  - name: "Рив Гош"
+    asn: []
+    domains:
+      - rivegauche.ru
+
+  - name: "Ostin"
+    asn: []
+    domains:
+      - ostin.com
+      - ostin.ru
+
+  - name: "Gloria Jeans"
+    asn: []
+    domains:
+      - gloria-jeans.ru
+
+  - name: "Melon Fashion Group (Befree, Zarina, Love Republic, Sela)"
+    asn: []
+    domains:
+      - befree.ru
+      - loverepublic.ru
+      - melonfashion.ru
+      - sela.ru
+      - zarina.ru
+
+  - name: "ОнлайнТрейд"
+    asn: []
+    domains:
+      - onlinetrade.ru
+
+  - name: "Регард"
+    asn: []
+    domains:
+      - regard.ru
+
+  - name: "Холодильник.ру"
+    asn: []
+    domains:
+      - holodilnik.ru
+
+  - name: "Четыре Лапы"
+    asn: []
+    domains:
+      - 4lapy.ru
+      - api.4lapy.ru
+
+  - name: "Читай-город / Буквоед"
+    asn: []
+    domains:
+      - bookvoed.ru
+      - chitai-gorod.ru
+
+  - name: "Лабиринт"
+    asn: []
+    domains:
+      - labirint.ru
+
   # ============================================================
   # ДОСТАВКА И ЛОГИСТИКА
   # ============================================================
@@ -832,6 +1014,77 @@ services:
       - zoo-bonus.zoozavr.ru
       - zoozavr.ru
 
+  - name: "Ашан"
+    asn: []
+    domains:
+      - auchan.ru
+      - online.auchan.ru
+
+  - name: "Азбука Вкуса"
+    asn: []
+    domains:
+      - api.av.ru
+      - av.ru
+      - azbukavkusa.ru
+
+  - name: "Глобус"
+    asn: []
+    domains:
+      - globus.ru
+      - online.globus.ru
+
+  - name: "О'КЕЙ"
+    asn: []
+    domains:
+      - okmarket.ru
+
+  - name: "Красное & Белое"
+    asn: []
+    domains:
+      - k-b.ru
+      - krasnoeibeloe.ru
+
+  - name: "Винлаб"
+    asn: []
+    domains:
+      - winelab.ru
+
+  # ============================================================
+  # РЕСТОРАНЫ И ДОСТАВКА ЕДЫ
+  # ============================================================
+  - name: "Вкусно — и точка"
+    asn: []
+    domains:
+      - api.vkusnoitochka.ru
+      - vkusnoitochka.ru
+
+  - name: "Додо Пицца"
+    asn: []
+    domains:
+      - dodoengineering.com
+      - dodois.io
+      - dodopizza.com
+      - dodopizza.ru
+
+  - name: "Ростикс"
+    asn: []
+    domains:
+      - kfc.ru
+      - rostics.ru
+
+  - name: "Бургер Кинг"
+    asn: []
+    domains:
+      - api.burgerking.ru
+      - burgerking.ru
+      - burgerkingrus.ru
+
+  - name: "Тануки / Якитория"
+    asn: []
+    domains:
+      - tanuki.ru
+      - yakitoriya.ru
+
   # ============================================================
   # СТРИМИНГ, ВИДЕО И МУЗЫКА
   # ============================================================
@@ -885,6 +1138,123 @@ services:
     domains:
       - zvuk.com
       - zvuk.ru
+
+  - name: "Матч ТВ"
+    asn: []
+    domains:
+      - matchpremier.ru
+      - matchtv.ru
+
+  - name: "Смотрим / ВГТРК"
+    asn: []
+    domains:
+      - russia.tv
+      - smotrim.ru
+      - vgtrk.ru
+
+  - name: "Первый канал"
+    asn: []
+    domains:
+      - 1tv.ru
+      - stream.1tv.ru
+
+  - name: "Триколор Кино и ТВ"
+    asn: []
+    domains:
+      - kino.tricolor.tv
+      - tricolor.tv
+
+  - name: "НТВ"
+    asn: []
+    domains:
+      - ntv.ru
+      - ntvplus.ru
+      - ntvplus.tv
+
+  - name: "СТС"
+    asn: []
+    domains:
+      - ctc.ru
+      - domashniy.ru
+
+  # ============================================================
+  # СМИ, ПРЕССА И МЕДИА
+  # ============================================================
+  - name: "РБК"
+    asn: []
+    domains:
+      - quote.ru
+      - rbc.ru
+      - rbcplus.ru
+
+  - name: "ТАСС"
+    asn: []
+    domains:
+      - tass.ru
+
+  - name: "РИА Новости"
+    asn: []
+    domains:
+      - 1prime.ru
+      - ria.ru
+      - rossiyasegodnya.com
+
+  - name: "Коммерсантъ"
+    asn: []
+    domains:
+      - kommersant.ru
+
+  - name: "Ведомости"
+    asn: []
+    domains:
+      - vedomosti.ru
+
+  - name: "Рамблер (Lenta, Gazeta, Чемпионат)"
+    asn: []
+    domains:
+      - championat.com
+      - gazeta.ru
+      - lenta.ru
+      - rambler.ru
+
+  - name: "Пикабу"
+    asn: []
+    domains:
+      - cs.pikabu.ru
+      - pikabu.ru
+
+  - name: "ИД Комитет (VC.ru, DTF)"
+    asn: []
+    domains:
+      - cmtt.ru
+      - dtf.ru
+      - vc.ru
+
+  # ============================================================
+  # БИЛЕТЫ И АФИША
+  # ============================================================
+  - name: "Кассир.ру"
+    asn: []
+    domains:
+      - api.kassir.ru
+      - kassir.ru
+
+  - name: "Ticketland"
+    asn: []
+    domains:
+      - live.mts.ru
+      - ticketland.ru
+
+  - name: "Афиша"
+    asn: []
+    domains:
+      - afisha.ru
+
+  - name: "Кинотеатры (Формула Кино, Синема Парк, КАРО)"
+    asn: []
+    domains:
+      - karofilm.ru
+      - kinoteatr.ru
 
   # ============================================================
   # ГОСУДАРСТВЕННЫЕ СЕРВИСЫ
@@ -950,6 +1320,61 @@ services:
     asn: []
     domains:
       - xn--80ajghhoc2aj1c8b.xn--p1ai
+
+  - name: "Суды и правосудие (ГАС Правосудие, Мой Арбитр, Мосгорсуд)"
+    asn: []
+    domains:
+      - arbitr.ru
+      - ej.sudrf.ru
+      - kad.arbitr.ru
+      - mos-gorsud.ru
+      - sudrf.ru
+
+  - name: "ФССП (Судебные приставы)"
+    asn: []
+    domains:
+      - fssp.gov.ru
+      - fssprus.ru
+
+  - name: "Росреестр"
+    asn: []
+    domains:
+      - pkk.rosreestr.ru
+      - rosreestr.gov.ru
+      - rosreestr.ru
+
+  - name: "ГИБДД / Госавтоинспекция"
+    asn: []
+    domains:
+      - gibdd.ru
+      - xn--90adear.xn--p1ai
+
+  - name: "ФНП / Нотариат"
+    asn: []
+    domains:
+      - notariat.ru
+      - reestr-dover.ru
+
+  - name: "ГИС ЖКХ и коммунальные услуги"
+    asn: []
+    domains:
+      - dom.gosuslugi.ru
+      - kvartplata.ru
+      - lkk.mosoblgaz.ru
+      - mosenergosbyt.ru
+      - mosoblgaz.ru
+      - my.mosenergosbyt.ru
+      - pay-service.ru
+
+  - name: "Региональные Госуслуги (СПб)"
+    asn: []
+    domains:
+      - gu.spb.ru
+
+  - name: "ФТС (Таможенная служба)"
+    asn: []
+    domains:
+      - customs.gov.ru
 
   # ============================================================
   # ТРАНСПОРТ, АВТО И КАРШЕРИНГ
@@ -1063,6 +1488,107 @@ services:
     asn: []
     domains:
       - uber.ru
+
+  - name: "Парковки России"
+    asn: []
+    domains:
+      - app.parking.mos.ru
+      - parking.mos.ru
+      - parkingrussia.ru
+
+  - name: "ЦППК и Аэроэкспресс"
+    asn: []
+    domains:
+      - aeroexpress.ru
+      - app.central-ppk.ru
+      - central-ppk.ru
+
+  - name: "BelkaCar"
+    asn: []
+    domains:
+      - api.belkacar.ru
+      - belkacar.ru
+
+  - name: "Whoosh"
+    asn: []
+    domains:
+      - api.whoosh.bike
+      - whoosh.bike
+      - whoosh.ru
+
+  - name: "Юрент"
+    asn: []
+    domains:
+      - api.urent.ru
+      - urent.city
+      - urent.ru
+
+  - name: "Лукойл (АЗС / Ликард)"
+    asn: []
+    domains:
+      - auto.lukoil.ru
+      - licard.ru
+      - lukoil.ru
+
+  - name: "Газпромнефть (АЗС / ОПТИ 24)"
+    asn: []
+    domains:
+      - gazprom-neft.ru
+      - gpn-card.com
+      - gpnbonus.ru
+
+  - name: "Роснефть (Семейная команда)"
+    asn: []
+    domains:
+      - komandacard.ru
+      - rn-card.ru
+      - rosneft.ru
+
+  - name: "Татнефть"
+    asn: []
+    domains:
+      - club.tatneft.ru
+      - tatneft.ru
+
+  - name: "Utair"
+    asn: []
+    domains:
+      - api.utair.ru
+      - utair.ru
+
+  - name: "Smartavia"
+    asn: []
+    domains:
+      - flysmartavia.com
+      - smartavia.ru
+
+  - name: "Red Wings"
+    asn: []
+    domains:
+      - flyredwings.com
+
+  - name: "Nordwind Airlines"
+    asn: []
+    domains:
+      - nordwindairlines.ru
+
+  # ============================================================
+  # АВТОСИГНАЛИЗАЦИИ И ТЕЛЕМАТИКА
+  # ============================================================
+  - name: "StarLine"
+    asn:
+      - 44117
+    domains:
+      - api.starline.ru
+      - starline-online.ru
+      - starline.ru
+
+  - name: "Pandora"
+    asn: []
+    domains:
+      - p-on.ru
+      - pandora-info.com
+      - pro.p-on.ru
 
   # ============================================================
   # НЕДВИЖИМОСТЬ
@@ -1181,6 +1707,40 @@ services:
       - skyeng.ru
       - student.skyeng.ru
 
+  - name: "МЭШ (Московская электронная школа)"
+    asn: []
+    domains:
+      - dnevnik.mos.ru
+      - school.mos.ru
+      - uchebnik.mos.ru
+
+  - name: "Дневник.ру"
+    asn: []
+    domains:
+      - dnevnik.me
+      - dnevnik.ru
+
+  - name: "Сферум"
+    asn: []
+    domains:
+      - sferum.ru
+
+  - name: "Учи.ру"
+    asn: []
+    domains:
+      - uchi.ru
+
+  - name: "Фоксфорд"
+    asn: []
+    domains:
+      - foxford.ru
+
+  - name: "Научные библиотеки (eLibrary, КиберЛенинка)"
+    asn: []
+    domains:
+      - cyberleninka.ru
+      - elibrary.ru
+
   # ============================================================
   # МЕДИЦИНА И ЗДОРОВЬЕ
   # ============================================================
@@ -1253,6 +1813,44 @@ services:
       - static.vitaexpress.ru
       - vitaexpress.ru
 
+  - name: "ПроДокторов"
+    asn: []
+    domains:
+      - medtochka.ru
+      - prodoctorov.ru
+
+  - name: "Здравсити"
+    asn: []
+    domains:
+      - zdravcity.ru
+
+  - name: "Аптека 36.6 / Горздрав"
+    asn: []
+    domains:
+      - 366.ru
+      - gorzdrav.org
+
+  - name: "Ригла / Будь Здоров"
+    asn: []
+    domains:
+      - budzdorov.ru
+      - rigla.ru
+
+  - name: "Планета Здоровья"
+    asn: []
+    domains:
+      - planetazdorovo.ru
+
+  - name: "Гемотест"
+    asn: []
+    domains:
+      - gemotest.ru
+
+  - name: "Хеликс"
+    asn: []
+    domains:
+      - helix.ru
+
   # ============================================================
   # СТРАХОВАНИЕ
   # ============================================================
@@ -1274,6 +1872,36 @@ services:
       - www.lms.reso.ru
       - www.reso.ru
       - ya.reso.ru
+
+  - name: "РСА (Российский союз автостраховщиков)"
+    asn: []
+    domains:
+      - autoins.ru
+      - dkbm-web.autoins.ru
+
+  - name: "ВСК"
+    asn:
+      - 43644
+    domains:
+      - shop.vsk.ru
+      - vsk.ru
+
+  - name: "Росгосстрах"
+    asn:
+      - 21396
+    domains:
+      - my.rgs.ru
+      - rgs.ru
+
+  - name: "Согласие"
+    asn: []
+    domains:
+      - soglasie.ru
+
+  - name: "АльфаСтрахование"
+    asn: []
+    domains:
+      - alfastrah.ru
 
   # ============================================================
   # МЕССЕНДЖЕРЫ И ИГРЫ
@@ -1328,6 +1956,55 @@ services:
       - 205312
     domains:
       - ngenix.net
+
+  - name: "Gitverse"
+    asn: []
+    domains:
+      - gitverse.ru
+
+  - name: "GitFlic"
+    asn: []
+    domains:
+      - gitflic.ru
+
+  - name: "Beget"
+    asn: []
+    domains:
+      - beget.com
+      - beget.ru
+
+  - name: "FirstVDS / ISPsystem"
+    asn: []
+    domains:
+      - firstvds.ru
+      - ispsystem.com
+      - ispsystem.ru
+
+  - name: "SpaceWeb"
+    asn: []
+    domains:
+      - sweb.ru
+
+  - name: "RUVDS"
+    asn: []
+    domains:
+      - ruvds.com
+
+  - name: "Cloud.ru"
+    asn: []
+    domains:
+      - cloud.ru
+      - console.cloud.ru
+
+  - name: "DDoS-Guard"
+    asn: []
+    domains:
+      - ddos-guard.net
+
+  - name: "Qrator Labs"
+    asn: []
+    domains:
+      - qrator.net
 
   # ============================================================
   # ПРОЧЕЕ
