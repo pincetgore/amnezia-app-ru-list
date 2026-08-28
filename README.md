@@ -158,7 +158,7 @@ dns:
 | ОТП Банк | AS42668 | `otpbank.ru` |
 | Центр-инвест | AS34863 | `centrinvest.ru` |
 | БКС Мир Инвестиций | AS44256 | `bcs.ru`, `bcsexpress.ru` |
-| Финам | AS28755 | `finam.ru` |
+| Финам | — | `finam.ru` |
 | Банки.ру | — | `banki.ru` |
 | Сравни.ру | — | `sravni.ru` |
 | Финуслуги | — | `finuslugi.ru` |

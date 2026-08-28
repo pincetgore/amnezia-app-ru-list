@@ -582,8 +582,7 @@ services:
       - bcsexpress.ru
 
   - name: "Финам"
-    asn:
-      - 28755
+    asn: []
     domains:
       - finam.ru
 
