@@ -787,8 +787,7 @@ services:
       - static.alicdn.com
 
   - name: "ВсеИнструменты.ру"
-    asn:
-      - 200877
+    asn: []
     domains:
       - vseinstrumenti.ru
 
@@ -945,7 +944,6 @@ services:
 
   - name: "Магнит"
     asn:
-      - 44685
       - 206126
     domains:
       - dostavka.magnit.ru
@@ -1169,15 +1167,13 @@ services:
       - zvuk.ru
 
   - name: "Матч ТВ"
-    asn:
-      - 202476
+    asn: []
     domains:
       - matchpremier.ru
       - matchtv.ru
 
   - name: "Смотрим / ВГТРК"
-    asn:
-      - 43825
+    asn: []
     domains:
       - russia.tv
       - smotrim.ru
@@ -1199,7 +1195,6 @@ services:
 
   - name: "НТВ"
     asn:
-      - 31548
       - 44485
     domains:
       - ntv.ru
@@ -1225,8 +1220,7 @@ services:
       - rbcplus.ru
 
   - name: "ТАСС"
-    asn:
-      - 21319
+    asn: []
     domains:
       - tass.ru
 
@@ -1245,8 +1239,7 @@ services:
       - kommersant.ru
 
   - name: "Ведомости"
-    asn:
-      - 44111
+    asn: []
     domains:
       - vedomosti.ru
 
@@ -1358,7 +1351,6 @@ services:
 
   - name: "Почта России"
     asn:
-      - 24701
       - 41457
     domains:
       - mobileapp.russianpost.ru
@@ -1388,8 +1380,7 @@ services:
       - fssprus.ru
 
   - name: "Росреестр"
-    asn:
-      - 42158
+    asn: []
     domains:
       - pkk.rosreestr.ru
       - rosreestr.gov.ru
@@ -1522,8 +1513,7 @@ services:
       - avtodor-tr.ru
 
   - name: "Делимобиль"
-    asn:
-      - 207393
+    asn: []
     domains:
       - api.delimobil.ru
       - delimobil.com
@@ -1587,7 +1577,6 @@ services:
 
   - name: "Газпромнефть (АЗС / ОПТИ 24)"
     asn:
-      - 39316
       - 41655
     domains:
       - gazprom-neft.ru
@@ -1851,8 +1840,7 @@ services:
       - lk.invitro.ru
 
   - name: "Медси"
-    asn:
-      - 44658
+    asn: []
     domains:
       - medsi-premium.ru
       - medsi.com
@@ -1966,8 +1954,7 @@ services:
       - rgs.ru
 
   - name: "Согласие"
-    asn:
-      - 43369
+    asn: []
     domains:
       - soglasie.ru
 
