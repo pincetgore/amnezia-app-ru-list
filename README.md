@@ -132,17 +132,17 @@ dns:
 | Альфа-Банк | AS15632, AS34838 и др. | `alfa.me`, `alfabank.com`, `alfabank.ru`, `alfadirect.ru` и др. |
 | Газпромбанк | AS35022, AS48033 и др. | `gazprombank.ru`, `gpb.ru` |
 | Россельхозбанк | AS41615 | `online.rshb.ru`, `rshb.ru` |
-| Промсвязьбанк | — | `ib.psbank.ru`, `psb.ru`, `psbank.ru` |
+| Промсвязьбанк | AS35090, AS41584 и др. | `ib.psbank.ru`, `psb.ru`, `psbank.ru` |
 | Совкомбанк | AS51136, AS197258 и др. | `halvacard.ru`, `sovcombank.ru` |
-| Райффайзен Банк | — | `online.raiffeisen.ru`, `raiffeisen.ru` |
+| Райффайзен Банк | AS25253 | `online.raiffeisen.ru`, `raiffeisen.ru` |
 | Московский Кредитный Банк | AS39267, AS50464 и др. | `mkb.ru`, `online.mkb.ru` |
 | Открытие | AS5589 | `open.ru` |
-| Росбанк | — | `rosbank.ru` |
+| Росбанк | AS25501 | `rosbank.ru` |
 | Банк Россия | AS50640, AS196796 и др. | `abr.ru` |
 | ЮMoney | AS43247 | `yookassa.ru`, `yoomoney.ru` |
 | СБП / НСПК | AS21292, AS41185 и др. | `nspk.ru`, `sbp.nspk.ru` |
 | Wildberries Банк | — | `wb-bank.ru` |
-| МТС Банк | — | `dbo-dengi.online`, `mtsbank.ru`, `mtsdengi.ru`, `tvoyodbo.online` |
+| МТС Банк | AS42777 | `dbo-dengi.online`, `mtsbank.ru`, `mtsdengi.ru`, `tvoyodbo.online` |
 | Ozon банк | — | `ozonbank.ru` |
 | Мосбиржа | AS48009 | `moex.com` |
 | Яндекс Банк / Яндекс Пэй | — | `bank.yandex.ru`, `pay.yandex.ru` |
@@ -153,16 +153,16 @@ dns:
 | Банк Санкт-Петербург | AS34978 | `bspb.ru` |
 | Уралсиб | AS29076 | `uralsib.ru` |
 | Ак Барс Банк | AS31200 | `akbars.ru` |
-| Банк ДОМ.РФ | — | `domrfbank.ru` |
+| Банк ДОМ.РФ | AS39169 | `domrfbank.ru` |
 | Ренессанс Банк | AS41703 | `rencredit.ru` |
-| ОТП Банк | — | `otpbank.ru` |
-| Центр-инвест | — | `centrinvest.ru` |
-| БКС Мир Инвестиций | — | `bcs.ru`, `bcsexpress.ru` |
-| Финам | — | `finam.ru` |
+| ОТП Банк | AS42668 | `otpbank.ru` |
+| Центр-инвест | AS34863 | `centrinvest.ru` |
+| БКС Мир Инвестиций | AS44256 | `bcs.ru`, `bcsexpress.ru` |
+| Финам | AS28755 | `finam.ru` |
 | Банки.ру | — | `banki.ru` |
 | Сравни.ру | — | `sravni.ru` |
 | Финуслуги | — | `finuslugi.ru` |
-| Золотая Корона (KoronaPay) | — | `korona.ru`, `koronapay.com`, `rnko.ru` |
+| Золотая Корона (KoronaPay) | AS42691 | `korona.ru`, `koronapay.com`, `rnko.ru` |
 
 ### Телеком и связь
 
@@ -184,48 +184,48 @@ dns:
 | Авито | AS201012 | `avito.com`, `avito.ru`, `avito.st`, `m.avito.ru` и др. |
 | СберМегаМаркет | — | `megamarket.ru`, `sbermegamarket.ru` |
 | Lamoda | AS57906 | `lamoda.co`, `lamoda.ru` |
-| DNS Shop | — | `dns-shop.net`, `dns-shop.ru` |
-| М.Видео / Эльдорадо | — | `eldorado.ru`, `mvideo.ru` |
-| Ситилинк | — | `citilink.ru` |
-| Леруа Мерлен | — | `lemanapro.ru` |
-| Золотое Яблоко | — | `api.goldapple.ru`, `gacdn.ru`, `goldapple.ru`, `juicyscore.ru` и др. |
-| Детский мир | — | `catalog-cdn.detmir.st`, `detmir.ru`, `go.detmir.st`, `img.detmir.st` |
+| DNS Shop | AS43547 | `dns-shop.net`, `dns-shop.ru` |
+| М.Видео / Эльдорадо | AS43977 | `eldorado.ru`, `mvideo.ru` |
+| Ситилинк | AS42888 | `citilink.ru` |
+| Леруа Мерлен | AS42358 | `lemanapro.ru` |
+| Золотое Яблоко | AS208753 | `api.goldapple.ru`, `gacdn.ru`, `goldapple.ru`, `juicyscore.ru` и др. |
+| Детский мир | AS44641 | `catalog-cdn.detmir.st`, `detmir.ru`, `go.detmir.st`, `img.detmir.st` |
 | Hoff | — | `hoff.ru` |
 | Aliexpress | — | `alicdn.com`, `aliexpress.ru`, `api.aliexpress.ru`, `static.alicdn.com` |
-| ВсеИнструменты.ру | — | `vseinstrumenti.ru` |
-| Петрович | — | `petrovich.ru` |
+| ВсеИнструменты.ру | AS200877 | `vseinstrumenti.ru` |
+| Петрович | AS50444 | `petrovich.ru` |
 | Максидом | — | `maxidom.ru` |
 | Спортмастер | AS41885 | `sportmaster.ru` |
-| Л'Этуаль | — | `api.letu.ru`, `letu.ru` |
-| Рив Гош | — | `rivegauche.ru` |
+| Л'Этуаль | AS42549 | `api.letu.ru`, `letu.ru` |
+| Рив Гош | AS43486 | `rivegauche.ru` |
 | Ostin | — | `ostin.com`, `ostin.ru` |
-| Gloria Jeans | — | `gloria-jeans.ru` |
-| Melon Fashion Group (Befree, Zarina, Love Republic, Sela) | — | `befree.ru`, `loverepublic.ru`, `melonfashion.ru`, `sela.ru` и др. |
+| Gloria Jeans | AS44040 | `gloria-jeans.ru` |
+| Melon Fashion Group (Befree, Zarina, Love Republic, Sela) | AS43577 | `befree.ru`, `loverepublic.ru`, `melonfashion.ru`, `sela.ru` и др. |
 | ОнлайнТрейд | — | `onlinetrade.ru` |
 | Регард | — | `regard.ru` |
 | Холодильник.ру | — | `holodilnik.ru` |
-| Четыре Лапы | — | `4lapy.ru`, `api.4lapy.ru` |
-| Читай-город / Буквоед | — | `bookvoed.ru`, `chitai-gorod.ru` |
+| Четыре Лапы | AS202359 | `4lapy.ru`, `api.4lapy.ru` |
+| Читай-город / Буквоед | AS207604 | `bookvoed.ru`, `chitai-gorod.ru` |
 | Лабиринт | — | `labirint.ru` |
 
 ### Доставка и логистика
 
-| Сервис | Домены |
-| ------ | ------ |
-| Купер (бывш. СберМаркет) | `api.kuper.ru`, `kuper.ru` |
-| Самокат | `api.samokat.ru`, `cdn.samokat.ru`, `cm.samokat.ru`, `samokat.ru` |
-| Delivery Club | `dclub.ru`, `delivery-club.ru` |
-| СДЭК | `ad-cdek.ru`, `cdek.ru`, `cdek.shopping`, `lk.cdek.ru` |
-| Boxberry | `boxberry.ru` |
-| Деловые Линии | `dellin.ru` |
+| Сервис | ASN | Домены |
+| ------ | ------ | ------ |
+| Купер (бывш. СберМаркет) | — | `api.kuper.ru`, `kuper.ru` |
+| Самокат | — | `api.samokat.ru`, `cdn.samokat.ru`, `cm.samokat.ru`, `samokat.ru` |
+| Delivery Club | — | `dclub.ru`, `delivery-club.ru` |
+| СДЭК | AS50488 | `ad-cdek.ru`, `cdek.ru`, `cdek.shopping`, `lk.cdek.ru` |
+| Boxberry | AS204646 | `boxberry.ru` |
+| Деловые Линии | AS44633 | `dellin.ru` |
 
 ### Ритейл и продукты
 
 | Сервис | ASN | Домены |
 | ------ | ------ | ------ |
 | Пятёрочка / X5 Group | AS215810, AS44704 | `5ka.ru`, `chizhik.club`, `chizhik.ru`, `myapelsin.ru` и др. |
-| Магнит | — | `dostavka.magnit.ru`, `magnit.app`, `magnit.com`, `magnit.ru` |
-| Лента | — | `lenta.com`, `online.lenta.com` |
+| Магнит | AS44685, AS206126 | `dostavka.magnit.ru`, `magnit.app`, `magnit.com`, `magnit.ru` |
+| Лента | AS41809 | `lenta.com`, `online.lenta.com` |
 | Metro Cash and Carry | — | `api.metro-cc.ru`, `metro-cc.ru`, `online.metro-cc.ru` |
 | FixPrice | — | `fix-price.com`, `fix-price.ru` |
 | Дикси | AS202760 | `dixy.ru` |
@@ -235,12 +235,12 @@ dns:
 | One Price Coffee | — | `api.onepricecoffee.com`, `cloud.onepricecoffee.com`, `delivery.onepricecoffee.com`, `onepricecoffee.com` |
 | Best Benefits | — | `app.bestbenefits.ru`, `bestbenefits.ru`, `mobile.bestbenefits.ru` |
 | Зоозавр | — | `api.new1.zoozavr.ru`, `api.zoozavr.ru`, `blog.zoozavr.ru`, `feedback.zoozavr.ru` и др. |
-| Ашан | — | `auchan.ru` |
-| Азбука Вкуса | — | `av.ru`, `azbukavkusa.ru` |
+| Ашан | AS39744 | `auchan.ru` |
+| Азбука Вкуса | AS43292 | `av.ru`, `azbukavkusa.ru` |
 | Глобус | — | `globus.ru`, `online.globus.ru` |
-| О'КЕЙ | — | `okmarket.ru` |
-| Красное & Белое | — | `k-b.ru`, `krasnoeibeloe.ru` |
-| Винлаб | — | `winelab.ru` |
+| О'КЕЙ | AS43431 | `okmarket.ru` |
+| Красное & Белое | AS204670 | `k-b.ru`, `krasnoeibeloe.ru` |
+| Винлаб | AS206089 | `winelab.ru` |
 
 ### Рестораны и доставка еды
 
@@ -264,25 +264,25 @@ dns:
 | START | — | `start.ru`, `start.video` |
 | Premier | — | `premier.one` |
 | Звук (Сбер) | — | `zvuk.com`, `zvuk.ru` |
-| Матч ТВ | — | `matchpremier.ru`, `matchtv.ru` |
-| Смотрим / ВГТРК | — | `russia.tv`, `smotrim.ru`, `vgtrk.ru` |
-| Первый канал | — | `1tv.ru`, `stream.1tv.ru` |
-| Триколор Кино и ТВ | — | `kino.tricolor.tv`, `tricolor.tv` |
-| НТВ | — | `ntv.ru`, `ntvplus.ru`, `ntvplus.tv` |
-| СТС | — | `ctc.ru`, `domashniy.ru` |
+| Матч ТВ | AS202476 | `matchpremier.ru`, `matchtv.ru` |
+| Смотрим / ВГТРК | AS43825 | `russia.tv`, `smotrim.ru`, `vgtrk.ru` |
+| Первый канал | AS42512 | `1tv.ru`, `stream.1tv.ru` |
+| Триколор Кино и ТВ | AS44034 | `kino.tricolor.tv`, `tricolor.tv` |
+| НТВ | AS31548, AS44485 | `ntv.ru`, `ntvplus.ru`, `ntvplus.tv` |
+| СТС | AS43924 | `ctc.ru`, `domashniy.ru` |
 
 ### СМИ, пресса и медиа
 
-| Сервис | Домены |
-| ------ | ------ |
-| РБК | `quote.ru`, `rbc.ru`, `rbcplus.ru` |
-| ТАСС | `tass.ru` |
-| РИА Новости | `1prime.ru`, `ria.ru`, `rossiyasegodnya.com` |
-| Коммерсантъ | `kommersant.ru` |
-| Ведомости | `vedomosti.ru` |
-| Рамблер (Lenta, Gazeta, Чемпионат) | `championat.com`, `gazeta.ru`, `lenta.ru`, `rambler.ru` |
-| Пикабу | `cs.pikabu.ru`, `pikabu.ru` |
-| ИД Комитет (VC.ru, DTF) | `cmtt.ru`, `dtf.ru`, `vc.ru` |
+| Сервис | ASN | Домены |
+| ------ | ------ | ------ |
+| РБК | AS29074 | `quote.ru`, `rbc.ru`, `rbcplus.ru` |
+| ТАСС | AS21319 | `tass.ru` |
+| РИА Новости | AS41829 | `1prime.ru`, `ria.ru`, `rossiyasegodnya.com` |
+| Коммерсантъ | AS34818 | `kommersant.ru` |
+| Ведомости | AS44111 | `vedomosti.ru` |
+| Рамблер (Lenta, Gazeta, Чемпионат) | AS39561 | `championat.com`, `gazeta.ru`, `lenta.ru`, `rambler.ru` |
+| Пикабу | — | `cs.pikabu.ru`, `pikabu.ru` |
+| ИД Комитет (VC.ru, DTF) | — | `cmtt.ru`, `dtf.ru`, `vc.ru` |
 
 ### Билеты и афиша
 
@@ -298,16 +298,16 @@ dns:
 | Сервис | ASN | Домены |
 | ------ | ------ | ------ |
 | Госуслуги | AS196747, AS48287 и др. | `esia.gosuslugi.ru`, `gosuslugi.ru`, `gu-st.ru`, `lk.gosuslugi.ru` и др. |
-| ФНС / Налоговая | — | `ebs.ru`, `goskey.ru`, `gov.ru`, `lkfl2.nalog.ru` и др. |
-| СФР / Социальный фонд России | — | `pfr.gov.ru`, `sfr.gov.ru` |
+| ФНС / Налоговая | AS25514, AS41892 и др. | `ebs.ru`, `goskey.ru`, `gov.ru`, `lkfl2.nalog.ru` и др. |
+| СФР / Социальный фонд России | AS42360 | `pfr.gov.ru`, `sfr.gov.ru` |
 | ЕИС Закупки | — | `zakupki.gov.ru` |
 | Мос.ру | AS8901 | `mos.ru`, `mosreg.ru`, `my.mos.ru`, `uslugi.mos.ru` |
-| ЦБ РФ | — | `cbr.ru`, `finmarket.ru` |
-| Почта России | — | `mobileapp.russianpost.ru`, `pochta.ru`, `tracking.pochta.ru` |
-| Честный знак | — | `xn--80ajghhoc2aj1c8b.xn--p1ai` |
+| ЦБ РФ | AS21272 | `cbr.ru`, `finmarket.ru` |
+| Почта России | AS24701, AS41457 | `mobileapp.russianpost.ru`, `pochta.ru`, `tracking.pochta.ru` |
+| Честный знак | AS207867 | `xn--80ajghhoc2aj1c8b.xn--p1ai` |
 | Суды и правосудие (ГАС Правосудие, Мой Арбитр, Мосгорсуд) | — | `arbitr.ru`, `ej.sudrf.ru`, `kad.arbitr.ru`, `mos-gorsud.ru` и др. |
-| ФССП (Судебные приставы) | — | `fssp.gov.ru`, `fssprus.ru` |
-| Росреестр | — | `pkk.rosreestr.ru`, `rosreestr.gov.ru`, `rosreestr.ru` |
+| ФССП (Судебные приставы) | AS48721 | `fssp.gov.ru`, `fssprus.ru` |
+| Росреестр | AS42158 | `pkk.rosreestr.ru`, `rosreestr.gov.ru`, `rosreestr.ru` |
 | ГИБДД / Госавтоинспекция | — | `gibdd.ru`, `xn--90adear.xn--p1ai` |
 | ФНП / Нотариат | — | `notariat.ru`, `reestr-dover.ru` |
 | ГИС ЖКХ и коммунальные услуги | — | `dom.gosuslugi.ru`, `kvartplata.ru`, `lkk.mosoblgaz.ru`, `mosenergosbyt.ru` и др. |
@@ -319,10 +319,10 @@ dns:
 | Сервис | ASN | Домены |
 | ------ | ------ | ------ |
 | РЖД | AS20702 | `cargo.rzd.ru`, `pass.rzd.ru`, `rzd-bonus.ru`, `rzd.ru` и др. |
-| Аэрофлот | — | `aeroflot.ru`, `api.aeroflot.ru` |
-| S7 Airlines | — | `s7.ru` |
+| Аэрофлот | AS34571 | `aeroflot.ru`, `api.aeroflot.ru` |
+| S7 Airlines | AS41801 | `s7.ru` |
 | Победа | — | `pobeda.aero` |
-| Уральские авиалинии | — | `uralairlines.ru` |
+| Уральские авиалинии | AS43455 | `uralairlines.ru` |
 | Aviasales | — | `aviasales.com`, `aviasales.ru` |
 | Tutu.ru | — | `tutu.ru` |
 | Островок | — | `api.ostrovok.ru`, `ostrovok.ru` |
@@ -333,7 +333,7 @@ dns:
 | Drom.ru | — | `auto.drom.ru`, `drom.ru` |
 | Автотека | — | `autoteka.ru` |
 | Автодор | AS20698 | `avtodor-tr.ru` |
-| Делимобиль | — | `api.delimobil.ru`, `delimobil.com`, `delimobil.ru` |
+| Делимобиль | AS207393 | `api.delimobil.ru`, `delimobil.com`, `delimobil.ru` |
 | Ситидрайв / Ситимобил | — | `city-mobil.ru`, `citydrive.ru` |
 | Drivee | — | `drivee.ru` |
 | Uber Russia | — | `uber.ru` |
@@ -342,11 +342,11 @@ dns:
 | BelkaCar | — | `api.belkacar.ru`, `belkacar.ru` |
 | Whoosh | — | `api.whoosh.bike`, `whoosh.bike`, `whoosh.ru` |
 | Юрент | — | `api.urent.ru`, `urent.city`, `urent.ru` |
-| Лукойл (АЗС / Ликард) | — | `auto.lukoil.ru`, `licard.ru`, `lukoil.ru` |
-| Газпромнефть (АЗС / ОПТИ 24) | — | `gazprom-neft.ru`, `opti-24.com`, `gpnbonus.ru` |
-| Роснефть (Семейная команда) | — | `komandacard.ru`, `rn-card.ru`, `rosneft.ru` |
-| Татнефть | — | `club.tatneft.ru`, `tatneft.ru` |
-| Utair | — | `utair.ru` |
+| Лукойл (АЗС / Ликард) | AS21245, AS44583 | `auto.lukoil.ru`, `licard.ru`, `lukoil.ru` |
+| Газпромнефть (АЗС / ОПТИ 24) | AS39316, AS41655 | `gazprom-neft.ru`, `opti-24.com`, `gpnbonus.ru` |
+| Роснефть (Семейная команда) | AS35297, AS41618 | `komandacard.ru`, `rn-card.ru`, `rosneft.ru` |
+| Татнефть | AS41793 | `club.tatneft.ru`, `tatneft.ru` |
+| Utair | AS35316 | `utair.ru` |
 | Smartavia | — | `flysmartavia.com`, `smartavia.ru` |
 | Red Wings | — | `flyredwings.com` |
 | Nordwind Airlines | — | `nordwindairlines.ru` |
@@ -360,22 +360,22 @@ dns:
 
 ### Недвижимость
 
-| Сервис | Домены |
-| ------ | ------ |
-| ЦИАН | `api.cian.ru`, `cian.ru` |
-| Домклик | `api.domclick.ru`, `domclick.ru` |
-| ДомРФ | `domrf.ru` |
+| Сервис | ASN | Домены |
+| ------ | ------ | ------ |
+| ЦИАН | AS200449 | `api.cian.ru`, `cian.ru` |
+| Домклик | — | `api.domclick.ru`, `domclick.ru` |
+| ДомРФ | — | `domrf.ru` |
 
 ### Работа, HR и бизнес (ЭДО)
 
 | Сервис | ASN | Домены |
 | ------ | ------ | ------ |
 | HeadHunter | AS47724, AS59601 | `api.hh.ru`, `headhunter.ru`, `hh.ru` |
-| SuperJob | — | `superjob.ru` |
+| SuperJob | AS44046 | `superjob.ru` |
 | Работа.ру | — | `rabota.ru` |
 | Хабр | — | `career.habr.com`, `habr.com` |
 | Профи.ру | AS60580 | `profi.ru` |
-| ЭДО и Бизнес (Контур, СБИС, 1С) | — | `1c.ru`, `b2b-center.ru`, `cryptopro.ru`, `diadoc.ru` и др. |
+| ЭДО и Бизнес (Контур, СБИС, 1С) | AS41807, AS44280 и др. | `1c.ru`, `b2b-center.ru`, `cryptopro.ru`, `diadoc.ru` и др. |
 
 ### Карты и навигация
 
@@ -404,12 +404,12 @@ dns:
 | Сервис | ASN | Домены |
 | ------ | ------ | ------ |
 | СберЗдоровье | — | `doctoronline.ru`, `sberhealth.ru` |
-| Аптека.ру | — | `apteka.ru` |
-| Еаптека | — | `eapteka.ru` |
-| Аптеки Столички | — | `api.stolichki.ru`, `stolichki.ru` |
+| Аптека.ру | AS34812 | `apteka.ru` |
+| Еаптека | AS208390 | `eapteka.ru` |
+| Аптеки Столички | AS206967 | `api.stolichki.ru`, `stolichki.ru` |
 | ЕМИАС | — | `emias.info`, `emias.ru`, `lk.emias.mos.ru`, `mgfoms.ru` и др. |
-| Invitro | — | `invitro.ru`, `lk.invitro.ru` |
-| Медси | — | `medsi-premium.ru`, `medsi.com`, `medsi.pro`, `medsi.ru` и др. |
+| Invitro | AS43846 | `invitro.ru`, `lk.invitro.ru` |
+| Медси | AS44658 | `medsi-premium.ru`, `medsi.com`, `medsi.pro`, `medsi.ru` и др. |
 | АГНИ | — | `beauty-forma.com`, `lk-dev.beauty-forma.com`, `lk.beauty-forma.com`, `shop.beauty-forma.com` |
 | Аптека Вита | AS42996 | `autodiscover.vitaexpress.ru`, `cloud.vitaexpress.ru`, `mailimage.vitaexpress.ru`, `mobapp-api.vitaexpress.ru` и др. |
 | ПроДокторов | — | `medtochka.ru`, `prodoctorov.ru` |
@@ -417,20 +417,20 @@ dns:
 | Аптека 36.6 / Горздрав | — | `366.ru`, `gorzdrav.org` |
 | Ригла / Будь Здоров | — | `budzdorov.ru`, `rigla.ru` |
 | Планета Здоровья | — | `planetazdorovo.ru` |
-| Гемотест | — | `gemotest.ru` |
-| Хеликс | — | `helix.ru` |
+| Гемотест | AS200787 | `gemotest.ru` |
+| Хеликс | AS57677 | `helix.ru` |
 
 ### Страхование
 
 | Сервис | ASN | Домены |
 | ------ | ------ | ------ |
-| Ингосстрах | — | `ingos.ru` |
+| Ингосстрах | AS42861 | `ingos.ru` |
 | РЕСО | AS39266 | `agent.reso.ru`, `j7h6i8.reso.ru`, `lms.reso.ru`, `reso.ru` и др. |
 | РСА (Российский союз автостраховщиков) | — | `autoins.ru`, `nsis.ru` |
 | ВСК | AS43644 | `shop.vsk.ru`, `vsk.ru` |
 | Росгосстрах | AS21396 | `my.rgs.ru`, `rgs.ru` |
-| Согласие | — | `soglasie.ru` |
-| АльфаСтрахование | — | `alfastrah.ru` |
+| Согласие | AS43369 | `soglasie.ru` |
+| АльфаСтрахование | AS42484 | `alfastrah.ru` |
 
 ### Мессенджеры и игры
 
