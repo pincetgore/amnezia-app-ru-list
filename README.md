@@ -163,6 +163,9 @@ dns:
 | Сравни.ру | — | `sravni.ru` |
 | Финуслуги | — | `finuslugi.ru` |
 | Золотая Корона (KoronaPay) | AS42691 | `korona.ru`, `koronapay.com`, `rnko.ru` |
+| Цифра Банк (Freedom Finance) | AS207012 | `cifra-bank.ru`, `cifrabank.ru` |
+| РНКБ (Группа ВТБ) | AS21235 | `rncb.ru` |
+| Банк Синара / Делобанк | AS50141 | `delo.ru`, `sinara.ru` |
 
 ### Телеком и связь
 
@@ -218,6 +221,7 @@ dns:
 | СДЭК | AS50488 | `ad-cdek.ru`, `cdek.ru`, `cdek.shopping`, `lk.cdek.ru` |
 | Boxberry | AS204646 | `boxberry.ru` |
 | Деловые Линии | AS44633 | `dellin.ru` |
+| ПЭК (Первая Экспедиционная Компания) | AS41893 | `pecom.ru` |
 
 ### Ритейл и продукты
 
@@ -270,6 +274,7 @@ dns:
 | Триколор Кино и ТВ | AS44034 | `kino.tricolor.tv`, `tricolor.tv` |
 | НТВ | AS44485 | `ntv.ru`, `ntvplus.ru`, `ntvplus.tv` |
 | СТС | AS43924 | `ctc.ru`, `domashniy.ru` |
+| Амедиатека (Amediateka) | — | `amediateka.ru` |
 
 ### СМИ, пресса и медиа
 
@@ -313,6 +318,11 @@ dns:
 | ГИС ЖКХ и коммунальные услуги | — | `dom.gosuslugi.ru`, `kvartplata.ru`, `lkk.mosoblgaz.ru`, `mosenergosbyt.ru` и др. |
 | Региональные Госуслуги (СПб) | — | `gu.spb.ru` |
 | ФТС (Таможенная служба) | — | `customs.gov.ru` |
+| МВД РФ | — | `mvd.ru` |
+| Федеральное казначейство | — | `roskazna.gov.ru` |
+| Федресурс и Банкротства (ЕФРСБ) | — | `bankrot.fedresurs.ru`, `fedresurs.ru` |
+| Электронные торговые площадки (Госзакупки) | — | `roseltorg.ru`, `rts-tender.ru`, `sberbank-ast.ru` |
+| Правовые справочные системы (Консультант / Гарант) | — | `consultant.ru`, `garant.ru` |
 
 ### Транспорт, авто и каршеринг
 
@@ -327,6 +337,8 @@ dns:
 | Tutu.ru | — | `tutu.ru` |
 | Островок | — | `api.ostrovok.ru`, `ostrovok.ru` |
 | Суточно.ру | — | `sutochno.ru` |
+| Твил (Tvil.ru) | — | `tvil.ru` |
+| OneTwoTrip | — | `onetwotrip.com`, `onetwotrip.ru` |
 | Московский метрополитен | — | `mosmetro.ru`, `wi-fi.ru` |
 | Тройка | — | `transport.mos.ru`, `troika.mos.ru` |
 | Авто.ру | — | `auto.ru` |
@@ -365,6 +377,8 @@ dns:
 | ЦИАН | AS200449 | `api.cian.ru`, `cian.ru` |
 | Домклик | — | `api.domclick.ru`, `domclick.ru` |
 | ДомРФ | — | `domrf.ru` |
+| ПИК (Группа ПИК и ПИК.Комфорт) | — | `pik.ru` |
+| Девелопер Самолет | — | `samolet.ru` |
 
 ### Работа, HR и бизнес (ЭДО)
 
@@ -407,6 +421,7 @@ dns:
 | Аптека.ру | AS34812 | `apteka.ru` |
 | Еаптека | AS208390 | `eapteka.ru` |
 | Аптеки Столички | AS206967 | `api.stolichki.ru`, `stolichki.ru` |
+| Аптека «Апрель» (Клуб Апрель) | — | `apteka-april.ru` |
 | ЕМИАС | — | `emias.info`, `emias.ru`, `lk.emias.mos.ru`, `mgfoms.ru` и др. |
 | Invitro | AS43846 | `invitro.ru`, `lk.invitro.ru` |
 | Медси | — | `medsi-premium.ru`, `medsi.com`, `medsi.pro`, `medsi.ru` и др. |

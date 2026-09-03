@@ -609,6 +609,26 @@ services:
       - koronapay.com
       - rnko.ru
 
+  - name: "Цифра Банк (Freedom Finance)"
+    asn:
+      - 207012
+    domains:
+      - cifra-bank.ru
+      - cifrabank.ru
+
+  - name: "РНКБ (Группа ВТБ)"
+    asn:
+      - 21235
+    domains:
+      - rncb.ru
+
+  - name: "Банк Синара / Делобанк"
+    asn:
+      - 50141
+    domains:
+      - delo.ru
+      - sinara.ru
+
   # ============================================================
   # ТЕЛЕКОМ И СВЯЗЬ
   # ============================================================
@@ -920,6 +940,12 @@ services:
     domains:
       - dellin.ru
 
+  - name: "ПЭК (Первая Экспедиционная Компания)"
+    asn:
+      - 41893
+    domains:
+      - pecom.ru
+
   # ============================================================
   # РИТЕЙЛ И ПРОДУКТЫ
   # ============================================================
@@ -1207,6 +1233,11 @@ services:
       - ctc.ru
       - domashniy.ru
 
+  - name: "Амедиатека (Amediateka)"
+    asn: []
+    domains:
+      - amediateka.ru
+
   # ============================================================
   # СМИ, ПРЕССА И МЕДИА
   # ============================================================
@@ -1401,12 +1432,16 @@ services:
     asn: []
     domains:
       - dom.gosuslugi.ru
+      - eirc.spb.ru
       - kvartplata.ru
+      - lk.mosenergosbyt.ru
       - lkk.mosoblgaz.ru
       - mosenergosbyt.ru
+      - mosobleirc.ru
       - mosoblgaz.ru
       - my.mosenergosbyt.ru
       - pay-service.ru
+      - pesc.ru
 
   - name: "Региональные Госуслуги (СПб)"
     asn: []
@@ -1417,6 +1452,35 @@ services:
     asn: []
     domains:
       - customs.gov.ru
+
+  - name: "МВД РФ"
+    asn: []
+    domains:
+      - mvd.ru
+
+  - name: "Федеральное казначейство"
+    asn: []
+    domains:
+      - roskazna.gov.ru
+
+  - name: "Федресурс и Банкротства (ЕФРСБ)"
+    asn: []
+    domains:
+      - bankrot.fedresurs.ru
+      - fedresurs.ru
+
+  - name: "Электронные торговые площадки (Госзакупки)"
+    asn: []
+    domains:
+      - roseltorg.ru
+      - rts-tender.ru
+      - sberbank-ast.ru
+
+  - name: "Правовые справочные системы (Консультант / Гарант)"
+    asn: []
+    domains:
+      - consultant.ru
+      - garant.ru
 
   # ============================================================
   # ТРАНСПОРТ, АВТО И КАРШЕРИНГ
@@ -1476,6 +1540,17 @@ services:
     asn: []
     domains:
       - sutochno.ru
+
+  - name: "Твил (Tvil.ru)"
+    asn: []
+    domains:
+      - tvil.ru
+
+  - name: "OneTwoTrip"
+    asn: []
+    domains:
+      - onetwotrip.com
+      - onetwotrip.ru
 
   - name: "Московский метрополитен"
     asn: []
@@ -1659,6 +1734,16 @@ services:
     domains:
       - domrf.ru
 
+  - name: "ПИК (Группа ПИК и ПИК.Комфорт)"
+    asn: []
+    domains:
+      - pik.ru
+
+  - name: "Девелопер Самолет"
+    asn: []
+    domains:
+      - samolet.ru
+
   # ============================================================
   # РАБОТА, HR И БИЗНЕС
   # ============================================================
@@ -1821,6 +1906,11 @@ services:
     domains:
       - api.stolichki.ru
       - stolichki.ru
+
+  - name: "Аптека Апрель (Клуб Апрель)"
+    asn: []
+    domains:
+      - apteka-april.ru
 
   - name: "ЕМИАС"
     asn: []
