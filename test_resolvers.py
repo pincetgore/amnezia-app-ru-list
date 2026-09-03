@@ -193,12 +193,9 @@ class TestDNSResolver:
             mock_resolver_instance = MagicMock()
             MockResolver.return_value = mock_resolver_instance
 
-            try:
-                resolve_domains([], nameservers=custom_nameservers)
-            except Exception:
-                pass  # Игнорируем ошибки, просто проверяем что nameservers был установлен
+            resolve_domains([], nameservers=custom_nameservers)
 
-            # Проверяем что nameservers был установлен на resolver
+            MockResolver.assert_called_once_with(configure=False)
             assert mock_resolver_instance.nameservers == custom_nameservers
 
     @pytest.mark.parametrize(
@@ -223,10 +220,7 @@ class TestDNSResolver:
                 mock_resolver_instance = MagicMock()
                 MockResolver.return_value = mock_resolver_instance
 
-                try:
-                    resolve_domains([], timeout=20, max_workers=30)
-                except Exception:
-                    pass
+                resolve_domains([], timeout=20, max_workers=30)
 
             # Проверяем что ThreadPoolExecutor был создан с правильными параметрами
             MockExecutor.assert_called_with(max_workers=30)
