@@ -124,15 +124,18 @@ def test_write_output_replaces_existing_file_atomically(tmp_path: Path):
     output_path = tmp_path / "ip-list.json"
     output_path.write_text("old and invalid content", encoding="utf-8")
 
-    write_output(
-        [{"networks": [IPv4Network("192.0.2.1/32")]}],
+    result = write_output(
+        [{"networks": [IPv4Network("192.0.2.2/32"), IPv4Network("192.0.2.1/32")]}],
         str(output_path),
     )
 
     assert yaml.safe_load(output_path.read_text(encoding="utf-8")) == [
-        {"hostname": "192.0.2.1/32", "ip": ""}
+        {"hostname": "192.0.2.1/32", "ip": ""},
+        {"hostname": "192.0.2.2/32", "ip": ""},
     ]
     assert not list(tmp_path.glob(".ip-list.json.*.tmp"))
+    assert (output_path.stat().st_mode & 0o777) == 0o644
+    assert result == [IPv4Network("192.0.2.1/32"), IPv4Network("192.0.2.2/32")]
 
 
 def test_config_yaml_is_valid():

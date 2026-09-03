@@ -86,9 +86,10 @@ def write_output(
             temporary_file.write(content)
             temporary_file.flush()
             os.fsync(temporary_file.fileno())
+        os.chmod(temporary_path, 0o644)
         os.replace(temporary_path, path)
     except BaseException:
         Path(temporary_path).unlink(missing_ok=True)
         raise
 
-    return aggregated
+    return sorted_nets
