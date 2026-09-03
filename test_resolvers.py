@@ -72,12 +72,12 @@ class TestASNResolver:
         assert result is None
 
     def test_get_prefixes_he_success(self):
-        """Проверяет успешный парсинг bgp.he.net с фильтрацией 0.0.0.0/0."""
+        """Проверяет успешный парсинг bgp.he.net с фильтрацией 0.0.0.0/0 и дедупликацией."""
         mock_response = MagicMock()
         mock_response.text = """
             <table>
                 <tr><td>0.0.0.0/0</td></tr>
-                <tr><td>1.2.3.0/24</td></tr>
+                <tr><td><a href="/net/1.2.3.0/24">1.2.3.0/24</a></td></tr>
                 <tr><td>4.5.6.0/25</td></tr>
             </table>
         """
@@ -137,6 +137,10 @@ class TestASNResolver:
         """Проверяет обработку некорректных форматов ASN."""
         assert resolve_asn("invalid_asn") == []
         assert resolve_asn(None) == []
+        assert resolve_asn(True) == []
+        assert resolve_asn(False) == []
+        assert resolve_asn(-1) == []
+        assert resolve_asn(0) == []
 
 
 class TestDNSResolver:
