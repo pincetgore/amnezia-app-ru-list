@@ -526,12 +526,8 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 
 1. Перейдите на страницу **Releases**.
 2. Скачайте нужный файл из последнего релиза:
-   * `ip-list.json` (или `ip-list-<день-месяц-год_время>.json`) — для импорта в приложение AmneziaVPN.
-   * `cidrs.txt` (или `cidrs-<день-месяц-год_время>.txt`) — простой текстовый список сетей в формате CIDR (по одному префиксу на строку). Подходит для настройки маршрутизации в других VPN-клиентах (v2ray, sing-box, Xray), сторонних утилитах, брандмауэрах (например, iptables) или на домашних роутерах (OpenWrt, Keenetic и др.).
-
-> 💡 **Прямые постоянные ссылки для автообновлений (скрипты, роутеры Keenetic/OpenWrt):**
-> - Amnezia JSON: `https://github.com/pincetgore/amnezia-app-ru-list/releases/latest/download/ip-list.json`
-> - CIDR список: `https://github.com/pincetgore/amnezia-app-ru-list/releases/latest/download/cidrs.txt`
+   * `ip-list-<день-месяц-год_время>.json` — для импорта в приложение AmneziaVPN.
+   * `cidrs-<день-месяц-год_время>.txt` — простой текстовый список сетей в формате CIDR (по одному префиксу на строку). Подходит для настройки маршрутизации в других VPN-клиентах (v2ray, sing-box, Xray), сторонних утилитах, брандмауэрах (например, iptables) или на домашних роутерах (OpenWrt, Keenetic и др.).
 
 ## Настройка приложения AmneziaVPN
 

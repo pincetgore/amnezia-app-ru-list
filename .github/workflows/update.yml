@@ -51,8 +51,6 @@ jobs:
         run: |
           python main.py -o ip-list-${{ env.CURRENT_DATETIME }}.json -f amnezia
           jq -r '.[].hostname' ip-list-${{ env.CURRENT_DATETIME }}.json > cidrs-${{ env.CURRENT_DATETIME }}.txt
-          cp ip-list-${{ env.CURRENT_DATETIME }}.json ip-list.json
-          cp cidrs-${{ env.CURRENT_DATETIME }}.txt cidrs.txt
 
       - name: Delete old release and tag
         run: |
@@ -69,15 +67,12 @@ jobs:
           📅 **Дата генерации:** ${{ env.CURRENT_DATETIME }}
           🏷 **Тип запуска:** ${{ env.RELEASE_LABEL }}
 
-          ### Файлы релиза:
-          - `ip-list-${{ env.CURRENT_DATETIME }}.json` (копия: `ip-list.json`) — для импорта в AmneziaVPN.
-          - `cidrs-${{ env.CURRENT_DATETIME }}.txt` (копия: `cidrs.txt`) — простой список CIDR-диапазонов.
+          - `ip-list-${{ env.CURRENT_DATETIME }}.json` — для импорта в AmneziaVPN.
+          - `cidrs-${{ env.CURRENT_DATETIME }}.txt` — простой список CIDR-диапазонов.
           EOF
           gh release create latest \
             ip-list-${{ env.CURRENT_DATETIME }}.json \
             cidrs-${{ env.CURRENT_DATETIME }}.txt \
-            ip-list.json \
-            cidrs.txt \
             --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
             --notes-file release-notes.md
         env:
