@@ -152,13 +152,15 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
 
         soup = BeautifulSoup(resp.text, "html.parser")
         prefixes = []
+        seen_prefixes = set()
         cidr_pattern = r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2}$'
 
         # Извлекаем префиксы из ссылок и ячеек таблиц
         elements = soup.find_all(["a", "td"])
         for elem in elements:
             text = elem.get_text().strip()
-            if re.match(cidr_pattern, text):
+            if re.match(cidr_pattern, text) and text not in seen_prefixes:
+                seen_prefixes.add(text)
                 try:
                     net = IPv4Network(text, strict=False)
                     if _is_valid_prefix(net):
@@ -170,12 +172,14 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
         if not prefixes:
             raw = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2})', resp.text)
             for p in raw:
-                try:
-                    net = IPv4Network(p, strict=False)
-                    if _is_valid_prefix(net):
-                        prefixes.append(net)
-                except ValueError:
-                    pass
+                if p not in seen_prefixes:
+                    seen_prefixes.add(p)
+                    try:
+                        net = IPv4Network(p, strict=False)
+                        if _is_valid_prefix(net):
+                            prefixes.append(net)
+                    except ValueError:
+                        pass
 
         logger.debug("AS%d: got %d prefixes from bgp.he.net (fallback)", asn, len(prefixes))
         return prefixes
@@ -199,8 +203,12 @@ def resolve_asn(asn: Any) -> List[IPv4Network]:
         except ValueError:
             logger.error("Invalid ASN format: '%s'", asn)
             return []
-    elif not isinstance(asn, int):
+    elif isinstance(asn, bool) or not isinstance(asn, int):
         logger.error("ASN must be an int or a string, got: %s", type(asn))
+        return []
+
+    if asn <= 0:
+        logger.error("ASN must be a positive integer, got: %r", asn)
         return []
 
     prefixes = get_prefixes_ripe(asn)
