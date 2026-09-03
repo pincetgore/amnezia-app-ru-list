@@ -15,7 +15,7 @@ from typing import Any, Dict, List
 import yaml
 from tqdm import tqdm
 
-from output.formatter import aggregate_networks, write_output
+from output.formatter import write_output
 from resolvers.asn import resolve_asn
 from resolvers.dns import resolve_domains
 
@@ -252,19 +252,18 @@ def main():
         for domain in sorted(set(all_dns_warnings)):
             print(f"  ⚠️  {domain}")
 
-    # Не создаём даже пустой выходной файл при полном отсутствии данных.
-    aggregated = aggregate_networks(
-        [network for result in service_results for network in result["networks"]]
-    )
-    if not aggregated:
+    # Проверяем наличие собранных префиксов до записи
+    if not any(result["networks"] for result in service_results):
         logger.error("No IP prefixes were collected; output was not written.")
         sys.exit(1)
 
     # -- Запись выходного файла только после успешного сбора всех данных --
-    write_output(service_results, args.output, args.format)
+    sorted_nets = write_output(service_results, args.output, args.format)
+    if not sorted_nets:
+        logger.error("No valid IP prefixes after aggregation; output was not written.")
+        sys.exit(1)
 
-    print(f"  After aggregation:  {len(aggregated)}")
-    print(f"  Total entries:      {len(aggregated)}")
+    print(f"  After aggregation:  {len(sorted_nets)}")
     print(f"\nOutput: {args.output}")
 
 
