@@ -54,6 +54,13 @@ jobs:
           cp ip-list-${{ env.CURRENT_DATETIME }}.json ip-list.json
           cp cidrs-${{ env.CURRENT_DATETIME }}.txt cidrs.txt
 
+      - name: Delete old release and tag
+        run: |
+          gh release delete latest -y || echo "No 'latest' release to delete"
+          git push origin --delete latest || echo "No 'latest' tag to delete"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create Release and Upload Artifacts
         run: |
           cat > release-notes.md <<'EOF'
@@ -72,7 +79,6 @@ jobs:
             ip-list.json \
             cidrs.txt \
             --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
-            --notes-file release-notes.md \
-            --clobber
+            --notes-file release-notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
