@@ -208,3 +208,15 @@ def test_no_duplicates_config(field_name, item_type):
                 seen_items[item] = service_name
                 
     assert not duplicates, f"Найдены дублирующиеся {item_type}:\n" + "\n".join(duplicates)
+
+
+def test_loopback_covers_localhost():
+    """Проверяет, что диапазон loopback в конфигурации покрывает 127.0.0.1 (localhost)."""
+    from ipaddress import IPv4Address
+    with open("config.yaml", "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+
+    local_service = next(s for s in config["services"] if "Локальные сети" in s["name"])
+    networks = [IPv4Network(cidr) for cidr in local_service["ip_ranges"]]
+    localhost = IPv4Address("127.0.0.1")
+    assert any(localhost in net for net in networks), "Диапазон loopback должен покрывать 127.0.0.1"
