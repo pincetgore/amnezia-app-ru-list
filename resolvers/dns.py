@@ -66,14 +66,17 @@ def resolve_domains(
         raise ValueError("DNS timeout must be positive")
     if max_workers <= 0:
         raise ValueError("DNS max_workers must be positive")
+    if nameservers is not None and not nameservers:
+        raise ValueError("At least one DNS nameserver must be configured")
 
-    resolver = dns.resolver.Resolver()
+    target_nameservers = nameservers if nameservers is not None else ["77.88.8.8", "77.88.8.1", "8.8.8.8", "1.1.1.1"]
+    if not target_nameservers:
+        raise ValueError("At least one DNS nameserver must be configured")
+
+    resolver = dns.resolver.Resolver(configure=False)
     # Используем Яндекс.DNS первыми, так как многие RU-домены (ВТБ, VK, X5)
     # блокируют запросы от зарубежных DNS (Google/Cloudflare) для защиты от DDoS.
-    resolver.nameservers = nameservers if nameservers is not None else ["77.88.8.8", "77.88.8.1", "8.8.8.8", "1.1.1.1"]
-
-    if not resolver.nameservers:
-        raise ValueError("At least one DNS nameserver must be configured")
+    resolver.nameservers = target_nameservers
 
     # Таймаут на один сервер делаем пропорциональным количеству серверов
     resolver.timeout = timeout / len(resolver.nameservers)
