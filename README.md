@@ -270,10 +270,7 @@ dns:
 | Звук (Сбер) | — | `zvuk.com`, `zvuk.ru` |
 | Матч ТВ | — | `matchpremier.ru`, `matchtv.ru` |
 | Смотрим / ВГТРК | — | `russia.tv`, `smotrim.ru`, `vgtrk.ru` |
-| Первый канал | AS42512 | `1tv.ru`, `stream.1tv.ru` |
 | Триколор Кино и ТВ | AS44034 | `kino.tricolor.tv`, `tricolor.tv` |
-| НТВ | AS44485 | `ntv.ru`, `ntvplus.ru`, `ntvplus.tv` |
-| СТС | AS43924 | `ctc.ru`, `domashniy.ru` |
 | Амедиатека (Amediateka) | — | `amediateka.ru` |
 
 ### СМИ, пресса и медиа

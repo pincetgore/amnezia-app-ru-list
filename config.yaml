@@ -1204,34 +1204,12 @@ services:
       - smotrim.ru
       - vgtrk.ru
 
-  - name: "Первый канал"
-    asn:
-      - 42512
-    domains:
-      - 1tv.ru
-      - stream.1tv.ru
-
   - name: "Триколор Кино и ТВ"
     asn:
       - 44034
     domains:
       - kino.tricolor.tv
       - tricolor.tv
-
-  - name: "НТВ"
-    asn:
-      - 44485
-    domains:
-      - ntv.ru
-      - ntvplus.ru
-      - ntvplus.tv
-
-  - name: "СТС"
-    asn:
-      - 43924
-    domains:
-      - ctc.ru
-      - domashniy.ru
 
   - name: "Амедиатека (Amediateka)"
     asn: []
@@ -1434,7 +1412,7 @@ services:
       - dom.gosuslugi.ru
       - eirc.spb.ru
       - kvartplata.ru
-      - lk.mosenergosbyt.ru
+      - my.mosenergosbyt.ru
       - lkk.mosoblgaz.ru
       - mosenergosbyt.ru
       - mosobleirc.ru
