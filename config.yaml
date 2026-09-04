@@ -1417,7 +1417,6 @@ services:
       - mosenergosbyt.ru
       - mosobleirc.ru
       - mosoblgaz.ru
-      - my.mosenergosbyt.ru
       - pay-service.ru
       - pesc.ru
 
