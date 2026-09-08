@@ -29,6 +29,10 @@ RIPE_API_URL = "https://stat.ripe.net/data/announced-prefixes/data.json"
 # Hurricane Electric BGP Toolkit — используется как резерв, если RIPE не возвращает данные
 HE_BGP_URL = "https://bgp.he.net/AS{asn}#_prefixes4"
 
+# Предварительно скомпилированное регулярное выражение для поиска CIDR
+CIDR_RE = re.compile(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2}$")
+CIDR_RAW_RE = re.compile(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2})")
+
 # Временная метка последнего запроса к API (используется для ограничения скорости)
 _last_request_time = 0.0
 
@@ -44,7 +48,14 @@ def _create_session_with_retries() -> requests.Session:
     - 500, 502, 503, 504 (Server errors)
     """
     session = requests.Session()
-    session.headers.update({"User-Agent": "Mozilla/5.0 (ru-bypass-list generator)"})
+    session.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/131.0.0.0 Safari/537.36"
+        ),
+        "Accept": "application/json, text/html, */*",
+    })
     
     # Настройка retry стратегии
     retry_strategy = Retry(
@@ -68,9 +79,9 @@ def _rate_limit():
     global _last_request_time
     sleep_time = 0.0
     with _rate_limit_lock:
-        now = time.time()
+        now = time.monotonic()
         elapsed = now - _last_request_time
-        if elapsed < 1.0:
+        if _last_request_time > 0 and elapsed < 1.0:
             sleep_time = 1.0 - elapsed
             _last_request_time = now + sleep_time
         else:
@@ -101,7 +112,7 @@ def _is_valid_prefix(net: IPv4Network) -> bool:
 def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]]:
     """Получает все анонсированные IPv4-префиксы для ASN из RIPE NCC API.
 
-    Возвращает None при сбое сетевого запроса, чтобы вызывающая функция
+    Возвращает None при сбое сетевого запроса или парсинга, чтобы вызывающая функция
     могла перейти к резервному варианту bgp.he.net.
     """
     _rate_limit()
@@ -115,10 +126,14 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]
         data = resp.json()
 
         prefixes = []
-        for entry in data.get("data", {}).get("prefixes", []):
+        data_section = data.get("data") if isinstance(data, dict) else None
+        entries = (data_section or {}).get("prefixes") or []
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
             prefix = entry.get("prefix", "")
-            # Пропускаем IPv6-префиксы (содержат двоеточия)
-            if ":" in prefix:
+            # Пропускаем невалидные строки и IPv6-префиксы (содержат двоеточия)
+            if not isinstance(prefix, str) or ":" in prefix or not prefix.strip():
                 continue
             try:
                 net = IPv4Network(prefix, strict=False)
@@ -131,7 +146,7 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]
         logger.debug("AS%d: got %d prefixes from RIPE", asn, len(prefixes))
         return prefixes
 
-    except requests.RequestException as e:
+    except (requests.RequestException, ValueError, AttributeError, KeyError) as e:
         logger.warning("RIPE API failed for AS%d: %s", asn, e)
         return None
 
@@ -153,13 +168,12 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
         soup = BeautifulSoup(resp.text, "html.parser")
         prefixes = []
         seen_prefixes = set()
-        cidr_pattern = r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2}$'
 
         # Извлекаем префиксы из ссылок и ячеек таблиц
         elements = soup.find_all(["a", "td"])
         for elem in elements:
             text = elem.get_text().strip()
-            if re.match(cidr_pattern, text) and text not in seen_prefixes:
+            if CIDR_RE.match(text) and text not in seen_prefixes:
                 seen_prefixes.add(text)
                 try:
                     net = IPv4Network(text, strict=False)
@@ -170,7 +184,7 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
 
         # Если не нашли элементы через теги a/td, используем паттерн во всём тексте в качестве запасного сценария
         if not prefixes:
-            raw = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2})', resp.text)
+            raw = CIDR_RAW_RE.findall(resp.text)
             for p in raw:
                 if p not in seen_prefixes:
                     seen_prefixes.add(p)
@@ -184,7 +198,7 @@ def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
         logger.debug("AS%d: got %d prefixes from bgp.he.net (fallback)", asn, len(prefixes))
         return prefixes
 
-    except requests.RequestException as e:
+    except (requests.RequestException, ValueError, AttributeError, KeyError) as e:
         logger.warning("bgp.he.net failed for AS%d: %s", asn, e)
         return []
 

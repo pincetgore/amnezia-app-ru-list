@@ -8,6 +8,8 @@ import main as app
 from main import validate_config
 from output.formatter import aggregate_networks, write_output
 
+CONFIG_PATH = Path(__file__).resolve().parent / "config.yaml"
+
 
 def test_aggregate_cidrs_removes_subnets():
     """Проверяет, что мелкие подсети поглощаются более крупными."""
@@ -140,7 +142,7 @@ def test_write_output_replaces_existing_file_atomically(tmp_path: Path):
 
 def test_config_yaml_is_valid():
     """Проверяет, что рабочий config.yaml имеет правильную структуру."""
-    with open("config.yaml", "r", encoding="utf-8") as f:
+    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
     
     assert isinstance(config, dict), "Конфиг должен быть словарем"
@@ -160,7 +162,7 @@ def test_config_yaml_is_valid():
 
 def test_domains_format():
     """Проверяет отсутствие опечаток (например http://) в доменах."""
-    with open("config.yaml", "r", encoding="utf-8") as f:
+    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
     services = config.get("services", [])
     for entry in services:
@@ -172,7 +174,7 @@ def test_domains_format():
 
 def test_no_duplicate_domains():
     """Проверяет отсутствие дубликатов доменов во всем config.yaml."""
-    with open("config.yaml", "r", encoding="utf-8") as f:
+    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
     
     seen_domains = {}
@@ -195,7 +197,7 @@ def test_no_duplicate_domains():
 ])
 def test_no_duplicates_config(field_name, item_type):
     """Проверяет отсутствие дубликатов в конфигурации (ASN, IP ranges)."""
-    with open("config.yaml", "r", encoding="utf-8") as f:
+    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
     
     seen_items = {}
@@ -216,7 +218,7 @@ def test_no_duplicates_config(field_name, item_type):
 def test_loopback_covers_localhost():
     """Проверяет, что диапазон loopback в конфигурации покрывает 127.0.0.1 (localhost)."""
     from ipaddress import IPv4Address
-    with open("config.yaml", "r", encoding="utf-8") as f:
+    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
     local_service = next(s for s in config["services"] if "Локальные сети" in s["name"])

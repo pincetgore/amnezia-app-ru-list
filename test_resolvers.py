@@ -71,6 +71,26 @@ class TestASNResolver:
         # После всех retry попыток должен вернуться None
         assert result is None
 
+    def test_get_prefixes_ripe_none_data(self):
+        """Проверяет устойчивость к ответу RIPE с data: null."""
+        mock_response = MagicMock()
+        mock_response.json.return_value = {"data": None}
+
+        with patch("resolvers.asn._session.get", return_value=mock_response):
+            result = get_prefixes_ripe(12389)
+
+        assert result == []
+
+    def test_get_prefixes_ripe_json_decode_error_returns_none(self):
+        """Проверяет обработку некорректного JSON от RIPE (возвращает None для fallback)."""
+        mock_response = MagicMock()
+        mock_response.json.side_effect = ValueError("Invalid JSON")
+
+        with patch("resolvers.asn._session.get", return_value=mock_response):
+            result = get_prefixes_ripe(12389)
+
+        assert result is None
+
     def test_get_prefixes_he_success(self):
         """Проверяет успешный парсинг bgp.he.net с фильтрацией 0.0.0.0/0 и дедупликацией."""
         mock_response = MagicMock()
@@ -228,6 +248,27 @@ class TestDNSResolver:
 
             # Проверяем что ThreadPoolExecutor был создан с правильными параметрами
             MockExecutor.assert_called_with(max_workers=30)
+
+    def test_resolve_single_domain_idn_punycode(self):
+        """Проверяет преобразование кириллического домена в punycode при DNS-запросе."""
+        mock_resolver = MagicMock()
+        mock_rdata = MagicMock()
+        mock_rdata.__str__.return_value = "1.2.3.4"
+        mock_resolver.resolve.return_value = [mock_rdata]
+
+        networks, warning = _resolve_single_domain("тест.рф", mock_resolver)
+
+        assert len(networks) == 1
+        assert IPv4Network("1.2.3.4/32") in networks
+        mock_resolver.resolve.assert_called_once_with("xn--e1aybc.xn--p1ai", "A")
+
+    def test_resolve_domains_limits_workers_to_domain_count(self):
+        """Проверяет оптимизацию: число воркеров ограничивается числом доменов."""
+        import concurrent.futures
+        with patch("resolvers.dns.concurrent.futures.ThreadPoolExecutor", wraps=concurrent.futures.ThreadPoolExecutor) as mock_executor_cls:
+            with patch("resolvers.dns._worker_resolve", return_value=([], None)):
+                resolve_domains(["a.com", "b.com"], timeout=20, max_workers=30)
+            mock_executor_cls.assert_called_with(max_workers=2)
 
 
 class TestNetworkAggregation:

@@ -7,8 +7,9 @@
 или используют общий/облачный хостинг.
 """
 
-import logging
 import concurrent.futures
+import logging
+import threading
 from ipaddress import IPv4Network
 from typing import List, Optional, Tuple
 
@@ -16,13 +17,39 @@ import dns.resolver
 
 logger = logging.getLogger(__name__)
 
+_thread_local = threading.local()
+
+
+def _to_ascii_domain(domain: str) -> str:
+    """Нормализует IDN (кириллические домены в punycode) для DNS-резолвинга."""
+    try:
+        return domain.encode("idna").decode("ascii")
+    except Exception:
+        return domain
+
+
+def _get_worker_resolver(base_resolver: dns.resolver.Resolver) -> dns.resolver.Resolver:
+    """Возвращает локальный для потока Resolver во избежание race conditions."""
+    res = getattr(_thread_local, "resolver", None)
+    if res is None:
+        try:
+            res = dns.resolver.Resolver(configure=False)
+            res.nameservers = list(base_resolver.nameservers)
+            res.timeout = base_resolver.timeout
+            res.lifetime = base_resolver.lifetime
+        except Exception:
+            res = base_resolver
+        _thread_local.resolver = res
+    return res
+
 
 def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> Tuple[List[IPv4Network], Optional[str]]:
     """Вспомогательная функция для получения IP-адресов одного домена."""
     networks = []
     warning = None
+    ascii_domain = _to_ascii_domain(domain)
     try:
-        answers = resolver.resolve(domain, "A")
+        answers = resolver.resolve(ascii_domain, "A")
         for rdata in answers:
             ip = str(rdata)
             net = IPv4Network(f"{ip}/32", strict=False)
@@ -42,6 +69,12 @@ def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> Tupl
         logger.warning("DNS error for %s: %s", domain, e)
         warning = domain
     return networks, warning
+
+
+def _worker_resolve(domain: str, base_resolver: dns.resolver.Resolver) -> Tuple[List[IPv4Network], Optional[str]]:
+    """Воркер с получением потокобезопасного экземпляра Resolver."""
+    resolver = _get_worker_resolver(base_resolver)
+    return _resolve_single_domain(domain, resolver)
 
 
 def resolve_domains(
@@ -78,15 +111,17 @@ def resolve_domains(
     # блокируют запросы от зарубежных DNS (Google/Cloudflare) для защиты от DDoS.
     resolver.nameservers = target_nameservers
 
-    # Таймаут на один сервер делаем пропорциональным количеству серверов
-    resolver.timeout = timeout / len(resolver.nameservers)
+    # Таймаут на один сервер делаем пропорциональным, но не менее 1.0 с
+    resolver.timeout = max(1.0, timeout / len(resolver.nameservers))
     # Общее время на все попытки резолвинга
     resolver.lifetime = timeout
 
     networks = []
     warnings = []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = [executor.submit(_resolve_single_domain, domain, resolver) for domain in domains]
+    # Оптимизация: не создаем 20 потоков, если доменов всего 1-2
+    effective_workers = min(max_workers, len(domains)) if domains else max_workers
+    with concurrent.futures.ThreadPoolExecutor(max_workers=effective_workers) as executor:
+        futures = [executor.submit(_worker_resolve, domain, resolver) for domain in domains]
         
         for future in concurrent.futures.as_completed(futures):
             nets, warn = future.result()
