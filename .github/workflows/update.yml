@@ -41,6 +41,7 @@ jobs:
         run: |
           echo "CURRENT_DATE=$(date +'%d.%m.%Y')" >> $GITHUB_ENV
           echo "CURRENT_DATETIME=$(date +'%d-%m-%Y_%H-%M')" >> $GITHUB_ENV
+          echo "RELEASE_TAG=v$(date +'%Y.%m.%d-%H%M')" >> $GITHUB_ENV
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "RELEASE_LABEL=manual" >> $GITHUB_ENV
           else
@@ -51,43 +52,29 @@ jobs:
         run: |
           python main.py -o ip-list-${{ env.CURRENT_DATETIME }}.json -f amnezia
           jq -r '.[].hostname' ip-list-${{ env.CURRENT_DATETIME }}.json > cidrs-${{ env.CURRENT_DATETIME }}.txt
+          cp ip-list-${{ env.CURRENT_DATETIME }}.json ip-list.json
+          cp cidrs-${{ env.CURRENT_DATETIME }}.txt cidrs.txt
 
-      - name: Create or Update Release and Upload Artifacts
+      - name: Create Release and Upload Artifacts
         run: |
           cat > release-notes.md <<'EOF'
           Автоматически сгенерированный список IP-адресов и доменов российских сервисов.
 
           📅 **Дата генерации:** ${{ env.CURRENT_DATETIME }}
           🏷 **Тип запуска:** ${{ env.RELEASE_LABEL }}
+          📌 **Тег релиза:** ${{ env.RELEASE_TAG }}
 
-          - `ip-list-${{ env.CURRENT_DATETIME }}.json` — для импорта в AmneziaVPN.
-          - `cidrs-${{ env.CURRENT_DATETIME }}.txt` — простой список CIDR-диапазонов.
+          - `ip-list.json` / `ip-list-${{ env.CURRENT_DATETIME }}.json` — для импорта в AmneziaVPN.
+          - `cidrs.txt` / `cidrs-${{ env.CURRENT_DATETIME }}.txt` — простой список CIDR-диапазонов.
           EOF
 
-          if gh release view latest >/dev/null 2>&1; then
-            echo "Release 'latest' exists. Uploading new assets seamlessly..."
-            gh release upload latest \
-              ip-list-${{ env.CURRENT_DATETIME }}.json \
-              cidrs-${{ env.CURRENT_DATETIME }}.txt \
-              --clobber
-
-            gh release edit latest \
-              --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
-              --notes-file release-notes.md
-
-            # Удаляем старые ассеты, сохраняя непрерывную доступность релиза
-            for asset in $(gh release view latest --json assets -q '.assets[].name' 2>/dev/null); do
-              if [ "$asset" != "ip-list-${{ env.CURRENT_DATETIME }}.json" ] && [ "$asset" != "cidrs-${{ env.CURRENT_DATETIME }}.txt" ]; then
-                gh release delete-asset latest "$asset" -y || true
-              fi
-            done
-          else
-            echo "Creating initial 'latest' release..."
-            gh release create latest \
-              ip-list-${{ env.CURRENT_DATETIME }}.json \
-              cidrs-${{ env.CURRENT_DATETIME }}.txt \
-              --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
-              --notes-file release-notes.md
-          fi
+          gh release create "${{ env.RELEASE_TAG }}" \
+            ip-list.json \
+            cidrs.txt \
+            ip-list-${{ env.CURRENT_DATETIME }}.json \
+            cidrs-${{ env.CURRENT_DATETIME }}.txt \
+            --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
+            --notes-file release-notes.md \
+            --latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
