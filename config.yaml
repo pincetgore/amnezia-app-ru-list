@@ -35,6 +35,113 @@ services:
     domains: []
 
   # ============================================================
+  # PUSH-УВЕДОМЛЕНИЯ И СИСТЕМНЫЕ СЕРВИСЫ
+  # ============================================================
+  - name: "Apple (Push-уведомления APNs, iCloud и системные сервисы)"
+    asn: []
+    ip_ranges:
+      - 17.249.0.0/16
+      - 17.252.0.0/16
+      - 17.57.144.0/22
+      - 17.188.128.0/18
+      - 17.188.20.0/23
+    domains:
+      - api-adservices.apple.com
+      - apple-icloud.cn
+      - apple.com
+      - appleicloud.cn
+      - appldnld.apple.com
+      - applemx-icloud.com
+      - captive.apple.com
+      - certs-lb.apple.com.akadns.net
+      - certs.apple.com
+      - configuration.apple.com
+      - courier.push.apple.com
+      - crl-lb.apple.com.akadns.net
+      - crl.apple.com
+      - crl3.digicert.com
+      - crl4.digicert.com
+      - fcs-keys-pub-prod.cdn-apple.com
+      - gdmf-ados.apple.com
+      - gdmf.apple.com
+      - gg.apple.com
+      - gs.apple.com
+      - gsra.apple.com
+      - iad.apple.com
+      - iadsdk.apple.com
+      - icloud-apple.cn
+      - icloud-content.com
+      - icloud-isupport.com
+      - icloud-sandbox.com
+      - icloud.ch
+      - icloud.com
+      - icloud.com.cn
+      - icloud.de
+      - icloud.ee
+      - icloud.fi
+      - icloud.fr
+      - icloud.hu
+      - icloud.ie
+      - icloud.is
+      - icloud.jp
+      - icloud.lv
+      - icloud.net.cn
+      - icloud.om
+      - icloud.org
+      - icloud.pt
+      - icloud.ro
+      - icloud.se
+      - icloud.si
+      - icloud.sk
+      - icloud.vn
+      - icloudads.net
+      - icloudapple.cn
+      - icloudbox.net
+      - icloudbrowser.net
+      - icloude.com
+      - icloudhome.com
+      - icloudmail.net
+      - icloudmusic.net
+      - icloudnet.net
+      - icloudo.com
+      - icloudo.de
+      - icloudo.net
+      - icloudos.de
+      - icloudos.net
+      - icloudpay.net
+      - icloudsecure.net
+      - icloudsetup.com
+      - identity.apple.com
+      - ig.apple.com
+      - ios-icloud.com
+      - me.com
+      - mesu.apple.com
+      - myicloud.net
+      - mylcloud.net
+      - ocsp-lb.apple.com.akadns.net
+      - ocsp.apple.com
+      - ocsp.digicert.cn
+      - ocsp.digicert.com
+      - ocsp2-lb.apple.com.akadns.net
+      - ocsp2.apple.com
+      - oscdn.apple.com
+      - osrecovery.apple.com
+      - push.apple.com
+      - qwapi.com
+      - skl.apple.com
+      - swcdn.apple.com
+      - swdist.apple.com
+      - swdownload.apple.com
+      - swscan.apple.com
+      - updates-http.cdn-apple.com
+      - updates.cdn-apple.com
+      - valid.apple.com
+      - wkms-public.apple.com
+      - www-cdn.icloud.com.akadns.net
+      - wwwicloud.com
+      - xp.apple.com
+
+  # ============================================================
   # IP И GEO ЧЕККЕРЫ
   # ============================================================
   - name: "Проверка IP на признак включения VPN"
