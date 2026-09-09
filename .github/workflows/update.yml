@@ -41,7 +41,6 @@ jobs:
         run: |
           echo "CURRENT_DATE=$(date +'%d.%m.%Y')" >> $GITHUB_ENV
           echo "CURRENT_DATETIME=$(date +'%d-%m-%Y_%H-%M')" >> $GITHUB_ENV
-          echo "RELEASE_TAG=v$(date +'%Y.%m.%d-%H%M')" >> $GITHUB_ENV
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "RELEASE_LABEL=manual" >> $GITHUB_ENV
           else
@@ -50,10 +49,18 @@ jobs:
 
       - name: Generate artifacts
         run: |
-          python main.py -o ip-list-${{ env.CURRENT_DATETIME }}.json -f amnezia
-          jq -r '.[].hostname' ip-list-${{ env.CURRENT_DATETIME }}.json > cidrs-${{ env.CURRENT_DATETIME }}.txt
-          cp ip-list-${{ env.CURRENT_DATETIME }}.json ip-list.json
-          cp cidrs-${{ env.CURRENT_DATETIME }}.txt cidrs.txt
+          python main.py -o ip-list.json -f amnezia
+          jq -r '.[].hostname' ip-list.json > cidrs.txt
+
+      - name: Delete old releases and tags
+        run: |
+          for tag in $(gh release list --limit 100 --json tagName -q '.[].tagName'); do
+            echo "Deleting old release: $tag"
+            gh release delete "$tag" -y --cleanup-tag || true
+          done
+          git push origin --delete latest 2>/dev/null || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release and Upload Artifacts
         run: |
@@ -62,17 +69,14 @@ jobs:
 
           📅 **Дата генерации:** ${{ env.CURRENT_DATETIME }}
           🏷 **Тип запуска:** ${{ env.RELEASE_LABEL }}
-          📌 **Тег релиза:** ${{ env.RELEASE_TAG }}
 
-          - `ip-list.json` / `ip-list-${{ env.CURRENT_DATETIME }}.json` — для импорта в AmneziaVPN.
-          - `cidrs.txt` / `cidrs-${{ env.CURRENT_DATETIME }}.txt` — простой список CIDR-диапазонов.
+          - `ip-list.json` — для импорта в AmneziaVPN.
+          - `cidrs.txt` — простой список CIDR-диапазонов.
           EOF
 
-          gh release create "${{ env.RELEASE_TAG }}" \
+          gh release create latest \
             ip-list.json \
             cidrs.txt \
-            ip-list-${{ env.CURRENT_DATETIME }}.json \
-            cidrs-${{ env.CURRENT_DATETIME }}.txt \
             --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
             --notes-file release-notes.md \
             --latest
