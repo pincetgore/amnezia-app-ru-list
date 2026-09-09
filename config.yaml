@@ -47,13 +47,9 @@ services:
       - 17.188.20.0/23
     domains:
       - api-adservices.apple.com
-      - apple-icloud.cn
       - apple.com
-      - appleicloud.cn
       - appldnld.apple.com
-      - applemx-icloud.com
       - captive.apple.com
-      - certs-lb.apple.com.akadns.net
       - certs.apple.com
       - configuration.apple.com
       - courier.push.apple.com
@@ -69,10 +65,7 @@ services:
       - gsra.apple.com
       - iad.apple.com
       - iadsdk.apple.com
-      - icloud-apple.cn
       - icloud-content.com
-      - icloud-isupport.com
-      - icloud-sandbox.com
       - icloud.ch
       - icloud.com
       - icloud.com.cn
@@ -85,7 +78,6 @@ services:
       - icloud.is
       - icloud.jp
       - icloud.lv
-      - icloud.net.cn
       - icloud.om
       - icloud.org
       - icloud.pt
@@ -95,11 +87,9 @@ services:
       - icloud.sk
       - icloud.vn
       - icloudads.net
-      - icloudapple.cn
       - icloudbox.net
       - icloudbrowser.net
       - icloude.com
-      - icloudhome.com
       - icloudmail.net
       - icloudmusic.net
       - icloudnet.net
@@ -110,24 +100,17 @@ services:
       - icloudos.net
       - icloudpay.net
       - icloudsecure.net
-      - icloudsetup.com
       - identity.apple.com
       - ig.apple.com
-      - ios-icloud.com
       - me.com
       - mesu.apple.com
       - myicloud.net
-      - mylcloud.net
-      - ocsp-lb.apple.com.akadns.net
       - ocsp.apple.com
       - ocsp.digicert.cn
       - ocsp.digicert.com
-      - ocsp2-lb.apple.com.akadns.net
       - ocsp2.apple.com
       - oscdn.apple.com
       - osrecovery.apple.com
-      - push.apple.com
-      - qwapi.com
       - skl.apple.com
       - swcdn.apple.com
       - swdist.apple.com
@@ -138,7 +121,6 @@ services:
       - valid.apple.com
       - wkms-public.apple.com
       - www-cdn.icloud.com.akadns.net
-      - wwwicloud.com
       - xp.apple.com
 
   - name: "Google FCM и системные сервисы Android"
@@ -163,15 +145,17 @@ services:
       - mtalk4.google.com
       - time.android.com
 
-  - name: "Push-уведомления вендоров Android (Xiaomi, Huawei, Samsung)"
+  - name: "Push-уведомления вендоров Android (Xiaomi, Huawei)"
     asn: []
     domains:
+      - api.xmpush.global.xiaomi.com
       - connect.rom.miui.com
       - connectivitycheck.platform.hicloud.com
-      - connectivitycheck.samsungcloud.com
-      - mipush.xiaomi.com
       - push.hicloud.com
-      - xmpush.xiaomi.com
+      - register.xmpush.xiaomi.com
+      - ru-api.xmpush.global.xiaomi.com
+      - ru.register.xmpush.global.xiaomi.com
+      - ru.resolver.msg.global.xiaomi.net
 
   # ============================================================
   # IP И GEO ЧЕККЕРЫ
