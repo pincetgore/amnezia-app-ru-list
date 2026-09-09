@@ -113,6 +113,8 @@ dns:
 | Сервис | IP-диапазоны | Домены |
 | ------ | ------ | ------ |
 | Apple (Push-уведомления APNs, iCloud и сервисы) | `17.249.0.0/16`, `17.252.0.0/16`, `17.57.144.0/22`, `17.188.128.0/18`, `17.188.20.0/23` | `push.apple.com`, `courier.push.apple.com`, `identity.apple.com`, `icloud.com` и др. |
+| Google FCM и системные сервисы Android | — | `mtalk.google.com`, `fcm.googleapis.com`, `connectivitycheck.gstatic.com` и др. |
+| Push-уведомления вендоров Android (Xiaomi, Huawei, Samsung) | — | `mipush.xiaomi.com`, `push.hicloud.com`, `connectivitycheck.samsungcloud.com` и др. |
 
 ### IP и GEO чеккеры
 

@@ -141,6 +141,38 @@ services:
       - wwwicloud.com
       - xp.apple.com
 
+  - name: "Google FCM и системные сервисы Android"
+    asn: []
+    domains:
+      - alt1-mtalk.google.com
+      - alt2-mtalk.google.com
+      - alt3-mtalk.google.com
+      - alt4-mtalk.google.com
+      - alt5-mtalk.google.com
+      - alt6-mtalk.google.com
+      - alt7-mtalk.google.com
+      - alt8-mtalk.google.com
+      - android.clients.google.com
+      - clients3.google.com
+      - connectivitycheck.android.com
+      - connectivitycheck.gstatic.com
+      - device-provisioning.googleapis.com
+      - fcm.googleapis.com
+      - firebaseinstallations.googleapis.com
+      - mtalk.google.com
+      - mtalk4.google.com
+      - time.android.com
+
+  - name: "Push-уведомления вендоров Android (Xiaomi, Huawei, Samsung)"
+    asn: []
+    domains:
+      - connect.rom.miui.com
+      - connectivitycheck.platform.hicloud.com
+      - connectivitycheck.samsungcloud.com
+      - mipush.xiaomi.com
+      - push.hicloud.com
+      - xmpush.xiaomi.com
+
   # ============================================================
   # IP И GEO ЧЕККЕРЫ
   # ============================================================
