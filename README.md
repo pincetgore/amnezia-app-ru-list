@@ -130,6 +130,13 @@ dns:
 | VK | AS28709, AS47541 и др. | `cloud.vk.com`, `mcs.mail.ru`, `mvk.com`, `userapi.com` и др. |
 | Mail.ru + Одноклассники | AS47764, AS49797 и др. | `biz.mail.ru`, `cloud.mail.ru`, `e.mail.ru`, `games.mail.ru` и др. |
 
+### Нейросети, AI и погода
+
+| Сервис | ASN | Домены |
+| ------ | ------ | ------ |
+| Нейросети и искусственный интеллект (GigaChat, Шедеврум) | — | `giga.chat`, `shedevrum.ai` |
+| Погодные сервисы (Гисметео, Метеум) | — | `gismeteo.ru`, `meteum.ai` |
+
 ### Банки и Финтех
 
 | Сервис | ASN | Домены |
@@ -185,6 +192,7 @@ dns:
 | Теле2 | `b2c-digest.ru`, `my.tele2.ru`, `t2.com`, `t2.ru` и др. |
 | Ростелеком | `lk.rt.ru`, `rostelecom.ru`, `rt.ru` |
 | Дом.ру | `domru.ru`, `ertelecom.ru`, `lk.domru.ru` |
+| Виртуальные мобильные операторы (Т-Мобайл, СберМобайл, ВТБ Мобайл, ГПБ Мобайл) | `gpbmobile.ru`, `sbermobile.ru`, `tinkoffmobile.ru`, `vtbmobile.ru` |
 
 ### E-commerce и маркетплейсы
 
@@ -230,6 +238,7 @@ dns:
 | Boxberry | AS204646 | `boxberry.ru` |
 | Деловые Линии | AS44633 | `dellin.ru` |
 | ПЭК (Первая Экспедиционная Компания) | AS41893 | `pecom.ru` |
+| Транспортные компании и курьерская доставка (DPD, Достависта, Байкал Сервис, ЖДЭ, Возовоз) | — | `baikalsr.ru`, `dostavista.ru`, `dpd.ru`, `jde.ru`, `vozovoz.ru` |
 
 ### Ритейл и продукты
 
@@ -307,6 +316,9 @@ dns:
 
 | Сервис | ASN | Домены |
 | ------ | ------ | ------ |
+| Правительство и Президент РФ (RSNet) | AS8291 | `council.gov.ru`, `duma.gov.ru`, `government.ru`, `kremlin.ru` |
+| Федеральные ведомства (РКН, Роспотребнадзор, ФАС, Минобороны) | AS61280 | `edu.ru`, `fas.gov.ru`, `mil.ru`, `rkn.gov.ru`, `rospotrebnadzor.ru` |
+| ЦИК РФ (Выборы) | — | `cikrf.ru`, `izbirkom.ru` |
 | Госуслуги | AS196747, AS48287 и др. | `esia.gosuslugi.ru`, `gosuslugi.ru`, `gu-st.ru`, `lk.gosuslugi.ru` и др. |
 | ФНС / Налоговая | AS25514, AS41892 и др. | `ebs.ru`, `goskey.ru`, `gov.ru`, `lkfl2.nalog.ru` и др. |
 | СФР / Социальный фонд России | AS42360 | `pfr.gov.ru`, `sfr.gov.ru` |
@@ -367,6 +379,9 @@ dns:
 | Smartavia | — | `flysmartavia.com`, `smartavia.ru` |
 | Red Wings | — | `flyredwings.com` |
 | Nordwind Airlines | — | `nordwindairlines.ru` |
+| Автозапчасти и автотовары (Exist, Автодок, Emex, ЕвроАвто, Колеса Даром) | AS204159 | `autodoc.ru`, `emex.ru`, `euroauto.ru`, `exist.ru`, `kolesa-darom.ru` |
+| Сети АЗС (Teboil, Нефтьмагистраль) | — | `neftm.ru`, `teboil.ru` |
+| Отели, бронирование и туры (Купибилет, Слетать.ру, Броневик) | — | `bronevik.com`, `kupibilet.ru`, `sletat.ru` |
 
 ### Автосигнализации и телематика
 
@@ -439,6 +454,8 @@ dns:
 | Планета Здоровья | — | `planetazdorovo.ru` |
 | Гемотест | AS200787 | `gemotest.ru` |
 | Хеликс | AS57677 | `helix.ru` |
+| Медицинские лаборатории (KDL, Ситилаб) | — | `citilab.ru`, `kdl.ru` |
+| Мониторинг диабета и уровня глюкозы (FreeStyle Libre, Medtrum, Sinocare iCan) | — | `freestylediabetes.ru`, `ican-sinocare.ru`, `medtrum.ru` |
 
 ### Страхование
 
