@@ -47,6 +47,10 @@ def test_aggregate_cidrs_ignores_default_route():
         {},
         {"services": [{"name": "Service", "domains": "example.com"}]},
         {"services": [{"name": "Service", "ip_ranges": ["not-a-network"]}]},
+        {"services": [{"name": "Service", "domain": ["example.com"]}]},  # Опечатка в ключе: domain вместо domains
+        {"services": [{"name": "Service", "extra_field": 123, "domains": ["example.com"]}]},  # Неизвестное поле
+        {"services": [{"name": "Service", "domains": [" example.com "]}]},  # Пробелы по краям
+        {"services": [{"name": "Service", "domains": ["exam ple.com"]}]},  # Пробел внутри
         {"services": [], "dns": {"nameservers": []}},
         {"services": [], "dns": {"timeout": 0}},
     ],

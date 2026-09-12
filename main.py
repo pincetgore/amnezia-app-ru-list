@@ -22,6 +22,7 @@ from resolvers.dns import resolve_domains
 logger = logging.getLogger(__name__)
 
 DEFAULT_NAMESERVERS = ["77.88.8.8", "77.88.8.1", "8.8.8.8", "1.1.1.1"]
+ALLOWED_SERVICE_KEYS = {"name", "asn", "domains", "ip_ranges"}
 
 
 def validate_config(config: Dict[str, Any]) -> None:
@@ -40,6 +41,10 @@ def validate_config(config: Dict[str, Any]) -> None:
         if not isinstance(name, str) or not name.strip():
             raise ValueError(f"Service at index {index} must have a non-empty string 'name'")
 
+        extra_keys = set(service.keys()) - ALLOWED_SERVICE_KEYS
+        if extra_keys:
+            raise ValueError(f"Service '{name}' has unknown fields: {sorted(extra_keys)}")
+
         for field in ("asn", "domains", "ip_ranges"):
             value = service.get(field)
             if value is not None and not isinstance(value, list):
@@ -51,7 +56,7 @@ def validate_config(config: Dict[str, Any]) -> None:
             if isinstance(asn, bool) or not isinstance(asn, int) or asn <= 0:
                 raise ValueError(f"Invalid ASN for service '{name}': {asn!r}")
         for domain in service.get("domains") or []:
-            if not isinstance(domain, str) or not domain.strip():
+            if not isinstance(domain, str) or not domain.strip() or " " in domain or domain != domain.strip():
                 raise ValueError(f"Invalid domain for service '{name}': {domain!r}")
         for ip_range in service.get("ip_ranges") or []:
             if not isinstance(ip_range, str):

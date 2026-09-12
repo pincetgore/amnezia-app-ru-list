@@ -2,7 +2,7 @@
 Резолвер DNS доменов.
 
 Получает IPv4-адреса для списка доменных имен через запросы DNS A-записей.
-Каждый полученный IP-адрес возвращается как сеть /32. Это дополняет
+Каждый полученный валидный IP-адрес возвращается как сеть /32. Это дополняет
 получение префиксов на основе ASN для сервисов, которые не имеют выделенной ASN
 или используют общий/облачный хостинг.
 """
@@ -20,12 +20,28 @@ logger = logging.getLogger(__name__)
 _thread_local = threading.local()
 
 
+def _is_valid_ip(net: IPv4Network) -> bool:
+    """Проверяет валидность полученного через DNS IPv4-адреса.
+
+    Исключает:
+    - Неопределенные адреса (0.0.0.0/8, 0.0.0.0/32)
+    - Loopback адреса (127.0.0.0/8, 127.0.0.1)
+    - Multicast / Class E (>= 224.0.0.0/4)
+    """
+    if net.is_unspecified or net.is_loopback or net.is_multicast:
+        return False
+    if str(net.network_address).startswith("0."):
+        return False
+    return True
+
+
 def _to_ascii_domain(domain: str) -> str:
     """Нормализует IDN (кириллические домены в punycode) для DNS-резолвинга."""
+    clean_domain = domain.strip()
     try:
-        return domain.encode("idna").decode("ascii")
+        return clean_domain.encode("idna").decode("ascii")
     except Exception:
-        return domain
+        return clean_domain
 
 
 def _get_worker_resolver(base_resolver: dns.resolver.Resolver) -> dns.resolver.Resolver:
@@ -34,12 +50,14 @@ def _get_worker_resolver(base_resolver: dns.resolver.Resolver) -> dns.resolver.R
     if res is None:
         try:
             res = dns.resolver.Resolver(configure=False)
-            res.nameservers = list(base_resolver.nameservers)
-            res.timeout = base_resolver.timeout
-            res.lifetime = base_resolver.lifetime
         except Exception:
             res = base_resolver
         _thread_local.resolver = res
+
+    if res is not base_resolver:
+        res.nameservers = list(base_resolver.nameservers)
+        res.timeout = base_resolver.timeout
+        res.lifetime = base_resolver.lifetime
     return res
 
 
@@ -52,10 +70,16 @@ def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> Tupl
         answers = resolver.resolve(ascii_domain, "A")
         for rdata in answers:
             ip = str(rdata)
-            net = IPv4Network(f"{ip}/32", strict=False)
-            networks.append(net)
-            logger.debug("DNS %s -> %s", domain, ip)
-        logger.debug("DNS %s: resolved %d A records", domain, len(answers))
+            try:
+                net = IPv4Network(f"{ip}/32", strict=False)
+                if _is_valid_ip(net):
+                    networks.append(net)
+                    logger.debug("DNS %s -> %s", domain, ip)
+                else:
+                    logger.warning("Ignoring invalid/sinkholed IP %s for %s", ip, domain)
+            except ValueError:
+                logger.warning("Invalid IP %s returned for %s", ip, domain)
+        logger.debug("DNS %s: resolved %d valid A records", domain, len(networks))
     except dns.resolver.NXDOMAIN:
         logger.warning("DNS domain does not exist (NXDOMAIN) for %s", domain)
         warning = domain
@@ -122,7 +146,7 @@ def resolve_domains(
     effective_workers = min(max_workers, len(domains)) if domains else max_workers
     with concurrent.futures.ThreadPoolExecutor(max_workers=effective_workers) as executor:
         futures = [executor.submit(_worker_resolve, domain, resolver) for domain in domains]
-        
+
         for future in concurrent.futures.as_completed(futures):
             nets, warn = future.result()
             networks.extend(nets)
