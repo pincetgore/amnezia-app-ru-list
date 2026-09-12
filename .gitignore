@@ -30,24 +30,48 @@ ENV/
 env/
 .env
 
-# Testing
+# Testing & Type checking
 .pytest_cache/
 .coverage
+.coverage.*
+coverage.xml
 htmlcov/
 .tox/
 .hypothesis/
+.mypy_cache/
+.ruff_cache/
+.pytype/
+*.pyre/
 
-# IDE
+# Logs & Temporary files
+*.log
+*.tmp
+.*.tmp
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# IDE & Editors
 .idea/
 .vscode/
+.zed/
+.fleet/
 *.swp
 *.swo
 *~
-.DS_Store
+*.sublime-project
+*.sublime-workspace
 
 # Generated output
 ip-list*.json
 cidrs*.txt
 
-# Project-specific
+# Project-specific local overrides
 config.local.yaml
+config.local.yml
+*.local.yaml
+*.local.yml
