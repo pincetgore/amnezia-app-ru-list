@@ -81,7 +81,7 @@ class TestASNResolver:
         """Проверяет обработку сетевой ошибки - возвращает None для fallback."""
         # Используем RequestException из requests, чтобы пройти через retry логику
         import requests
-        
+
         with patch("resolvers.asn._session.get", side_effect=requests.RequestException("Network error")):
             result = get_prefixes_ripe(12389)
 
@@ -132,7 +132,7 @@ class TestASNResolver:
     def test_get_prefixes_he_error(self):
         """Проверяет обработку ошибки при запросе к bgp.he.net."""
         import requests
-        
+
         with patch("resolvers.asn._session.get", side_effect=requests.RequestException("Network error")):
             result = get_prefixes_he(12389)
 
@@ -142,24 +142,28 @@ class TestASNResolver:
         """Проверяет приоритет RIPE над bgp.he.net."""
         mock_ripe = [IPv4Network("1.2.3.0/24")]
 
-        with patch("resolvers.asn.get_prefixes_ripe", return_value=mock_ripe) as mock_ripe_func:
-            with patch("resolvers.asn.get_prefixes_he") as mock_he_func:
-                result = resolve_asn(12389)
+        with (
+            patch("resolvers.asn.get_prefixes_ripe", return_value=mock_ripe) as mock_ripe_func,
+            patch("resolvers.asn.get_prefixes_he") as mock_he_func,
+        ):
+            result = resolve_asn(12389)
 
-                assert result == mock_ripe
-                mock_ripe_func.assert_called_once_with(12389)
-                mock_he_func.assert_not_called()
+            assert result == mock_ripe
+            mock_ripe_func.assert_called_once_with(12389)
+            mock_he_func.assert_not_called()
 
     def test_resolve_asn_fallback_to_he(self):
         """Проверяет fallback на bgp.he.net при сбое RIPE."""
         mock_he = [IPv4Network("4.5.6.0/24")]
 
-        with patch("resolvers.asn.get_prefixes_ripe", return_value=None):
-            with patch("resolvers.asn.get_prefixes_he", return_value=mock_he) as mock_he_func:
-                result = resolve_asn(12389)
+        with (
+            patch("resolvers.asn.get_prefixes_ripe", return_value=None),
+            patch("resolvers.asn.get_prefixes_he", return_value=mock_he) as mock_he_func,
+        ):
+            result = resolve_asn(12389)
 
-                assert result == mock_he
-                mock_he_func.assert_called_once_with(12389)
+            assert result == mock_he
+            mock_he_func.assert_called_once_with(12389)
 
     def test_resolve_asn_with_string_format(self):
         """Проверяет корректность обработки строковых ASN (например, 'AS12389')."""
@@ -220,6 +224,7 @@ class TestDNSResolver:
         assert len(networks) == 2
         assert IPv4Network("1.2.3.4/32") in networks
         assert IPv4Network("5.6.7.8/32") in networks
+        assert warning is None
 
     def test_resolve_single_domain_filters_sinkholed_and_loopback_ips(self):
         """Проверяет, что 0.0.0.0, 127.0.0.1 и multicast фильтруются при резолвинге."""
@@ -314,14 +319,17 @@ class TestDNSResolver:
 
         assert len(networks) == 1
         assert IPv4Network("1.2.3.4/32") in networks
+        assert warning is None
         mock_resolver.resolve.assert_called_once_with("xn--e1aybc.xn--p1ai", "A")
 
     def test_resolve_domains_limits_workers_to_domain_count(self):
         """Проверяет оптимизацию: число воркеров ограничивается числом доменов."""
         import concurrent.futures
-        with patch("resolvers.dns.concurrent.futures.ThreadPoolExecutor", wraps=concurrent.futures.ThreadPoolExecutor) as mock_executor_cls:
-            with patch("resolvers.dns._worker_resolve", return_value=([], None)):
-                resolve_domains(["a.com", "b.com"], timeout=20, max_workers=30)
+        with (
+            patch("resolvers.dns.concurrent.futures.ThreadPoolExecutor", wraps=concurrent.futures.ThreadPoolExecutor) as mock_executor_cls,
+            patch("resolvers.dns._worker_resolve", return_value=([], None)),
+        ):
+            resolve_domains(["a.com", "b.com"], timeout=20, max_workers=30)
             mock_executor_cls.assert_called_with(max_workers=2)
 
 

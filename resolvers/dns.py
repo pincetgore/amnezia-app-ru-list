@@ -11,7 +11,6 @@ import concurrent.futures
 import logging
 import threading
 from ipaddress import IPv4Network
-from typing import List, Optional, Tuple
 
 import dns.exception
 import dns.resolver
@@ -31,9 +30,7 @@ def _is_valid_ip(net: IPv4Network) -> bool:
     """
     if net.is_unspecified or net.is_loopback or net.is_multicast:
         return False
-    if str(net.network_address).startswith("0."):
-        return False
-    return True
+    return not str(net.network_address).startswith("0.")
 
 
 def _to_ascii_domain(domain: str) -> str:
@@ -62,7 +59,7 @@ def _get_worker_resolver(base_resolver: dns.resolver.Resolver) -> dns.resolver.R
     return res
 
 
-def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> Tuple[List[IPv4Network], Optional[str]]:
+def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> tuple[list[IPv4Network], str | None]:
     """Вспомогательная функция для получения IP-адресов одного домена."""
     networks = []
     warning = None
@@ -96,18 +93,18 @@ def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> Tupl
     return networks, warning
 
 
-def _worker_resolve(domain: str, base_resolver: dns.resolver.Resolver) -> Tuple[List[IPv4Network], Optional[str]]:
+def _worker_resolve(domain: str, base_resolver: dns.resolver.Resolver) -> tuple[list[IPv4Network], str | None]:
     """Воркер с получением потокобезопасного экземпляра Resolver."""
     resolver = _get_worker_resolver(base_resolver)
     return _resolve_single_domain(domain, resolver)
 
 
 def resolve_domains(
-    domains: List[str],
+    domains: list[str],
     timeout: int = 10,
     max_workers: int = 20,
-    nameservers: Optional[List[str]] = None,
-) -> Tuple[List[IPv4Network], List[str]]:
+    nameservers: list[str] | None = None,
+) -> tuple[list[IPv4Network], list[str]]:
     """Получает IPv4-сети /32 для списка доменов и возвращает предупреждения.
 
     Параметры:

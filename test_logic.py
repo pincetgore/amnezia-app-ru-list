@@ -1,8 +1,8 @@
+from ipaddress import IPv4Network
 from pathlib import Path
 
 import pytest
 import yaml
-from ipaddress import IPv4Network
 
 import main as app
 from main import validate_config
@@ -20,7 +20,7 @@ def test_aggregate_cidrs_removes_subnets():
     ]
     result = aggregate_networks(ips)
     result_strs = [str(net) for net in result]
-    
+
     assert "10.0.0.0/8" in result_strs
     assert "10.1.0.0/16" not in result_strs, "Вложенная подсеть 10.1.0.0/16 не была удалена!"
     assert "192.168.1.1/32" in result_strs
@@ -146,9 +146,9 @@ def test_write_output_replaces_existing_file_atomically(tmp_path: Path):
 
 def test_config_yaml_is_valid():
     """Проверяет, что рабочий config.yaml имеет правильную структуру."""
-    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+    with open(CONFIG_PATH, encoding="utf-8") as f:
         config = yaml.safe_load(f)
-    
+
     assert isinstance(config, dict), "Конфиг должен быть словарем"
     assert "services" in config, "Конфиг должен содержать ключ 'services'"
     services = config["services"]
@@ -158,15 +158,15 @@ def test_config_yaml_is_valid():
     for entry in services:
         assert "name" in entry, f"Отсутствует 'name' в записи: {entry}"
         assert "asn" in entry or "domains" in entry or "ip_ranges" in entry, f"Запись {entry['name']} должна иметь asn, domains или ip_ranges"
-        
-        if "asn" in entry and entry["asn"]:
+
+        if entry.get("asn"):
             assert isinstance(entry["asn"], list), f"ASN в {entry['name']} должен быть списком"
             for asn in entry["asn"]:
                 assert isinstance(asn, int), f"ASN {asn} должен быть числом"
 
 def test_domains_format():
     """Проверяет отсутствие опечаток (например http://) в доменах."""
-    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+    with open(CONFIG_PATH, encoding="utf-8") as f:
         config = yaml.safe_load(f)
     services = config.get("services", [])
     for entry in services:
@@ -178,12 +178,12 @@ def test_domains_format():
 
 def test_no_duplicate_domains():
     """Проверяет отсутствие дубликатов доменов во всем config.yaml."""
-    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+    with open(CONFIG_PATH, encoding="utf-8") as f:
         config = yaml.safe_load(f)
-    
+
     seen_domains = {}
     duplicates = []
-    
+
     for service in config.get("services", []):
         service_name = service.get("name", "Unknown")
         for domain in service.get("domains") or []:
@@ -191,7 +191,7 @@ def test_no_duplicate_domains():
                 duplicates.append(f"{domain} (в '{service_name}' и '{seen_domains[domain]}')")
             else:
                 seen_domains[domain] = service_name
-                
+
     assert not duplicates, "Найдены дублирующиеся домены:\n" + "\n".join(duplicates)
 
 
@@ -201,12 +201,12 @@ def test_no_duplicate_domains():
 ])
 def test_no_duplicates_config(field_name, item_type):
     """Проверяет отсутствие дубликатов в конфигурации (ASN, IP ranges)."""
-    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+    with open(CONFIG_PATH, encoding="utf-8") as f:
         config = yaml.safe_load(f)
-    
+
     seen_items = {}
     duplicates = []
-    
+
     for service in config.get("services", []):
         service_name = service.get("name", "Unknown")
         for item in service.get(field_name) or []:
@@ -215,14 +215,14 @@ def test_no_duplicates_config(field_name, item_type):
                 duplicates.append(f"{item_str} (в '{service_name}' и '{seen_items[item]}')")
             else:
                 seen_items[item] = service_name
-                
+
     assert not duplicates, f"Найдены дублирующиеся {item_type}:\n" + "\n".join(duplicates)
 
 
 def test_loopback_covers_localhost():
     """Проверяет, что диапазон loopback в конфигурации покрывает 127.0.0.1 (localhost)."""
     from ipaddress import IPv4Address
-    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+    with open(CONFIG_PATH, encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
     local_service = next(s for s in config["services"] if "Локальные сети" in s["name"])

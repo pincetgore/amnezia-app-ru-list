@@ -10,7 +10,7 @@ import logging
 import signal
 import sys
 from ipaddress import IPv4Address, IPv4Network
-from typing import Any, Dict, List
+from typing import Any
 
 import yaml
 from tqdm import tqdm
@@ -25,7 +25,7 @@ DEFAULT_NAMESERVERS = ["77.88.8.8", "77.88.8.1", "8.8.8.8", "1.1.1.1"]
 ALLOWED_SERVICE_KEYS = {"name", "asn", "domains", "ip_ranges"}
 
 
-def validate_config(config: Dict[str, Any]) -> None:
+def validate_config(config: dict[str, Any]) -> None:
     """Проверяет структуру конфигурации до выполнения сетевых запросов."""
     if not isinstance(config, dict):
         raise ValueError("Config root must be a mapping")
@@ -88,7 +88,7 @@ def validate_config(config: Dict[str, Any]) -> None:
                 raise ValueError(f"'dns.{field}' must be a positive number")
 
 
-def load_config(path: str = "config.yaml") -> Dict[str, Any]:
+def load_config(path: str = "config.yaml") -> dict[str, Any]:
     """Загружает определения сервисов из конфигурационного файла YAML."""
     try:
         with open(path, encoding="utf-8") as f:
@@ -109,7 +109,7 @@ def _handle_sigint(sig, frame):
 
 def main():
     """Главная функция: загружает сервисы из config.yaml, резолвит их IP через ASN/DNS и генерирует список.
-    
+
     Алгоритм:
     1. Загружает конфигурацию сервисов из config.yaml
     2. Для каждого сервиса получает IP-префиксы через RIPE API/bgp.he.net по ASN
@@ -121,7 +121,7 @@ def main():
     """
     # Регистрация обработчика для graceful shutdown
     signal.signal(signal.SIGINT, _handle_sigint)
-    
+
     # -- Парсинг аргументов командной строки (CLI) --
     parser = argparse.ArgumentParser(
         description="Generate IP bypass list for Russian services (AmneziaVPN split tunneling)"

@@ -1,12 +1,9 @@
 """
-Резолвер ASN в префиксы.
+Резолвер ASN (Autonomous System Number).
 
-Получает все анонсированные IPv4-префиксы для заданного номера автономной системы (ASN).
-Основной источник: RIPE NCC RISstat API.
-Резервный источник: парсинг HTML с bgp.he.net.
-
-Для предотвращения блокировки со стороны API применяется глобальное ограничение скорости
-(минимум 1 секунда между запросами).
+Получает анонсированные IPv4-префиксы для ASN через RIPE NCC Stat API.
+В качестве резервного источника (fallback) используется парсинг bgp.he.net,
+если RIPE API недоступен или возвращает ошибки.
 """
 
 import logging
@@ -14,7 +11,8 @@ import re
 import threading
 import time
 from ipaddress import IPv4Network
-from typing import Any, List, Optional
+from typing import Any
+from urllib.parse import quote
 
 import requests
 from bs4 import BeautifulSoup
@@ -23,10 +21,8 @@ from urllib3.util.retry import Retry
 
 logger = logging.getLogger(__name__)
 
-# Эндпоинт RIPE NCC RISstat API для анонсированных префиксов
-RIPE_API_URL = "https://stat.ripe.net/data/announced-prefixes/data.json"
-
-# Hurricane Electric BGP Toolkit — используется как резерв, если RIPE не возвращает данные
+# URL API для получения префиксов ASN
+RIPE_API_URL = "https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS{asn}"
 HE_BGP_URL = "https://bgp.he.net/AS{asn}#_prefixes4"
 
 # Предварительно скомпилированное регулярное выражение для поиска CIDR
@@ -39,9 +35,10 @@ _last_request_time = 0.0
 # Мьютекс для потокобезопасного ограничения скорости запросов
 _rate_limit_lock = threading.Lock()
 
+
 def _create_session_with_retries() -> requests.Session:
     """Создает requests.Session с автоматическим retry для сетевых сбоев.
-    
+
     Выполняет до трёх повторных запросов (до четырёх суммарных попыток)
     с exponential backoff при:
     - 429 (Too Many Requests)
@@ -56,7 +53,7 @@ def _create_session_with_retries() -> requests.Session:
         ),
         "Accept": "application/json, text/html, */*",
     })
-    
+
     # Настройка retry стратегии
     retry_strategy = Retry(
         total=3,                                    # До 3 повторов после первоначального запроса
@@ -64,15 +61,17 @@ def _create_session_with_retries() -> requests.Session:
         status_forcelist=[429, 500, 502, 503, 504],  # Коды для повтора
         allowed_methods=["GET"],                    # Только GET запросы
     )
-    
+
     adapter = HTTPAdapter(max_retries=retry_strategy)
     session.mount("http://", adapter)
     session.mount("https://", adapter)
-    
+
     return session
+
 
 # Переиспользование соединения для производительности (с retry логикой)
 _session = _create_session_with_retries()
+
 
 def _rate_limit():
     """Обеспечивает минимальный интервал в 1 секунду между последовательными запросами к API."""
@@ -104,12 +103,10 @@ def _is_valid_prefix(net: IPv4Network) -> bool:
         return False
     if net.is_unspecified or net.is_loopback or net.is_multicast:
         return False
-    if str(net.network_address).startswith("0."):
-        return False
-    return True
+    return not str(net.network_address).startswith("0.")
 
 
-def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]]:
+def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network] | None:
     """Получает все анонсированные IPv4-префиксы для ASN из RIPE NCC API.
 
     Возвращает None при сбое сетевого запроса или парсинга, чтобы вызывающая функция
@@ -118,115 +115,112 @@ def get_prefixes_ripe(asn: int, timeout: int = 30) -> Optional[List[IPv4Network]
     _rate_limit()
     try:
         resp = _session.get(
-            RIPE_API_URL,
-            params={"resource": f"AS{asn}"},
+            RIPE_API_URL.format(asn=quote(str(asn), safe="")),
             timeout=timeout,
         )
         resp.raise_for_status()
         data = resp.json()
-
-        prefixes = []
-        data_section = data.get("data") if isinstance(data, dict) else None
-        entries = (data_section or {}).get("prefixes") or []
-        for entry in entries:
-            if not isinstance(entry, dict):
-                continue
-            prefix = entry.get("prefix", "")
-            # Пропускаем невалидные строки и IPv6-префиксы (содержат двоеточия)
-            if not isinstance(prefix, str) or ":" in prefix or not prefix.strip():
-                continue
-            try:
-                net = IPv4Network(prefix, strict=False)
-                if _is_valid_prefix(net):
-                    prefixes.append(net)
-                else:
-                    logger.warning("Ignoring broad/invalid prefix from RIPE for AS%d: %s", asn, prefix)
-            except ValueError:
-                logger.warning("Invalid prefix from RIPE for AS%d: %s", asn, prefix)
-        logger.debug("AS%d: got %d prefixes from RIPE", asn, len(prefixes))
-        return prefixes
-
-    except (requests.RequestException, ValueError, AttributeError, KeyError) as e:
-        logger.warning("RIPE API failed for AS%d: %s", asn, e)
+    except Exception as e:
+        logger.warning("RIPE API failed for AS%s: %s", asn, e)
         return None
 
+    data_section = data.get("data") if isinstance(data, dict) else None
+    entries = data_section.get("prefixes", []) if isinstance(data_section, dict) else []
+    prefixes = []
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        prefix = entry.get("prefix")
+        if not prefix or not isinstance(prefix, str) or not CIDR_RE.match(prefix):
+            continue
+        try:
+            net = IPv4Network(prefix, strict=False)
+            if _is_valid_prefix(net):
+                prefixes.append(net)
+        except ValueError:
+            continue
 
-def get_prefixes_he(asn: int, timeout: int = 30) -> List[IPv4Network]:
+    logger.debug("RIPE API AS%s: found %d IPv4 prefixes", asn, len(prefixes))
+    return prefixes
+
+
+def get_prefixes_he(asn: int, timeout: int = 30) -> list[IPv4Network]:
     """Парсит анонсированные IPv4-префиксы с bgp.he.net (резервный вариант).
 
-    Извлекает CIDR-префиксы из элементов HTML-страницы с использованием BeautifulSoup.
-    Менее надежен, чем RIPE, но полезен, когда RIPE возвращает пустой результат.
+    Вызывается только если RIPE NCC API недоступен или возвращает пустые данные.
     """
     _rate_limit()
     try:
         resp = _session.get(
-            HE_BGP_URL.format(asn=asn),
+            HE_BGP_URL.format(asn=quote(str(asn), safe="")),
             timeout=timeout,
         )
         resp.raise_for_status()
+    except Exception as e:
+        logger.error("bgp.he.net request failed for AS%s: %s", asn, e)
+        return []
 
-        soup = BeautifulSoup(resp.text, "html.parser")
-        prefixes = []
-        seen_prefixes = set()
+    soup = BeautifulSoup(resp.text, "html.parser")
+    prefixes = []
+    seen_prefixes = set()
 
-        # Извлекаем префиксы из ссылок и ячеек таблиц
-        elements = soup.find_all(["a", "td"])
-        for elem in elements:
-            text = elem.get_text().strip()
-            if CIDR_RE.match(text) and text not in seen_prefixes:
-                seen_prefixes.add(text)
+    for elem in soup.find_all(["a", "td"]):
+        text = elem.get_text().strip()
+        if CIDR_RE.match(text) and text not in seen_prefixes:
+            seen_prefixes.add(text)
+            try:
+                net = IPv4Network(text, strict=False)
+                if _is_valid_prefix(net):
+                    prefixes.append(net)
+            except ValueError:
+                continue
+
+    if not prefixes:
+        for p in CIDR_RAW_RE.findall(resp.text):
+            if p not in seen_prefixes:
+                seen_prefixes.add(p)
                 try:
-                    net = IPv4Network(text, strict=False)
+                    net = IPv4Network(p, strict=False)
                     if _is_valid_prefix(net):
                         prefixes.append(net)
                 except ValueError:
-                    pass
+                    continue
 
-        # Если не нашли элементы через теги a/td, используем паттерн во всём тексте в качестве запасного сценария
-        if not prefixes:
-            raw = CIDR_RAW_RE.findall(resp.text)
-            for p in raw:
-                if p not in seen_prefixes:
-                    seen_prefixes.add(p)
-                    try:
-                        net = IPv4Network(p, strict=False)
-                        if _is_valid_prefix(net):
-                            prefixes.append(net)
-                    except ValueError:
-                        pass
-
-        logger.debug("AS%d: got %d prefixes from bgp.he.net (fallback)", asn, len(prefixes))
-        return prefixes
-
-    except (requests.RequestException, ValueError, AttributeError, KeyError) as e:
-        logger.warning("bgp.he.net failed for AS%d: %s", asn, e)
-        return []
+    logger.debug("bgp.he.net AS%s: found %d IPv4 prefixes", asn, len(prefixes))
+    return prefixes
 
 
-def resolve_asn(asn: Any) -> List[IPv4Network]:
+def resolve_asn(asn: Any) -> list[IPv4Network]:
     """Получает все IPv4-префиксы для ASN.
 
-    Сначала пытается использовать RIPE NCC; если RIPE не возвращает результаты (None или []), переключается на bgp.he.net.
-    Принимает как целые числа, так и строки (например, "12345" или "AS12345"), нормализуя их.
+    Сначала опрашивает RIPE NCC Stat API; при сбое или пустом результате
+    переключается на резервный источник bgp.he.net.
+    Возвращает список объектов IPv4Network.
     """
-    if isinstance(asn, str):
-        # Удаляем "AS" префикс в любом регистре и пробелы
-        asn_clean = asn.upper().replace("AS", "").strip()
-        try:
-            asn = int(asn_clean)
-        except ValueError:
-            logger.error("Invalid ASN format: '%s'", asn)
-            return []
-    elif isinstance(asn, bool) or not isinstance(asn, int):
-        logger.error("ASN must be an int or a string, got: %s", type(asn))
+    if isinstance(asn, bool):
+        logger.error("Invalid ASN %r: booleans are not valid ASNs", asn)
         return []
 
-    if asn <= 0:
-        logger.error("ASN must be a positive integer, got: %r", asn)
+    clean_asn = None
+    if isinstance(asn, int):
+        if asn > 0:
+            clean_asn = asn
+    elif isinstance(asn, str):
+        normalized = asn.strip().upper()
+        if normalized.startswith("AS"):
+            normalized = normalized[2:]
+        if normalized.isdigit():
+            val = int(normalized)
+            if val > 0:
+                clean_asn = val
+
+    if clean_asn is None:
+        logger.error("Invalid ASN %r: must be a positive integer (e.g. 12389, 'AS12389')", asn)
         return []
 
-    prefixes = get_prefixes_ripe(asn)
-    if not prefixes:
-        prefixes = get_prefixes_he(asn)
-    return prefixes or []
+    prefixes = get_prefixes_ripe(clean_asn)
+    if prefixes is not None:
+        return prefixes
 
+    logger.info("Falling back to bgp.he.net for AS%s", clean_asn)
+    return get_prefixes_he(clean_asn)

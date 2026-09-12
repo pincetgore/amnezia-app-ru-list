@@ -13,10 +13,10 @@ import os
 import tempfile
 from ipaddress import IPv4Network, collapse_addresses
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 
-def aggregate_networks(networks: List[IPv4Network]) -> List[IPv4Network]:
+def aggregate_networks(networks: list[IPv4Network]) -> list[IPv4Network]:
     """Удаляет дубликаты и агрегирует сети.
 
     Использует collapse_addresses() из стандартной библиотеки для слияния перекрывающихся/смежных подсетей
@@ -32,7 +32,7 @@ def aggregate_networks(networks: List[IPv4Network]) -> List[IPv4Network]:
     return list(collapse_addresses(valid_networks))
 
 
-def format_amnezia(sorted_nets: List[IPv4Network]) -> List[Dict[str, str]]:
+def format_amnezia(sorted_nets: list[IPv4Network]) -> list[dict[str, str]]:
     """Формирует JSON-структуру для AmneziaVPN из результатов по каждому сервису.
 
     Структура вывода:
@@ -41,16 +41,16 @@ def format_amnezia(sorted_nets: List[IPv4Network]) -> List[Dict[str, str]]:
     return [{"hostname": str(net), "ip": ""} for net in sorted_nets]
 
 
-def format_plain(sorted_nets: List[IPv4Network]) -> str:
+def format_plain(sorted_nets: list[IPv4Network]) -> str:
     """Формирует простой текстовый список CIDR (один префикс на строку)."""
     return "\n".join(str(n) for n in sorted_nets) + "\n"
 
 
 def write_output(
-    service_results: List[Dict[str, Any]],
+    service_results: list[dict[str, Any]],
     output_path: str,
     fmt: str = "amnezia"
-) -> List[IPv4Network]:
+) -> list[IPv4Network]:
     """Записывает отформатированный вывод в файл.
 
     Поддерживаемые форматы:
