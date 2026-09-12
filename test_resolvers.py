@@ -8,18 +8,29 @@ Unit-тесты для resolvers (ASN и DNS) с использованием м
 - Корректность создания /32 сетей для IP адресов
 """
 
-import pytest
-from unittest.mock import patch, MagicMock
 from ipaddress import IPv4Network
+from unittest.mock import MagicMock, patch
 
 import dns.resolver
-from resolvers.asn import get_prefixes_ripe, get_prefixes_he, resolve_asn
+import pytest
+
+from resolvers.asn import get_prefixes_he, get_prefixes_ripe, resolve_asn
 from resolvers.dns import (
-    resolve_domains,
-    _resolve_single_domain,
     _get_worker_resolver,
     _is_valid_ip,
+    _resolve_single_domain,
+    resolve_domains,
 )
+
+
+class _DummyRdata:
+    """Простой эмулятор DNS rdata объекта для тестирования."""
+
+    def __init__(self, address: str) -> None:
+        self.address = address
+
+    def __str__(self) -> str:
+        return self.address
 
 
 @pytest.fixture(autouse=True)
@@ -50,6 +61,7 @@ class TestASNResolver:
         with patch("resolvers.asn._session.get", return_value=mock_response):
             result = get_prefixes_ripe(12389)
 
+        assert result is not None
         assert len(result) == 2
         assert IPv4Network("1.2.3.0/24") in result
         assert IPv4Network("4.5.6.0/24") in result
@@ -180,9 +192,7 @@ class TestDNSResolver:
     def test_resolve_single_domain_success(self):
         """Проверяет успешный резолвинг домена в /32 сеть."""
         mock_resolver = MagicMock()
-        mock_rdata = MagicMock()
-        mock_rdata.__str__.return_value = "1.2.3.4"
-        mock_resolver.resolve.return_value = [mock_rdata]
+        mock_resolver.resolve.return_value = [_DummyRdata("1.2.3.4")]
 
         networks, warning = _resolve_single_domain("example.com", mock_resolver)
 
@@ -203,14 +213,7 @@ class TestDNSResolver:
     def test_resolve_single_domain_multiple_ips(self):
         """Проверяет резолвинг домена с несколькими A-записями."""
         mock_resolver = MagicMock()
-
-        # Создаем несколько mock rdata
-        mock_rdata1 = MagicMock()
-        mock_rdata1.__str__.return_value = "1.2.3.4"
-        mock_rdata2 = MagicMock()
-        mock_rdata2.__str__.return_value = "5.6.7.8"
-
-        mock_resolver.resolve.return_value = [mock_rdata1, mock_rdata2]
+        mock_resolver.resolve.return_value = [_DummyRdata("1.2.3.4"), _DummyRdata("5.6.7.8")]
 
         networks, warning = _resolve_single_domain("example.com", mock_resolver)
 
@@ -221,21 +224,11 @@ class TestDNSResolver:
     def test_resolve_single_domain_filters_sinkholed_and_loopback_ips(self):
         """Проверяет, что 0.0.0.0, 127.0.0.1 и multicast фильтруются при резолвинге."""
         mock_resolver = MagicMock()
-
-        mock_rdata_valid = MagicMock()
-        mock_rdata_valid.__str__.return_value = "93.184.216.34"
-        mock_rdata_zero = MagicMock()
-        mock_rdata_zero.__str__.return_value = "0.0.0.0"
-        mock_rdata_loopback = MagicMock()
-        mock_rdata_loopback.__str__.return_value = "127.0.0.1"
-        mock_rdata_multicast = MagicMock()
-        mock_rdata_multicast.__str__.return_value = "224.0.0.1"
-
         mock_resolver.resolve.return_value = [
-            mock_rdata_valid,
-            mock_rdata_zero,
-            mock_rdata_loopback,
-            mock_rdata_multicast,
+            _DummyRdata("93.184.216.34"),
+            _DummyRdata("0.0.0.0"),
+            _DummyRdata("127.0.0.1"),
+            _DummyRdata("224.0.0.1"),
         ]
 
         networks, warning = _resolve_single_domain("example.com", mock_resolver)
@@ -315,9 +308,7 @@ class TestDNSResolver:
     def test_resolve_single_domain_idn_punycode(self):
         """Проверяет преобразование кириллического домена в punycode при DNS-запросе."""
         mock_resolver = MagicMock()
-        mock_rdata = MagicMock()
-        mock_rdata.__str__.return_value = "1.2.3.4"
-        mock_resolver.resolve.return_value = [mock_rdata]
+        mock_resolver.resolve.return_value = [_DummyRdata("1.2.3.4")]
 
         networks, warning = _resolve_single_domain("тест.рф", mock_resolver)
 

@@ -13,6 +13,7 @@ import threading
 from ipaddress import IPv4Network
 from typing import List, Optional, Tuple
 
+import dns.exception
 import dns.resolver
 
 logger = logging.getLogger(__name__)
