@@ -153,7 +153,7 @@ class TestASNResolver:
             mock_he_func.assert_not_called()
 
     def test_resolve_asn_fallback_to_he(self):
-        """Проверяет fallback на bgp.he.net при сбое RIPE."""
+        """Проверяет fallback на bgp.he.net при сбое RIPE (None)."""
         mock_he = [IPv4Network("4.5.6.0/24")]
 
         with (
@@ -164,6 +164,19 @@ class TestASNResolver:
 
             assert result == mock_he
             mock_he_func.assert_called_once_with(12389)
+
+    def test_resolve_asn_fallback_to_he_on_empty_ripe(self):
+        """Проверяет fallback на bgp.he.net, когда RIPE возвращает пустой список префиксов []."""
+        mock_he = [IPv4Network("4.5.6.0/24")]
+
+        with (
+            patch("resolvers.asn.get_prefixes_ripe", return_value=[]),
+            patch("resolvers.asn.get_prefixes_he", return_value=mock_he) as mock_he_func,
+        ):
+            result = resolve_asn(33844)
+
+            assert result == mock_he
+            mock_he_func.assert_called_once_with(33844)
 
     def test_resolve_asn_with_string_format(self):
         """Проверяет корректность обработки строковых ASN (например, 'AS12389')."""

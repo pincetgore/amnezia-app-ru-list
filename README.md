@@ -686,7 +686,7 @@ python main.py
 
 ## Ручной запуск тестов
 
-Выполните команду для запуска всех 53 тестов:
+Выполните команду для запуска всех 54 тестов:
 
 ```bash
 pytest -v
@@ -698,7 +698,7 @@ pytest -v
 pytest test_logic.py -v
 ```
 
-Для запуска только unit-тестов резолверов (33 тестов):
+Для запуска только unit-тестов резолверов (34 тестов):
 
 ```bash
 pytest test_resolvers.py -v
@@ -721,7 +721,7 @@ pytest test_logic.py::test_no_duplicates_config -v
 ├── requirements.txt        # Python зависимости (версии зафиксированы)
 ├── .gitignore              # Исключение артефактов (кэши, IDE, build)
 ├── test_logic.py           # 20 конфигурационных тестов
-├── test_resolvers.py       # 33 unit-теста для резолверов (с мокированием)
+├── test_resolvers.py       # 34 unit-теста для резолверов (с мокированием)
 ├── resolvers/
 │   ├── asn.py              # RIPE API → IPv4 префиксы (bs4 fallback на bgp.he.net)
 │   └── dns.py              # DNS A-записи → /32 сети (параллельно)

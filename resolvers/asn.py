@@ -219,7 +219,7 @@ def resolve_asn(asn: Any) -> list[IPv4Network]:
         return []
 
     prefixes = get_prefixes_ripe(clean_asn)
-    if prefixes is not None:
+    if prefixes:
         return prefixes
 
     logger.info("Falling back to bgp.he.net for AS%s", clean_asn)
