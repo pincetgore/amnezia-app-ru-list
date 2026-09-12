@@ -636,7 +636,7 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 
 # Локальное развертывание
 
-**Требования:** Python 3.11+
+**Требования:** Python 3.14+
 
 Клонируйте репозиторий и выполните следующие команды: 
 
@@ -720,6 +720,8 @@ pytest test_logic.py::test_no_duplicates_config -v
 ├── config.yaml             # Конфигурация сервисов и DNS параметры
 ├── requirements.txt        # Python зависимости (версии зафиксированы)
 ├── .gitignore              # Исключение артефактов (кэши, IDE, build)
+├── pyrightconfig.json      # Конфигурация статического анализатора типов
+├── ruff.toml               # Конфигурация линтера и форматтера Ruff
 ├── test_logic.py           # 20 конфигурационных тестов
 ├── test_resolvers.py       # 34 unit-теста для резолверов (с мокированием)
 ├── resolvers/
@@ -736,6 +738,8 @@ pytest test_logic.py::test_no_duplicates_config -v
 - **resolvers/dns.py** — многопоточный резолвинг доменов (до 20 параллельных работников). Использует настраиваемые DNS серверы и возвращает предупреждение для любого неразрешённого домена, включая NXDOMAIN.
 - **output/formatter.py** — агрегирует сети через `collapse_addresses()`, форматирует в JSON (AmneziaVPN) или plain (текст) и атомарно заменяет выходной файл.
 - **config.yaml** — определения сервисов (ASN, домены, IP) и глобальные параметры DNS.
+- **pyrightconfig.json** — привязка виртуального окружения Python 3.14 и правила проверки типов.
+- **ruff.toml** — правила линтинга (PEP 8, Pyflakes, isort, modern syntax py314).
 
 ## Параметры CLI
 
