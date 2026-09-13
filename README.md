@@ -5,12 +5,6 @@
 ![Tests](https://img.shields.io/badge/Unit_Tests-Passing-brightgreen?style=for-the-badge)
 ![Data Source](https://img.shields.io/badge/Data_Source-RIPE_NCC_API-ea580c?style=for-the-badge)
 [![License](https://img.shields.io/badge/LICENSE-MIT-F6C25B?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=555555)](LICENSE)
-<p align="center">
-  <a href="https://yoomoney.ru/to/4100119554027650">
-    <img src="https://img.shields.io/badge/Поддержать-ЮMoney-8B3FFD?style=for-the-badge&logo=yoomoney&logoColor=white" alt="Поддержать" />
-  </a>
-</p>
-
 ## ⚠️ Юридическая информация
 
 > **Этот проект создан исключительно в ознакомительных и исследовательских целях.**
@@ -627,12 +621,6 @@ GitHub Actions workflow запускается **ежедневно в 04:00 UTC
 2. Добавьте сервис или внесите исправления в файл `config.yaml`.
 3. Убедитесь, что тесты проходят (см. ниже).
 4. Откройте Pull Request с описанием добавленного ресурса.
-
-> [!TIP]
-> **Хотите поддержать проект?**
-> Если вам помогает этот список и вы хотите поддержать его развитие (оплату серверов обновлений и чашечку кофе для автора), вы можете сделать донат по кнопке ниже:
-> 
-> [![Поддержать проект](https://img.shields.io/badge/Поддержать_проект-ЮMoney-8B3FFD?style=for-the-badge&logo=yoomoney&logoColor=white)](https://yoomoney.ru/to/4100119554027650)
 
 # Локальное развертывание
 

@@ -52,17 +52,19 @@ jobs:
           python main.py -o ip-list.json -f amnezia
           jq -r '.[].hostname' ip-list.json > cidrs.txt
 
-      - name: Delete old releases and tags
+      - name: Clean up old releases and drafts
         run: |
-          for tag in $(gh release list --limit 100 --json tagName -q '.[].tagName'); do
-            echo "Deleting old release: $tag"
-            gh release delete "$tag" -y --cleanup-tag || true
+          # Удаляем старые релизы и зависшие черновики по ID через API
+          for id in $(gh api "repos/$GITHUB_REPOSITORY/releases" --jq '.[].id' 2>/dev/null); do
+            echo "Deleting release ID: $id"
+            gh api -X DELETE "repos/$GITHUB_REPOSITORY/releases/$id" || true
           done
+          # Удаляем тег latest из git, если он остался без релиза
           git push origin --delete latest 2>/dev/null || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create Release and Upload Artifacts
+      - name: Create or Update Release and Upload Artifacts
         run: |
           cat > release-notes.md <<'EOF'
           Автоматически сгенерированный список IP-адресов и доменов российских сервисов.
@@ -74,11 +76,21 @@ jobs:
           - `cidrs.txt` — простой список CIDR-диапазонов.
           EOF
 
-          gh release create latest \
-            ip-list.json \
-            cidrs.txt \
-            --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
-            --notes-file release-notes.md \
-            --latest
+          if gh release view latest >/dev/null 2>&1; then
+            echo "Release 'latest' exists. Updating title, notes and artifacts..."
+            gh release edit latest \
+              --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
+              --notes-file release-notes.md \
+              --latest
+            gh release upload latest ip-list.json cidrs.txt --clobber
+          else
+            echo "Creating release 'latest'..."
+            gh release create latest \
+              ip-list.json \
+              cidrs.txt \
+              --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
+              --notes-file release-notes.md \
+              --latest
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
