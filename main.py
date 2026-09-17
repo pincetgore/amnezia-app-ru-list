@@ -10,6 +10,7 @@ import logging
 import signal
 import sys
 from ipaddress import IPv4Address, IPv4Network
+from types import FrameType
 from typing import Any
 
 import yaml
@@ -101,7 +102,7 @@ def load_config(path: str = "config.yaml") -> dict[str, Any]:
         sys.exit(1)
 
 
-def _handle_sigint(sig, frame):
+def _handle_sigint(sig: int, frame: FrameType | None) -> None:
     """Graceful shutdown при Ctrl+C."""
     logger.info("Received interrupt signal, shutting down...")
     sys.exit(130)
