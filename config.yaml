@@ -992,12 +992,6 @@ services:
       - ostin.com
       - ostin.ru
 
-  - name: "Gloria Jeans"
-    asn:
-      - 44040
-    domains:
-      - gloria-jeans.ru
-
   - name: "Melon Fashion Group (Befree, Zarina, Love Republic, Sela)"
     asn:
       - 43577
@@ -1515,11 +1509,6 @@ services:
     domains:
       - pfr.gov.ru
       - sfr.gov.ru
-
-  - name: "ЕИС Закупки"
-    asn: []
-    domains:
-      - zakupki.gov.ru
 
   - name: "Мос.ру"
     asn:

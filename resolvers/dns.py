@@ -17,6 +17,8 @@ import dns.resolver
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_NAMESERVERS: list[str] = ["77.88.8.8", "77.88.8.1", "8.8.8.8", "1.1.1.1"]
+
 _thread_local = threading.local()
 
 
@@ -61,8 +63,8 @@ def _get_worker_resolver(base_resolver: dns.resolver.Resolver) -> dns.resolver.R
 
 def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> tuple[list[IPv4Network], str | None]:
     """Вспомогательная функция для получения IP-адресов одного домена."""
-    networks = []
-    warning = None
+    networks: list[IPv4Network] = []
+    warning: str | None = None
     ascii_domain = _to_ascii_domain(domain)
     try:
         answers = resolver.resolve(ascii_domain, "A")
@@ -99,56 +101,60 @@ def _worker_resolve(domain: str, base_resolver: dns.resolver.Resolver) -> tuple[
     return _resolve_single_domain(domain, resolver)
 
 
+class DNSResolver:
+    """Многопоточный DNS-резолвер с настраиваемыми DNS-серверами и пулом воркеров."""
+
+    def __init__(
+        self,
+        nameservers: list[str] | None = None,
+        timeout: float = 10.0,
+        max_workers: int = 20,
+    ) -> None:
+        if timeout <= 0:
+            raise ValueError("DNS timeout must be positive")
+        if max_workers <= 0:
+            raise ValueError("DNS max_workers must be positive")
+        if nameservers is not None and not nameservers:
+            raise ValueError("At least one DNS nameserver must be configured")
+
+        self.nameservers = list(nameservers) if nameservers is not None else list(DEFAULT_NAMESERVERS)
+        if not self.nameservers:
+            raise ValueError("At least one DNS nameserver must be configured")
+
+        self.timeout = float(timeout)
+        self.max_workers = int(max_workers)
+
+    def _create_base_resolver(self) -> dns.resolver.Resolver:
+        resolver = dns.resolver.Resolver(configure=False)
+        resolver.nameservers = list(self.nameservers)
+        resolver.timeout = max(1.0, self.timeout / len(resolver.nameservers))
+        resolver.lifetime = self.timeout
+        return resolver
+
+    def resolve(self, domains: list[str]) -> tuple[list[IPv4Network], list[str]]:
+        """Разрешает список доменов параллельно и возвращает список сетей и предупреждений."""
+        base_resolver = self._create_base_resolver()
+        networks: list[IPv4Network] = []
+        warnings: list[str] = []
+
+        effective_workers = min(self.max_workers, len(domains)) if domains else self.max_workers
+        with concurrent.futures.ThreadPoolExecutor(max_workers=effective_workers) as executor:
+            futures = [executor.submit(_worker_resolve, domain, base_resolver) for domain in domains]
+            for future in concurrent.futures.as_completed(futures):
+                nets, warn = future.result()
+                networks.extend(nets)
+                if warn:
+                    warnings.append(warn)
+
+        return networks, warnings
+
+
 def resolve_domains(
     domains: list[str],
     timeout: int = 10,
     max_workers: int = 20,
     nameservers: list[str] | None = None,
 ) -> tuple[list[IPv4Network], list[str]]:
-    """Получает IPv4-сети /32 для списка доменов и возвращает предупреждения.
-
-    Параметры:
-    - domains: список доменов для резолвинга
-    - timeout: таймаут в секундах
-    - max_workers: макс количество параллельных воркеров
-    - nameservers: список DNS серверов (если None, использует Яндекс.DNS)
-
-    Ошибки для отдельных доменов логируются и пропускаются — функция
-    возвращает кортеж (сети, домены_с_предупреждениями) без вызова исключений.
-    Запросы выполняются параллельно с использованием пула потоков.
-    """
-    if timeout <= 0:
-        raise ValueError("DNS timeout must be positive")
-    if max_workers <= 0:
-        raise ValueError("DNS max_workers must be positive")
-    if nameservers is not None and not nameservers:
-        raise ValueError("At least one DNS nameserver must be configured")
-
-    target_nameservers = nameservers if nameservers is not None else ["77.88.8.8", "77.88.8.1", "8.8.8.8", "1.1.1.1"]
-    if not target_nameservers:
-        raise ValueError("At least one DNS nameserver must be configured")
-
-    resolver = dns.resolver.Resolver(configure=False)
-    # Используем Яндекс.DNS первыми, так как многие RU-домены (ВТБ, VK, X5)
-    # блокируют запросы от зарубежных DNS (Google/Cloudflare) для защиты от DDoS.
-    resolver.nameservers = target_nameservers
-
-    # Таймаут на один сервер делаем пропорциональным, но не менее 1.0 с
-    resolver.timeout = max(1.0, timeout / len(resolver.nameservers))
-    # Общее время на все попытки резолвинга
-    resolver.lifetime = timeout
-
-    networks = []
-    warnings = []
-    # Оптимизация: не создаем 20 потоков, если доменов всего 1-2
-    effective_workers = min(max_workers, len(domains)) if domains else max_workers
-    with concurrent.futures.ThreadPoolExecutor(max_workers=effective_workers) as executor:
-        futures = [executor.submit(_worker_resolve, domain, resolver) for domain in domains]
-
-        for future in concurrent.futures.as_completed(futures):
-            nets, warn = future.result()
-            networks.extend(nets)
-            if warn:
-                warnings.append(warn)
-
-    return networks, warnings
+    """Функция модуля для обратной совместимости."""
+    resolver = DNSResolver(nameservers=nameservers, timeout=timeout, max_workers=max_workers)
+    return resolver.resolve(domains)

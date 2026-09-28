@@ -15,8 +15,8 @@ def test_aggregate_cidrs_removes_subnets():
     """Проверяет, что мелкие подсети поглощаются более крупными."""
     ips = [
         IPv4Network("10.0.0.0/8"),
-        IPv4Network("10.1.0.0/16"),   # Должно поглотиться первой строкой
-        IPv4Network("192.168.1.1/32")
+        IPv4Network("10.1.0.0/16"),  # Должно поглотиться первой строкой
+        IPv4Network("192.168.1.1/32"),
     ]
     result = aggregate_networks(ips)
     result_strs = [str(net) for net in result]
@@ -40,6 +40,7 @@ def test_aggregate_cidrs_ignores_default_route():
     assert "10.0.0.0/8" in result_strs
     assert "77.88.0.0/18" in result_strs
     assert len(result) == 2
+
 
 @pytest.mark.parametrize(
     "config",
@@ -157,12 +158,15 @@ def test_config_yaml_is_valid():
 
     for entry in services:
         assert "name" in entry, f"Отсутствует 'name' в записи: {entry}"
-        assert "asn" in entry or "domains" in entry or "ip_ranges" in entry, f"Запись {entry['name']} должна иметь asn, domains или ip_ranges"
+        assert "asn" in entry or "domains" in entry or "ip_ranges" in entry, (
+            f"Запись {entry['name']} должна иметь asn, domains или ip_ranges"
+        )
 
         if entry.get("asn"):
             assert isinstance(entry["asn"], list), f"ASN в {entry['name']} должен быть списком"
             for asn in entry["asn"]:
                 assert isinstance(asn, int), f"ASN {asn} должен быть числом"
+
 
 def test_domains_format():
     """Проверяет отсутствие опечаток (например http://) в доменах."""
@@ -171,10 +175,13 @@ def test_domains_format():
     services = config.get("services", [])
     for entry in services:
         for domain in entry.get("domains", []):
-            assert not (domain.startswith("http://") or domain.startswith("https://")), f"Домен не должен содержать протокол: {domain}"
+            assert not (domain.startswith("http://") or domain.startswith("https://")), (
+                f"Домен не должен содержать протокол: {domain}"
+            )
             assert not domain.endswith("/"), f"Домен не должен заканчиваться на слеш: {domain}"
             assert " " not in domain, f"Домен не должен содержать пробелы: '{domain}'"
             assert not domain.startswith("*"), f"Wildcard-домены (*.domain) не поддерживаются: {domain}"
+
 
 def test_no_duplicate_domains():
     """Проверяет отсутствие дубликатов доменов во всем config.yaml."""
@@ -195,10 +202,13 @@ def test_no_duplicate_domains():
     assert not duplicates, "Найдены дублирующиеся домены:\n" + "\n".join(duplicates)
 
 
-@pytest.mark.parametrize("field_name,item_type", [
-    ("asn", "ASN"),
-    ("ip_ranges", "IP range"),
-])
+@pytest.mark.parametrize(
+    "field_name,item_type",
+    [
+        ("asn", "ASN"),
+        ("ip_ranges", "IP range"),
+    ],
+)
 def test_no_duplicates_config(field_name, item_type):
     """Проверяет отсутствие дубликатов в конфигурации (ASN, IP ranges)."""
     with open(CONFIG_PATH, encoding="utf-8") as f:
@@ -222,6 +232,7 @@ def test_no_duplicates_config(field_name, item_type):
 def test_loopback_covers_localhost():
     """Проверяет, что диапазон loopback в конфигурации покрывает 127.0.0.1 (localhost)."""
     from ipaddress import IPv4Address
+
     with open(CONFIG_PATH, encoding="utf-8") as f:
         config = yaml.safe_load(f)
 

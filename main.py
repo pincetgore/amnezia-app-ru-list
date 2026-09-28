@@ -9,97 +9,33 @@ import argparse
 import logging
 import signal
 import sys
-from ipaddress import IPv4Address, IPv4Network
 from types import FrameType
-from typing import Any
 
-import yaml
 from tqdm import tqdm
 
+from core.config import ALLOWED_SERVICE_KEYS, load_config, load_raw_config, parse_config, validate_config
+from core.models import DEFAULT_NAMESERVERS, AppConfig, PipelineResult, ServiceResult, ServiceStats
+from core.pipeline import ListBuilderPipeline
+from core.reporter import print_aggregation_summary, print_statistics_report
 from output.formatter import write_output
 from resolvers.asn import resolve_asn
 from resolvers.dns import resolve_domains
 
+__all__ = [
+    "ALLOWED_SERVICE_KEYS",
+    "DEFAULT_NAMESERVERS",
+    "ListBuilderPipeline",
+    "build_arg_parser",
+    "load_config",
+    "load_raw_config",
+    "main",
+    "parse_config",
+    "resolve_asn",
+    "resolve_domains",
+    "validate_config",
+]
+
 logger = logging.getLogger(__name__)
-
-DEFAULT_NAMESERVERS = ["77.88.8.8", "77.88.8.1", "8.8.8.8", "1.1.1.1"]
-ALLOWED_SERVICE_KEYS = {"name", "asn", "domains", "ip_ranges"}
-
-
-def validate_config(config: dict[str, Any]) -> None:
-    """Проверяет структуру конфигурации до выполнения сетевых запросов."""
-    if not isinstance(config, dict):
-        raise ValueError("Config root must be a mapping")
-
-    services = config.get("services")
-    if not isinstance(services, list):
-        raise ValueError("'services' must be a list")
-
-    for index, service in enumerate(services):
-        if not isinstance(service, dict):
-            raise ValueError(f"Service at index {index} must be a mapping")
-        name = service.get("name")
-        if not isinstance(name, str) or not name.strip():
-            raise ValueError(f"Service at index {index} must have a non-empty string 'name'")
-
-        extra_keys = set(service.keys()) - ALLOWED_SERVICE_KEYS
-        if extra_keys:
-            raise ValueError(f"Service '{name}' has unknown fields: {sorted(extra_keys)}")
-
-        for field in ("asn", "domains", "ip_ranges"):
-            value = service.get(field)
-            if value is not None and not isinstance(value, list):
-                raise ValueError(f"'{field}' for service '{name}' must be a list")
-        if not any(service.get(field) for field in ("asn", "domains", "ip_ranges")):
-            raise ValueError(f"Service '{name}' must define ASN, domains, or IP ranges")
-
-        for asn in service.get("asn") or []:
-            if isinstance(asn, bool) or not isinstance(asn, int) or asn <= 0:
-                raise ValueError(f"Invalid ASN for service '{name}': {asn!r}")
-        for domain in service.get("domains") or []:
-            if not isinstance(domain, str) or not domain.strip() or " " in domain or domain != domain.strip():
-                raise ValueError(f"Invalid domain for service '{name}': {domain!r}")
-        for ip_range in service.get("ip_ranges") or []:
-            if not isinstance(ip_range, str):
-                raise ValueError(f"Invalid IP range for service '{name}': {ip_range!r}")
-            try:
-                IPv4Network(ip_range, strict=False)
-            except ValueError as exc:
-                raise ValueError(f"Invalid IP range for service '{name}': {ip_range!r}") from exc
-
-    dns_config = config.get("dns", {})
-    if dns_config is not None and not isinstance(dns_config, dict):
-        raise ValueError("'dns' must be a mapping")
-    dns_config = dns_config or {}
-    if "nameservers" in dns_config:
-        nameservers = dns_config["nameservers"]
-        if not isinstance(nameservers, list) or not nameservers:
-            raise ValueError("'dns.nameservers' must be a non-empty list")
-        for nameserver in nameservers:
-            if not isinstance(nameserver, str):
-                raise ValueError(f"Invalid DNS nameserver: {nameserver!r}")
-            try:
-                IPv4Address(nameserver)
-            except ValueError as exc:
-                raise ValueError(f"Invalid DNS nameserver: {nameserver!r}") from exc
-    for field in ("timeout", "max_workers"):
-        if field in dns_config:
-            value = dns_config[field]
-            if isinstance(value, bool) or not isinstance(value, (int, float)) or value <= 0:
-                raise ValueError(f"'dns.{field}' must be a positive number")
-
-
-def load_config(path: str = "config.yaml") -> dict[str, Any]:
-    """Загружает определения сервисов из конфигурационного файла YAML."""
-    try:
-        with open(path, encoding="utf-8") as f:
-            return yaml.safe_load(f) or {}
-    except FileNotFoundError:
-        logger.critical("Config file '%s' not found.", path)
-        sys.exit(1)
-    except yaml.YAMLError as e:
-        logger.critical("Failed to parse YAML in '%s': %s", path, e)
-        sys.exit(1)
 
 
 def _handle_sigint(sig: int, frame: FrameType | None) -> None:
@@ -108,46 +44,46 @@ def _handle_sigint(sig: int, frame: FrameType | None) -> None:
     sys.exit(130)
 
 
-def main():
-    """Главная функция: загружает сервисы из config.yaml, резолвит их IP через ASN/DNS и генерирует список.
-
-    Алгоритм:
-    1. Загружает конфигурацию сервисов из config.yaml
-    2. Для каждого сервиса получает IP-префиксы через RIPE API/bgp.he.net по ASN
-    3. Резолвит A-записи доменов параллельно
-    4. Добавляет явно заданные IP-диапазоны
-    5. Агрегирует все CIDR-диапазоны (удаляет дубли и вложенные подсети)
-    6. Записывает результат в JSON/plain формат
-    7. Выводит статистику
-    """
-    # Регистрация обработчика для graceful shutdown
-    signal.signal(signal.SIGINT, _handle_sigint)
-
-    # -- Парсинг аргументов командной строки (CLI) --
+def build_arg_parser() -> argparse.ArgumentParser:
+    """Создает парсер аргументов командной строки."""
     parser = argparse.ArgumentParser(
         description="Generate IP bypass list for Russian services (AmneziaVPN split tunneling)"
     )
     parser.add_argument(
-        "--output", "-o",
+        "--output",
+        "-o",
         default="ip-list.json",
         help="Output file path (default: ip-list.json)",
     )
     parser.add_argument(
-        "--format", "-f",
+        "--format",
+        "-f",
         choices=["amnezia", "plain"],
         default="amnezia",
         help="Output format (default: amnezia)",
     )
     parser.add_argument(
-        "--config", "-c",
+        "--config",
+        "-c",
         default="config.yaml",
         help="Path to config.yaml (default: config.yaml)",
     )
     parser.add_argument(
-        "--verbose", "-v",
+        "--verbose",
+        "-v",
         action="store_true",
         help="Enable debug logging",
     )
+    return parser
+
+
+def main() -> None:
+    """Главная функция: загружает сервисы из config.yaml, резолвит их IP через ASN/DNS и генерирует список."""
+    # Регистрация обработчика для graceful shutdown
+    signal.signal(signal.SIGINT, _handle_sigint)
+
+    # -- Парсинг аргументов командной строки (CLI) --
+    parser = build_arg_parser()
     args = parser.parse_args()
 
     log_level = logging.DEBUG if args.verbose else logging.INFO
@@ -159,118 +95,80 @@ def main():
         force=True,
     )
 
-    # -- Загрузка определений сервисов --
-    config = load_config(args.config) or {}
+    # -- Загрузка и валидация конфигурации --
+    raw_config = load_raw_config(args.config) or {}
     try:
-        validate_config(config)
+        validate_config(raw_config)
     except ValueError as exc:
         logger.critical("Invalid configuration: %s", exc)
         sys.exit(1)
 
-    services = config["services"]
+    config: AppConfig = parse_config(raw_config)
 
-    # -- Загрузка DNS конфигурации --
-    dns_config = config.get("dns") or {}
-    dns_nameservers = dns_config.get("nameservers", DEFAULT_NAMESERVERS)
-    dns_timeout = dns_config.get("timeout", 10)
-    dns_max_workers = dns_config.get("max_workers", 20)
+    # -- Инициализация пайплайна --
+    pipeline = ListBuilderPipeline(
+        asn_resolver=lambda asn: resolve_asn(asn),
+        dns_resolver_factory=lambda cfg: (
+            lambda domains: resolve_domains(
+                domains,
+                timeout=int(cfg.timeout),
+                max_workers=cfg.max_workers,
+                nameservers=cfg.nameservers,
+            )
+        ),
+    )
 
-    service_results = []
-    stats = []
-    all_asn_warnings = []
-    all_dns_warnings = []
+    # -- Обработка каждого сервиса через пайплайн с отображением tqdm --
+    service_results: list[ServiceResult] = []
+    stats: list[ServiceStats] = []
+    all_asn_warnings: list[str] = []
+    all_dns_warnings: list[str] = []
 
-    # -- Обработка каждого сервиса: получение префиксов ASN и DNS-записей --
-    for service in tqdm(services, desc="Processing services", unit="svc", disable=not sys.stdout.isatty()):
-        name = service["name"]
-        service_networks = []
-        # Безопасное извлечение: защищает от случаев, когда в YAML указано 'domains: null'
-        domains = service.get("domains") or []
-        asns = service.get("asn") or []
-        ip_ranges = service.get("ip_ranges") or []
+    pbar = tqdm(
+        config.services,
+        desc="Processing services",
+        unit="svc",
+        disable=not sys.stdout.isatty(),
+    )
 
-        # Шаг 1: Получение всех анонсированных IP-префиксов для каждой ASN через RIPE API / bgp.he.net
-        if asns:
-            for asn in asns:
-                try:
-                    prefixes = resolve_asn(asn)
-                    if not prefixes:
-                        logger.warning("No prefixes resolved for AS%s (%s)", asn, name)
-                        all_asn_warnings.append(f"AS{asn} ({name})")
-                    else:
-                        service_networks.extend(prefixes)
-                except Exception as e:
-                    logger.warning("Failed to resolve AS%s for %s: %s", asn, name, e)
-                    logger.debug("Exception details:", exc_info=True)
-                    all_asn_warnings.append(f"AS{asn} ({name}) - error: {e}")
+    for service in pbar:
+        res, st, asn_warns, dns_warns = pipeline.resolve_service(
+            service,
+            asn_resolver_func=lambda asn: resolve_asn(asn),
+            dns_resolver_func=lambda domains: resolve_domains(
+                domains,
+                timeout=int(config.dns.timeout),
+                max_workers=config.dns.max_workers,
+                nameservers=config.dns.nameservers,
+            ),
+        )
+        service_results.append(res)
+        stats.append(st)
+        all_asn_warnings.extend(asn_warns)
+        all_dns_warnings.extend(dns_warns)
 
-        # Шаг 2: Резолв A-записей доменов для дополнения данных ASN IP-адресами /32
-        if domains:
-            try:
-                dns_networks, dns_warnings = resolve_domains(
-                    domains,
-                    timeout=dns_timeout,
-                    max_workers=dns_max_workers,
-                    nameservers=dns_nameservers,
-                )
-                service_networks.extend(dns_networks)
-                # Недоступность отдельного домена не должна прерывать выпуск:
-                # список проблемных доменов выводится в итоговой статистике.
-                all_dns_warnings.extend(dns_warnings)
-            except Exception as e:
-                logger.warning("Failed DNS resolution for %s: %s", name, e)
-                logger.debug("Exception details:", exc_info=True)
-                all_dns_warnings.append(f"{name} (DNS error: {e})")
-
-        # Шаг 3: Добавление явно заданных IP-диапазонов
-        if ip_ranges:
-            for ip_str in ip_ranges:
-                try:
-                    service_networks.append(IPv4Network(ip_str, strict=False))
-                except ValueError as e:
-                    logger.warning("Invalid IP range '%s' for %s: %s", ip_str, name, e)
-
-        count = len(service_networks)
-        stats.append((name, count))
-        service_results.append({
-            "name": name,
-            "domains": domains,
-            "networks": service_networks,
-        })
+    pipeline_result = PipelineResult(
+        service_results=service_results,
+        stats=stats,
+        asn_warnings=all_asn_warnings,
+        dns_warnings=all_dns_warnings,
+    )
 
     # -- Вывод сводной статистики --
-    print("\n" + "=" * 50)
-    print("Statistics:")
-    print("=" * 50)
-    for name, count in stats:
-        print(f"  {name}: {count} raw prefixes")
-    print("-" * 50)
-    print(f"  Services processed: {len(stats)}")
-    print(f"  Total raw prefixes: {sum(c for _, c in stats)}")
-    if all_asn_warnings:
-        print(f"  ASN warnings:       {len(all_asn_warnings)}")
-        print("\nASNs that could not be resolved or returned no prefixes:")
-        for item in sorted(set(all_asn_warnings)):
-            print(f"  ⚠️  {item}")
-    if all_dns_warnings:
-        print(f"  DNS warnings:       {len(all_dns_warnings)}")
-        print("\nDomains that could not be resolved:")
-        for domain in sorted(set(all_dns_warnings)):
-            print(f"  ⚠️  {domain}")
+    print_statistics_report(pipeline_result)
 
     # Проверяем наличие собранных префиксов до записи
-    if not any(result["networks"] for result in service_results):
+    if not pipeline_result.has_networks:
         logger.error("No IP prefixes were collected; output was not written.")
         sys.exit(1)
 
     # -- Запись выходного файла только после успешного сбора всех данных --
-    sorted_nets = write_output(service_results, args.output, args.format)
+    sorted_nets = write_output(pipeline_result.service_results, args.output, args.format)
     if not sorted_nets:
         logger.error("No valid IP prefixes after aggregation; output was not written.")
         sys.exit(1)
 
-    print(f"  After aggregation:  {len(sorted_nets)}")
-    print(f"\nOutput: {args.output}")
+    print_aggregation_summary(len(sorted_nets), args.output)
 
 
 if __name__ == "__main__":

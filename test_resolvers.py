@@ -51,8 +51,8 @@ class TestASNResolver:
                 "prefixes": [
                     {"prefix": "1.2.3.0/24"},
                     {"prefix": "4.5.6.0/24"},
-                    {"prefix": "0.0.0.0/0"},      # Default route - должно пропуститься
-                    {"prefix": "0.0.0.0/8"},      # Unspecified / broad - должно пропуститься
+                    {"prefix": "0.0.0.0/0"},  # Default route - должно пропуститься
+                    {"prefix": "0.0.0.0/8"},  # Unspecified / broad - должно пропуститься
                     {"prefix": "2001:db8::/32"},  # IPv6 - должно пропуститься
                 ]
             }
@@ -338,8 +338,11 @@ class TestDNSResolver:
     def test_resolve_domains_limits_workers_to_domain_count(self):
         """Проверяет оптимизацию: число воркеров ограничивается числом доменов."""
         import concurrent.futures
+
         with (
-            patch("resolvers.dns.concurrent.futures.ThreadPoolExecutor", wraps=concurrent.futures.ThreadPoolExecutor) as mock_executor_cls,
+            patch(
+                "resolvers.dns.concurrent.futures.ThreadPoolExecutor", wraps=concurrent.futures.ThreadPoolExecutor
+            ) as mock_executor_cls,
             patch("resolvers.dns._worker_resolve", return_value=([], None)),
         ):
             resolve_domains(["a.com", "b.com"], timeout=20, max_workers=30)

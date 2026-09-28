@@ -11,6 +11,7 @@
 import json
 import os
 import tempfile
+from collections.abc import Sequence
 from ipaddress import IPv4Network, collapse_addresses
 from pathlib import Path
 from typing import Any
@@ -25,10 +26,7 @@ def aggregate_networks(networks: list[IPv4Network]) -> list[IPv4Network]:
     """
     if not networks:
         return []
-    valid_networks = [
-        net for net in networks
-        if net.prefixlen > 0 and not net.is_unspecified
-    ]
+    valid_networks = [net for net in networks if net.prefixlen > 0 and not net.is_unspecified]
     return list(collapse_addresses(valid_networks))
 
 
@@ -46,11 +44,7 @@ def format_plain(sorted_nets: list[IPv4Network]) -> str:
     return "\n".join(str(n) for n in sorted_nets) + "\n"
 
 
-def write_output(
-    service_results: list[dict[str, Any]],
-    output_path: str,
-    fmt: str = "amnezia"
-) -> list[IPv4Network]:
+def write_output(service_results: Sequence[Any], output_path: str, fmt: str = "amnezia") -> list[IPv4Network]:
     """Записывает отформатированный вывод в файл.
 
     Поддерживаемые форматы:
@@ -63,9 +57,10 @@ def write_output(
     path.parent.mkdir(parents=True, exist_ok=True)
 
     # Собираем сети со всех сервисов
-    all_networks = []
+    all_networks: list[IPv4Network] = []
     for svc in service_results:
-        all_networks.extend(svc.get("networks", []))
+        networks = svc.get("networks", []) if hasattr(svc, "get") else getattr(svc, "networks", [])
+        all_networks.extend(networks)
 
     # Агрегируем все CIDR-диапазоны из всех сервисов и сортируем их
     aggregated = aggregate_networks(all_networks)

@@ -212,7 +212,6 @@ dns:
 | Л'Этуаль | AS42549 | `api.letu.ru`, `letu.ru` |
 | Рив Гош | AS43486 | `rivegauche.ru` |
 | Ostin | — | `ostin.com`, `ostin.ru` |
-| Gloria Jeans | AS44040 | `gloria-jeans.ru` |
 | Melon Fashion Group (Befree, Zarina, Love Republic, Sela) | AS43577 | `befree.ru`, `loverepublic.ru`, `melonfashion.ru`, `sela.ru` и др. |
 | ОнлайнТрейд | — | `onlinetrade.ru` |
 | Регард | — | `regard.ru` |
@@ -316,7 +315,6 @@ dns:
 | Госуслуги | AS196747, AS48287 и др. | `esia.gosuslugi.ru`, `gosuslugi.ru`, `gu-st.ru`, `lk.gosuslugi.ru` и др. |
 | ФНС / Налоговая | AS25514, AS41892 и др. | `ebs.ru`, `goskey.ru`, `gov.ru`, `lkfl2.nalog.ru` и др. |
 | СФР / Социальный фонд России | AS42360 | `pfr.gov.ru`, `sfr.gov.ru` |
-| ЕИС Закупки | — | `zakupki.gov.ru` |
 | Мос.ру | AS8901 | `mos.ru`, `mosreg.ru`, `my.mos.ru`, `uslugi.mos.ru` |
 | ЦБ РФ | AS21272 | `cbr.ru`, `finmarket.ru` |
 | Почта России | AS41457 | `mobileapp.russianpost.ru`, `pochta.ru`, `tracking.pochta.ru` |
@@ -645,7 +643,7 @@ python main.py
 - `requests==2.34.2` — HTTP-клиент с поддержкой retry логики
 - `dnspython==2.8.0` — DNS-резолвер
 - `pyyaml==6.0.3` — парсер YAML-конфигов
-- `tqdm==4.70.0` — прогресс-бар
+- `tqdm==4.70.1` — прогресс-бар
 - `pytest==9.1.1` — фреймворк для тестирования
 - `beautifulsoup4==4.15.0` — HTML-парсер для извлечения данных с bgp.he.net
 
@@ -674,10 +672,16 @@ python main.py
 
 ## Ручной запуск тестов
 
-Выполните команду для запуска всех 54 тестов:
+Выполните команду для запуска всех 69 тестов:
 
 ```bash
 pytest -v
+```
+
+Для запуска тестов архитектурных компонентов (модели, валидация конфигурации, пайплайн, репортер — 15 тестов):
+
+```bash
+pytest test_core.py -v
 ```
 
 Для запуска проверок конфигурации и форматирования (20 тестов):
@@ -704,24 +708,34 @@ pytest test_logic.py::test_no_duplicates_config -v
 
 ```
 .
-├── main.py                 # Основной скрипт (загрузка, резолвинг, агрегация)
+├── main.py                 # Тонкая точка входа CLI и обратная совместимость
 ├── config.yaml             # Конфигурация сервисов и DNS параметры
 ├── requirements.txt        # Python зависимости (версии зафиксированы)
 ├── .gitignore              # Исключение артефактов (кэши, IDE, build)
 ├── pyrightconfig.json      # Конфигурация статического анализатора типов
 ├── ruff.toml               # Конфигурация линтера и форматтера Ruff
+├── test_core.py            # 15 тестов архитектурных компонентов и моделей
 ├── test_logic.py           # 20 конфигурационных тестов
 ├── test_resolvers.py       # 34 unit-теста для резолверов (с мокированием)
+├── core/
+│   ├── config.py           # Загрузка, валидация и парсинг YAML в AppConfig
+│   ├── models.py           # Строго типизированные доменные датаклассы (AppConfig, ServiceConfig, PipelineResult)
+│   ├── pipeline.py         # ListBuilderPipeline: движок резолвинга и сбора сетей
+│   └── reporter.py         # Форматирование и вывод консольной статистики и предупреждений
 ├── resolvers/
-│   ├── asn.py              # RIPE API → IPv4 префиксы (bs4 fallback на bgp.he.net)
-│   └── dns.py              # DNS A-записи → /32 сети (параллельно)
+│   ├── asn.py              # ASNResolver: RIPE API → IPv4 префиксы (bs4 fallback на bgp.he.net)
+│   └── dns.py              # DNSResolver: DNS A-записи → /32 сети (параллельно)
 └── output/
     └── formatter.py        # JSON/plain форматирование + агрегация CIDR
 ```
 
 ### Описание ключевых файлов
 
-- **main.py** — оркестратор: загружает конфиг, вызывает резолверы, пишет результат. Обрабатывает SIGINT для graceful shutdown.
+- **main.py** — тонкая точка входа CLI: парсинг аргументов командной строки, настройка логирования, инициализация graceful shutdown (SIGINT), запуск `ListBuilderPipeline` и вывод результатов.
+- **core/models.py** — доменные датаклассы (`AppConfig`, `DnsConfig`, `ServiceConfig`, `ServiceResult`, `PipelineResult`) со слотами и строгой типизацией.
+- **core/config.py** — изолированная валидация структуры `config.yaml` и безопасный парсинг в типизированные объекты.
+- **core/pipeline.py** — `ListBuilderPipeline`: независимый от CLI оркестратор получения сетей по ASN, DNS и статическим диапазонам с поддержкой callback-функций прогресса.
+- **core/reporter.py** — модуль формирования и вывода итоговых сводок и отчётов о предупреждениях.
 - **resolvers/asn.py** — получает IPv4-префиксы от RIPE (до 3 повторных запросов, exponential backoff). Fallback на bgp.he.net с парсингом HTML через BeautifulSoup.
 - **resolvers/dns.py** — многопоточный резолвинг доменов (до 20 параллельных работников). Использует настраиваемые DNS серверы и возвращает предупреждение для любого неразрешённого домена, включая NXDOMAIN.
 - **output/formatter.py** — агрегирует сети через `collapse_addresses()`, форматирует в JSON (AmneziaVPN) или plain (текст) и атомарно заменяет выходной файл.
