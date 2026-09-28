@@ -53,7 +53,6 @@ services:
       - certs.apple.com
       - configuration.apple.com
       - courier.push.apple.com
-      - crl-lb.apple.com.akadns.net
       - crl.apple.com
       - crl3.digicert.com
       - crl4.digicert.com
@@ -1464,7 +1463,8 @@ services:
     asn:
       - 61280
     domains:
-      - edu.ru
+      - edu.gov.ru
+      - www.edu.ru
       - fas.gov.ru
       - mil.ru
       - rkn.gov.ru
@@ -2102,7 +2102,7 @@ services:
     domains:
       - medsi-premium.ru
       - medsi.com
-      - medsi.pro
+      - app.medsi.pro
       - medsi.ru
       - smartmed.pro
 

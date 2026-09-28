@@ -310,7 +310,7 @@ dns:
 | Сервис | ASN | Домены |
 | ------ | ------ | ------ |
 | Правительство и Президент РФ (RSNet) | AS8291 | `council.gov.ru`, `duma.gov.ru`, `government.ru`, `kremlin.ru` |
-| Федеральные ведомства (РКН, Роспотребнадзор, ФАС, Минобороны) | AS61280 | `edu.ru`, `fas.gov.ru`, `mil.ru`, `rkn.gov.ru`, `rospotrebnadzor.ru` |
+| Федеральные ведомства (РКН, Роспотребнадзор, ФАС, Минобороны) | AS61280 | `edu.gov.ru`, `www.edu.ru`, `fas.gov.ru`, `mil.ru`, `rkn.gov.ru`, `rospotrebnadzor.ru` |
 | ЦИК РФ (Выборы) | — | `cikrf.ru`, `izbirkom.ru` |
 | Госуслуги | AS196747, AS48287 и др. | `esia.gosuslugi.ru`, `gosuslugi.ru`, `gu-st.ru`, `lk.gosuslugi.ru` и др. |
 | ФНС / Налоговая | AS25514, AS41892 и др. | `ebs.ru`, `goskey.ru`, `gov.ru`, `lkfl2.nalog.ru` и др. |
@@ -436,7 +436,7 @@ dns:
 | Аптека «Апрель» (Клуб Апрель) | — | `apteka-april.ru` |
 | ЕМИАС | — | `emias.info`, `emias.ru`, `lk.emias.mos.ru`, `mgfoms.ru` и др. |
 | Invitro | AS43846 | `invitro.ru`, `lk.invitro.ru` |
-| Медси | — | `medsi-premium.ru`, `medsi.com`, `medsi.pro`, `medsi.ru` и др. |
+| Медси | — | `medsi-premium.ru`, `medsi.com`, `app.medsi.pro`, `medsi.ru` и др. |
 | АГНИ | — | `beauty-forma.com`, `lk-dev.beauty-forma.com`, `lk.beauty-forma.com`, `shop.beauty-forma.com` |
 | Аптека Вита | AS42996 | `autodiscover.vitaexpress.ru`, `cloud.vitaexpress.ru`, `mailimage.vitaexpress.ru`, `mobapp-api.vitaexpress.ru` и др. |
 | ПроДокторов | — | `medtochka.ru`, `prodoctorov.ru` |
