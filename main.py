@@ -14,7 +14,7 @@ from types import FrameType
 from tqdm import tqdm
 
 from core.config import ALLOWED_SERVICE_KEYS, load_config, load_raw_config, parse_config, validate_config
-from core.models import DEFAULT_NAMESERVERS, AppConfig, PipelineResult, ServiceResult, ServiceStats
+from core.models import DEFAULT_NAMESERVERS, AppConfig
 from core.pipeline import ListBuilderPipeline
 from core.reporter import print_aggregation_summary, print_statistics_report
 from output.formatter import write_output
@@ -96,14 +96,7 @@ def main() -> None:
     )
 
     # -- Загрузка и валидация конфигурации --
-    raw_config = load_raw_config(args.config) or {}
-    try:
-        validate_config(raw_config)
-    except ValueError as exc:
-        logger.critical("Invalid configuration: %s", exc)
-        sys.exit(1)
-
-    config: AppConfig = parse_config(raw_config)
+    config: AppConfig = load_config(args.config)
 
     # -- Инициализация пайплайна --
     pipeline = ListBuilderPipeline(
@@ -118,41 +111,17 @@ def main() -> None:
         ),
     )
 
-    # -- Обработка каждого сервиса через пайплайн с отображением tqdm --
-    service_results: list[ServiceResult] = []
-    stats: list[ServiceStats] = []
-    all_asn_warnings: list[str] = []
-    all_dns_warnings: list[str] = []
-
+    # -- Обработка сервисов через пайплайн с отображением tqdm --
     pbar = tqdm(
         config.services,
         desc="Processing services",
         unit="svc",
         disable=not sys.stdout.isatty(),
     )
-
-    for service in pbar:
-        res, st, asn_warns, dns_warns = pipeline.resolve_service(
-            service,
-            asn_resolver_func=lambda asn: resolve_asn(asn),
-            dns_resolver_func=lambda domains: resolve_domains(
-                domains,
-                timeout=int(config.dns.timeout),
-                max_workers=config.dns.max_workers,
-                nameservers=config.dns.nameservers,
-            ),
-        )
-        service_results.append(res)
-        stats.append(st)
-        all_asn_warnings.extend(asn_warns)
-        all_dns_warnings.extend(dns_warns)
-
-    pipeline_result = PipelineResult(
-        service_results=service_results,
-        stats=stats,
-        asn_warnings=all_asn_warnings,
-        dns_warnings=all_dns_warnings,
-    )
+    progress_cb = (lambda _name, _idx, _total: pbar.update(1)) if hasattr(pbar, "update") else None
+    pipeline_result = pipeline.run(config, progress_callback=progress_cb)
+    if hasattr(pbar, "close"):
+        pbar.close()
 
     # -- Вывод сводной статистики --
     print_statistics_report(pipeline_result)

@@ -15,9 +15,9 @@ from ipaddress import IPv4Network
 import dns.exception
 import dns.resolver
 
-logger = logging.getLogger(__name__)
+from core.models import DEFAULT_NAMESERVERS
 
-DEFAULT_NAMESERVERS: list[str] = ["77.88.8.8", "77.88.8.1", "8.8.8.8", "1.1.1.1"]
+logger = logging.getLogger(__name__)
 
 _thread_local = threading.local()
 
@@ -50,11 +50,13 @@ def _get_worker_resolver(base_resolver: dns.resolver.Resolver) -> dns.resolver.R
     if res is None:
         try:
             res = dns.resolver.Resolver(configure=False)
+            res.nameservers = list(base_resolver.nameservers)
+            res.timeout = base_resolver.timeout
+            res.lifetime = base_resolver.lifetime
         except Exception:
             res = base_resolver
         _thread_local.resolver = res
-
-    if res is not base_resolver:
+    elif res is not base_resolver and (res.nameservers != base_resolver.nameservers or res.timeout != base_resolver.timeout):
         res.nameservers = list(base_resolver.nameservers)
         res.timeout = base_resolver.timeout
         res.lifetime = base_resolver.lifetime

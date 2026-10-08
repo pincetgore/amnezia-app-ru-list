@@ -54,13 +54,11 @@ jobs:
 
       - name: Clean up old releases and drafts
         run: |
-          # Удаляем старые релизы и зависшие черновики по ID через API
-          for id in $(gh api "repos/$GITHUB_REPOSITORY/releases" --jq '.[].id' 2>/dev/null); do
-            echo "Deleting release ID: $id"
+          # Удаляем старые релизы и зависшие черновики по ID через API (кроме latest)
+          for id in $(gh api "repos/$GITHUB_REPOSITORY/releases" --paginate --jq '.[] | select(.tag_name != "latest") | .id' 2>/dev/null); do
+            echo "Deleting old release ID: $id"
             gh api -X DELETE "repos/$GITHUB_REPOSITORY/releases/$id" || true
           done
-          # Удаляем тег latest из git, если он остался без релиза
-          git push origin --delete latest 2>/dev/null || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -70,7 +68,7 @@ jobs:
           Автоматически сгенерированный список IP-адресов и доменов российских сервисов.
 
           📅 **Дата генерации:** ${{ env.CURRENT_DATETIME }}
-          🏷 **Тип запуска:** ${{ env.RELEASE_LABEL }}
+          🏷️ **Тип запуска:** ${{ env.RELEASE_LABEL }}
 
           - `ip-list.json` — для импорта в AmneziaVPN.
           - `cidrs.txt` — простой список CIDR-диапазонов.

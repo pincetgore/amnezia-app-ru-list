@@ -14,8 +14,10 @@ from unittest.mock import MagicMock, patch
 import dns.resolver
 import pytest
 
+from core.models import DEFAULT_NAMESERVERS
 from resolvers.asn import get_prefixes_he, get_prefixes_ripe, resolve_asn
 from resolvers.dns import (
+    DNSResolver,
     _get_worker_resolver,
     _is_valid_ip,
     _resolve_single_domain,
@@ -129,6 +131,25 @@ class TestASNResolver:
         assert IPv4Network("4.5.6.0/24") in result
         assert IPv4Network("0.0.0.0/0") not in result
 
+    def test_get_prefixes_he_ignores_unrelated_tables(self):
+        """Проверяет, что префиксы из других таблиц (peers/IXP) игнорируются при наличии table_prefixes4."""
+        mock_response = MagicMock()
+        mock_response.text = """
+            <table id="table_peers">
+                <tr><td><a href="/net/8.8.8.0/24">8.8.8.0/24</a></td></tr>
+            </table>
+            <table id="table_prefixes4">
+                <tr><td><a href="/net/1.2.3.0/24">1.2.3.0/24</a></td></tr>
+            </table>
+        """
+
+        with patch("resolvers.asn._session.get", return_value=mock_response):
+            result = get_prefixes_he(12389)
+
+        assert len(result) == 1
+        assert IPv4Network("1.2.3.0/24") in result
+        assert IPv4Network("8.8.8.0/24") not in result
+
     def test_get_prefixes_he_error(self):
         """Проверяет обработку ошибки при запросе к bgp.he.net."""
         import requests
@@ -205,6 +226,11 @@ class TestASNResolver:
 
 class TestDNSResolver:
     """Тесты для DNS резолвера."""
+
+    def test_dns_resolver_uses_default_nameservers(self):
+        """Проверяет, что DNSResolver использует DEFAULT_NAMESERVERS по умолчанию."""
+        resolver = DNSResolver()
+        assert resolver.nameservers == DEFAULT_NAMESERVERS
 
     def test_resolve_single_domain_success(self):
         """Проверяет успешный резолвинг домена в /32 сеть."""

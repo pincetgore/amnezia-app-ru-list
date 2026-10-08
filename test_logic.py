@@ -52,6 +52,9 @@ def test_aggregate_cidrs_ignores_default_route():
         {"services": [{"name": "Service", "extra_field": 123, "domains": ["example.com"]}]},  # Неизвестное поле
         {"services": [{"name": "Service", "domains": [" example.com "]}]},  # Пробелы по краям
         {"services": [{"name": "Service", "domains": ["exam ple.com"]}]},  # Пробел внутри
+        {"services": [{"name": "Service", "domains": ["*.example.com"]}]},  # Wildcard домен
+        {"services": [{"name": "Service", "domains": ["https://example.com"]}]},  # Схема URL
+        {"services": [{"name": "Service", "domains": ["example.com/"]}]},  # Слеш на конце
         {"services": [], "dns": {"nameservers": []}},
         {"services": [], "dns": {"timeout": 0}},
     ],

@@ -55,6 +55,12 @@ def validate_config(config: dict[str, Any]) -> None:
         for domain in service.get("domains") or []:
             if not isinstance(domain, str) or not domain.strip() or " " in domain or domain != domain.strip():
                 raise ValueError(f"Invalid domain for service '{name}': {domain!r}")
+            if domain.startswith("*"):
+                raise ValueError(f"Wildcard domains are not supported in service '{name}': {domain!r}")
+            if "://" in domain:
+                raise ValueError(f"Domain must not contain URL scheme in service '{name}': {domain!r}")
+            if domain.endswith("/"):
+                raise ValueError(f"Domain must not end with slash in service '{name}': {domain!r}")
         for ip_range in service.get("ip_ranges") or []:
             if not isinstance(ip_range, str):
                 raise ValueError(f"Invalid IP range for service '{name}': {ip_range!r}")
