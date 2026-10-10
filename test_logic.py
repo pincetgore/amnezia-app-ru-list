@@ -5,8 +5,9 @@ import pytest
 import yaml
 
 import main as app
-from main import validate_config
+from core.config import validate_config
 from output.formatter import aggregate_networks, write_output
+from resolvers.dns import DNSResolver
 
 CONFIG_PATH = Path(__file__).resolve().parent / "config.yaml"
 
@@ -65,68 +66,66 @@ def test_validate_config_rejects_invalid_values(config):
         validate_config(config)
 
 
-def test_dns_warning_writes_output_and_reports_domain(tmp_path: Path, monkeypatch, capsys):
-    """Недоступный DNS-домен выводится как предупреждение и не останавливает выпуск."""
+CLI_CONFIG = (
+    "services:\n"
+    "  - name: TestService\n"
+    "    asn: [12345, 23456]\n"
+    "    domains: [good.example, bad.example]\n"
+    "    ip_ranges: [192.0.2.1/32]\n"
+)
+
+
+def _run_cli(tmp_path: Path, monkeypatch, failing_asns: set[int], failing_domains: set[str]) -> Path:
+    """Запускает main() с фейковыми ASN/DNS: указанные в failing_* не резолвятся."""
     config_path = tmp_path / "config.yaml"
-    config_path.write_text(
-        "services:\n  - name: Service\n    domains:\n      - example.com\n    ip_ranges:\n      - 192.0.2.1/32\n",
-        encoding="utf-8",
-    )
+    config_path.write_text(CLI_CONFIG, encoding="utf-8")
     output_path = tmp_path / "ip-list.json"
 
-    class TqdmStub:
-        def __call__(self, services, **_):
-            return services
-
-        @staticmethod
-        def write(_message):
-            pass
+    def fake_dns(_self, domains):
+        return {d: ([], d) if d in failing_domains else ([IPv4Network("198.51.100.1/32")], None) for d in domains}
 
     monkeypatch.setattr(app.sys, "argv", ["main.py", "-c", str(config_path), "-o", str(output_path)])
-    monkeypatch.setattr(app, "tqdm", TqdmStub())
-    monkeypatch.setattr(
-        app,
-        "resolve_domains",
-        lambda *args, **kwargs: ([], ["example.com"]),
-    )
-
+    monkeypatch.setattr(app, "resolve_asn", lambda asn: [] if asn in failing_asns else [IPv4Network("203.0.113.0/24")])
+    monkeypatch.setattr(DNSResolver, "resolve", fake_dns)
     app.main()
+    return output_path
+
+
+def test_dns_warning_writes_output_and_reports_domain(tmp_path: Path, monkeypatch, capsys):
+    """Отдельный недоступный DNS-домен выводится как предупреждение и не останавливает выпуск."""
+    output_path = _run_cli(tmp_path, monkeypatch, failing_asns=set(), failing_domains={"bad.example"})
     captured = capsys.readouterr()
     assert output_path.exists()
     assert "Domains that could not be resolved:" in captured.out
-    assert "example.com" in captured.out
+    assert "bad.example" in captured.out
 
 
 def test_asn_warning_writes_output_and_reports_asn(tmp_path: Path, monkeypatch, capsys):
-    """Недоступный или пустой ASN выводится как предупреждение и не останавливает выпуск."""
-    config_path = tmp_path / "config.yaml"
-    config_path.write_text(
-        "services:\n  - name: TestService\n    asn:\n      - 12345\n    ip_ranges:\n      - 192.0.2.1/32\n",
-        encoding="utf-8",
-    )
-    output_path = tmp_path / "ip-list.json"
-
-    class TqdmStub:
-        def __call__(self, services, **_):
-            return services
-
-        @staticmethod
-        def write(_message):
-            pass
-
-    monkeypatch.setattr(app.sys, "argv", ["main.py", "-c", str(config_path), "-o", str(output_path)])
-    monkeypatch.setattr(app, "tqdm", TqdmStub())
-    monkeypatch.setattr(
-        app,
-        "resolve_asn",
-        lambda _asn: [],
-    )
-
-    app.main()
+    """Отдельный недоступный или пустой ASN выводится как предупреждение и не останавливает выпуск."""
+    output_path = _run_cli(tmp_path, monkeypatch, failing_asns={12345}, failing_domains=set())
     captured = capsys.readouterr()
     assert output_path.exists()
     assert "ASNs that could not be resolved or returned no prefixes:" in captured.out
     assert "AS12345 (TestService)" in captured.out
+
+
+@pytest.mark.parametrize(
+    ("failing_asns", "failing_domains"),
+    [
+        ({12345, 23456}, set()),
+        (set(), {"good.example", "bad.example"}),
+    ],
+)
+def test_mass_failure_keeps_previous_output(tmp_path: Path, monkeypatch, failing_asns, failing_domains):
+    """Если легли RIPE или DNS, почти пустой список (только ip_ranges) не публикуется."""
+    output_path = tmp_path / "ip-list.json"
+    output_path.write_text("previous good list", encoding="utf-8")
+
+    with pytest.raises(SystemExit) as exc_info:
+        _run_cli(tmp_path, monkeypatch, failing_asns, failing_domains)
+
+    assert exc_info.value.code == 1
+    assert output_path.read_text(encoding="utf-8") == "previous good list"
 
 
 def test_write_output_replaces_existing_file_atomically(tmp_path: Path):
@@ -135,7 +134,7 @@ def test_write_output_replaces_existing_file_atomically(tmp_path: Path):
     output_path.write_text("old and invalid content", encoding="utf-8")
 
     result = write_output(
-        [{"networks": [IPv4Network("192.0.2.2/32"), IPv4Network("192.0.2.1/32")]}],
+        [IPv4Network("192.0.2.2/32"), IPv4Network("192.0.2.1/32")],
         str(output_path),
     )
 

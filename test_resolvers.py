@@ -15,14 +15,8 @@ import dns.resolver
 import pytest
 
 from core.models import DEFAULT_NAMESERVERS
-from resolvers.asn import get_prefixes_he, get_prefixes_ripe, resolve_asn
-from resolvers.dns import (
-    DNSResolver,
-    _get_worker_resolver,
-    _is_valid_ip,
-    _resolve_single_domain,
-    resolve_domains,
-)
+from resolvers.asn import ASNResolver, is_valid_prefix, resolve_asn
+from resolvers.dns import DNSResolver, _resolve_single_domain
 
 
 class _DummyRdata:
@@ -40,6 +34,16 @@ def mock_rate_limit():
     """Предотвращает искусственные задержки (sleep) во время тестирования."""
     with patch("resolvers.asn._rate_limit", return_value=None):
         yield
+
+
+def _resolver(response=None, error=None) -> ASNResolver:
+    """ASNResolver с фейковой HTTP-сессией."""
+    session = MagicMock()
+    if error is not None:
+        session.get.side_effect = error
+    else:
+        session.get.return_value = response
+    return ASNResolver(session=session)
 
 
 class TestASNResolver:
@@ -60,8 +64,7 @@ class TestASNResolver:
             }
         }
 
-        with patch("resolvers.asn._session.get", return_value=mock_response):
-            result = get_prefixes_ripe(12389)
+        result = _resolver(mock_response).get_prefixes_ripe(12389)
 
         assert result is not None
         assert len(result) == 2
@@ -74,8 +77,7 @@ class TestASNResolver:
         mock_response = MagicMock()
         mock_response.json.return_value = {"data": {"prefixes": []}}
 
-        with patch("resolvers.asn._session.get", return_value=mock_response):
-            result = get_prefixes_ripe(12389)
+        result = _resolver(mock_response).get_prefixes_ripe(12389)
 
         assert result == []
 
@@ -84,8 +86,7 @@ class TestASNResolver:
         # Используем RequestException из requests, чтобы пройти через retry логику
         import requests
 
-        with patch("resolvers.asn._session.get", side_effect=requests.RequestException("Network error")):
-            result = get_prefixes_ripe(12389)
+        result = _resolver(error=requests.RequestException("Network error")).get_prefixes_ripe(12389)
 
         # После всех retry попыток должен вернуться None
         assert result is None
@@ -95,8 +96,7 @@ class TestASNResolver:
         mock_response = MagicMock()
         mock_response.json.return_value = {"data": None}
 
-        with patch("resolvers.asn._session.get", return_value=mock_response):
-            result = get_prefixes_ripe(12389)
+        result = _resolver(mock_response).get_prefixes_ripe(12389)
 
         assert result == []
 
@@ -105,8 +105,7 @@ class TestASNResolver:
         mock_response = MagicMock()
         mock_response.json.side_effect = ValueError("Invalid JSON")
 
-        with patch("resolvers.asn._session.get", return_value=mock_response):
-            result = get_prefixes_ripe(12389)
+        result = _resolver(mock_response).get_prefixes_ripe(12389)
 
         assert result is None
 
@@ -123,8 +122,7 @@ class TestASNResolver:
             </table>
         """
 
-        with patch("resolvers.asn._session.get", return_value=mock_response):
-            result = get_prefixes_he(12389)
+        result = _resolver(mock_response).get_prefixes_he(12389)
 
         assert len(result) == 2
         assert IPv4Network("1.2.3.0/24") in result
@@ -143,8 +141,7 @@ class TestASNResolver:
             </table>
         """
 
-        with patch("resolvers.asn._session.get", return_value=mock_response):
-            result = get_prefixes_he(12389)
+        result = _resolver(mock_response).get_prefixes_he(12389)
 
         assert len(result) == 1
         assert IPv4Network("1.2.3.0/24") in result
@@ -154,8 +151,7 @@ class TestASNResolver:
         """Проверяет обработку ошибки при запросе к bgp.he.net."""
         import requests
 
-        with patch("resolvers.asn._session.get", side_effect=requests.RequestException("Network error")):
-            result = get_prefixes_he(12389)
+        result = _resolver(error=requests.RequestException("Network error")).get_prefixes_he(12389)
 
         assert result == []
 
@@ -164,13 +160,13 @@ class TestASNResolver:
         mock_ripe = [IPv4Network("1.2.3.0/24")]
 
         with (
-            patch("resolvers.asn.get_prefixes_ripe", return_value=mock_ripe) as mock_ripe_func,
-            patch("resolvers.asn.get_prefixes_he") as mock_he_func,
+            patch.object(ASNResolver, "get_prefixes_ripe", return_value=mock_ripe) as mock_ripe_func,
+            patch.object(ASNResolver, "get_prefixes_he") as mock_he_func,
         ):
             result = resolve_asn(12389)
 
             assert result == mock_ripe
-            mock_ripe_func.assert_called_once_with(12389)
+            mock_ripe_func.assert_called_once_with(12389, timeout=30)
             mock_he_func.assert_not_called()
 
     def test_resolve_asn_fallback_to_he(self):
@@ -178,40 +174,36 @@ class TestASNResolver:
         mock_he = [IPv4Network("4.5.6.0/24")]
 
         with (
-            patch("resolvers.asn.get_prefixes_ripe", return_value=None),
-            patch("resolvers.asn.get_prefixes_he", return_value=mock_he) as mock_he_func,
+            patch.object(ASNResolver, "get_prefixes_ripe", return_value=None),
+            patch.object(ASNResolver, "get_prefixes_he", return_value=mock_he) as mock_he_func,
         ):
             result = resolve_asn(12389)
 
             assert result == mock_he
-            mock_he_func.assert_called_once_with(12389)
+            mock_he_func.assert_called_once_with(12389, timeout=30)
 
     def test_resolve_asn_fallback_to_he_on_empty_ripe(self):
         """Проверяет fallback на bgp.he.net, когда RIPE возвращает пустой список префиксов []."""
         mock_he = [IPv4Network("4.5.6.0/24")]
 
         with (
-            patch("resolvers.asn.get_prefixes_ripe", return_value=[]),
-            patch("resolvers.asn.get_prefixes_he", return_value=mock_he) as mock_he_func,
+            patch.object(ASNResolver, "get_prefixes_ripe", return_value=[]),
+            patch.object(ASNResolver, "get_prefixes_he", return_value=mock_he) as mock_he_func,
         ):
             result = resolve_asn(33844)
 
             assert result == mock_he
-            mock_he_func.assert_called_once_with(33844)
+            mock_he_func.assert_called_once_with(33844, timeout=30)
 
     def test_resolve_asn_with_string_format(self):
         """Проверяет корректность обработки строковых ASN (например, 'AS12389')."""
         mock_prefixes = [IPv4Network("1.2.3.0/24")]
 
-        with patch("resolvers.asn.get_prefixes_ripe", return_value=mock_prefixes) as mock_ripe:
-            result = resolve_asn("AS12389")
-            assert result == mock_prefixes
-            mock_ripe.assert_called_once_with(12389)
-
-        with patch("resolvers.asn.get_prefixes_ripe", return_value=mock_prefixes) as mock_ripe:
-            result = resolve_asn("12389")
-            assert result == mock_prefixes
-            mock_ripe.assert_called_once_with(12389)
+        for raw in ("AS12389", "12389"):
+            with patch.object(ASNResolver, "get_prefixes_ripe", return_value=mock_prefixes) as mock_ripe:
+                result = resolve_asn(raw)
+                assert result == mock_prefixes
+                mock_ripe.assert_called_once_with(12389, timeout=30)
 
     def test_resolve_asn_with_invalid_string(self):
         """Проверяет обработку невалидной строки ASN."""
@@ -281,73 +273,47 @@ class TestDNSResolver:
         assert IPv4Network("93.184.216.34/32") in networks
         assert warning is None
 
-    def test_is_valid_ip(self):
-        """Проверяет функцию фильтрации _is_valid_ip."""
-        assert _is_valid_ip(IPv4Network("93.184.216.34/32")) is True
-        assert _is_valid_ip(IPv4Network("0.0.0.0/32")) is False
-        assert _is_valid_ip(IPv4Network("127.0.0.1/32")) is False
-        assert _is_valid_ip(IPv4Network("224.0.0.1/32")) is False
-        assert _is_valid_ip(IPv4Network("0.1.2.3/32")) is False
+    def test_is_valid_prefix_for_dns_addresses(self):
+        """Общий фильтр is_valid_prefix отсеивает sinkhole/loopback/multicast и для /32 из DNS."""
+        assert is_valid_prefix(IPv4Network("93.184.216.34/32")) is True
+        assert is_valid_prefix(IPv4Network("0.0.0.0/32")) is False
+        assert is_valid_prefix(IPv4Network("127.0.0.1/32")) is False
+        assert is_valid_prefix(IPv4Network("224.0.0.1/32")) is False
+        assert is_valid_prefix(IPv4Network("0.1.2.3/32")) is False
 
-    def test_get_worker_resolver_syncs_settings(self):
-        """Проверяет, что настройки из base_resolver синхронизируются в thread_local resolver."""
-        base1 = dns.resolver.Resolver(configure=False)
-        base1.nameservers = ["77.88.8.8"]
-        base1.timeout = 5.0
-        base1.lifetime = 10.0
+    def test_resolver_uses_configured_nameservers_and_timeouts(self):
+        """Каждый Resolver создаётся с настроенными серверами и таймаутом на сервер."""
+        resolver = DNSResolver(nameservers=["8.8.8.8", "1.1.1.1"], timeout=4.0)._create_resolver()
 
-        res1 = _get_worker_resolver(base1)
-        assert res1.nameservers == ["77.88.8.8"]
-        assert res1.timeout == 5.0
+        assert resolver.nameservers == ["8.8.8.8", "1.1.1.1"]
+        assert resolver.timeout == 2.0
+        assert resolver.lifetime == 4.0
 
-        base2 = dns.resolver.Resolver(configure=False)
-        base2.nameservers = ["1.1.1.1", "8.8.8.8"]
-        base2.timeout = 2.0
-        base2.lifetime = 4.0
+    def test_resolve_deduplicates_and_maps_each_domain(self):
+        """Повторяющиеся домены резолвятся один раз; результат — словарь по доменам."""
+        calls = []
 
-        res2 = _get_worker_resolver(base2)
-        assert res2.nameservers == ["1.1.1.1", "8.8.8.8"]
-        assert res2.timeout == 2.0
+        def fake_single(domain, _resolver):
+            calls.append(domain)
+            return ([IPv4Network("1.2.3.4/32")], None) if domain == "ok.ru" else ([], domain)
 
-    def test_resolve_domains_with_custom_nameservers(self):
-        """Проверяет что custom nameservers используются при передаче."""
-        custom_nameservers = ["8.8.8.8", "1.1.1.1"]
+        with patch("resolvers.dns._resolve_single_domain", side_effect=fake_single):
+            result = DNSResolver().resolve(["ok.ru", "bad.ru", "ok.ru"])
 
-        with patch("resolvers.dns.dns.resolver.Resolver") as MockResolver:
-            mock_resolver_instance = MagicMock()
-            MockResolver.return_value = mock_resolver_instance
+        assert sorted(calls) == ["bad.ru", "ok.ru"]
+        assert result == {"ok.ru": ([IPv4Network("1.2.3.4/32")], None), "bad.ru": ([], "bad.ru")}
 
-            resolve_domains([], nameservers=custom_nameservers)
-
-            MockResolver.assert_called_once_with(configure=False)
-            assert mock_resolver_instance.nameservers == custom_nameservers
+    def test_resolve_empty_list(self):
+        assert DNSResolver().resolve([]) == {}
 
     @pytest.mark.parametrize(
         "kwargs",
         [{"nameservers": []}, {"timeout": 0}, {"max_workers": 0}],
     )
-    def test_resolve_domains_rejects_invalid_settings(self, kwargs):
+    def test_resolver_rejects_invalid_settings(self, kwargs):
         """Пустые и нулевые параметры не подменяются значениями по умолчанию."""
         with pytest.raises(ValueError):
-            resolve_domains([], **kwargs)
-
-    def test_resolve_domains_with_timeout(self):
-        """Проверяет что timeout и max_workers используются правильно."""
-        with patch("resolvers.dns.concurrent.futures.ThreadPoolExecutor") as MockExecutor:
-            mock_executor = MagicMock()
-            mock_executor.__enter__ = MagicMock(return_value=mock_executor)
-            mock_executor.__exit__ = MagicMock(return_value=False)
-            mock_executor.submit.return_value = MagicMock()
-            MockExecutor.return_value = mock_executor
-
-            with patch("resolvers.dns.dns.resolver.Resolver") as MockResolver:
-                mock_resolver_instance = MagicMock()
-                MockResolver.return_value = mock_resolver_instance
-
-                resolve_domains([], timeout=20, max_workers=30)
-
-            # Проверяем что ThreadPoolExecutor был создан с правильными параметрами
-            MockExecutor.assert_called_with(max_workers=30)
+            DNSResolver(**kwargs)
 
     def test_resolve_single_domain_idn_punycode(self):
         """Проверяет преобразование кириллического домена в punycode при DNS-запросе."""
@@ -361,7 +327,7 @@ class TestDNSResolver:
         assert warning is None
         mock_resolver.resolve.assert_called_once_with("xn--e1aybc.xn--p1ai", "A")
 
-    def test_resolve_domains_limits_workers_to_domain_count(self):
+    def test_resolve_limits_workers_to_domain_count(self):
         """Проверяет оптимизацию: число воркеров ограничивается числом доменов."""
         import concurrent.futures
 
@@ -369,9 +335,9 @@ class TestDNSResolver:
             patch(
                 "resolvers.dns.concurrent.futures.ThreadPoolExecutor", wraps=concurrent.futures.ThreadPoolExecutor
             ) as mock_executor_cls,
-            patch("resolvers.dns._worker_resolve", return_value=([], None)),
+            patch("resolvers.dns._resolve_single_domain", return_value=([], None)),
         ):
-            resolve_domains(["a.com", "b.com"], timeout=20, max_workers=30)
+            DNSResolver(timeout=20, max_workers=30).resolve(["a.com", "b.com"])
             mock_executor_cls.assert_called_with(max_workers=2)
 
 

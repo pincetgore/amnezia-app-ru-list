@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass, field
 from ipaddress import IPv4Network
-from typing import Any
 
 DEFAULT_NAMESERVERS: list[str] = ["77.88.8.8", "77.88.8.1", "8.8.8.8", "1.1.1.1"]
 DEFAULT_DNS_TIMEOUT: float = 10.0
@@ -44,31 +43,6 @@ class ServiceResult:
     domains: list[str] = field(default_factory=list)
     networks: list[IPv4Network] = field(default_factory=list)
 
-    def __getitem__(self, key: str) -> Any:
-        """Backwards compatibility for dict-like access."""
-        if key == "name":
-            return self.name
-        if key == "domains":
-            return self.domains
-        if key == "networks":
-            return self.networks
-        raise KeyError(key)
-
-    def get(self, key: str, default: Any = None) -> Any:
-        """Backwards compatibility for dict-like get."""
-        try:
-            return self[key]
-        except KeyError:
-            return default
-
-    def to_dict(self) -> dict[str, Any]:
-        """Convert to legacy dictionary format."""
-        return {
-            "name": self.name,
-            "domains": list(self.domains),
-            "networks": list(self.networks),
-        }
-
 
 @dataclass(slots=True, frozen=True)
 class ServiceStats:
@@ -86,16 +60,28 @@ class PipelineResult:
     stats: list[ServiceStats] = field(default_factory=list)
     asn_warnings: list[str] = field(default_factory=list)
     dns_warnings: list[str] = field(default_factory=list)
+    asn_total: int = 0
+    domain_total: int = 0
 
     @property
     def total_raw_prefixes(self) -> int:
         """Sum of all raw prefixes collected across services."""
         return sum(s.raw_prefix_count for s in self.stats)
 
-    @property
-    def has_networks(self) -> bool:
-        """Whether any service resolved at least one network."""
-        return any(bool(res.networks) for res in self.service_results)
+    def failure_reason(self, max_failed_share: float = 0.5) -> str | None:
+        """Returns why the run must not be published, or None if it is healthy.
+
+        Static ip_ranges always resolve, so "some networks collected" does not prove
+        that RIPE or DNS worked. A mass failure would publish a near-empty list.
+        """
+        checks = (
+            ("ASN", len(self.asn_warnings), self.asn_total),
+            ("domain", len(self.dns_warnings), self.domain_total),
+        )
+        for kind, failed, total in checks:
+            if total and failed / total > max_failed_share:
+                return f"{failed} of {total} {kind} lookups failed (limit {max_failed_share:.0%})"
+        return None
 
     def collect_all_networks(self) -> list[IPv4Network]:
         """Flatten and return all collected networks."""

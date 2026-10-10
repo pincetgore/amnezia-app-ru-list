@@ -91,8 +91,8 @@ def _rate_limit(min_interval: float = 1.0) -> None:
         time.sleep(sleep_time)
 
 
-def _is_valid_prefix(net: IPv4Network) -> bool:
-    """Проверяет валидность полученного BGP IPv4-префикса.
+def is_valid_prefix(net: IPv4Network) -> bool:
+    """Проверяет валидность IPv4-префикса из BGP или DNS (/32).
 
     Исключает:
     - Default route (0.0.0.0/0) и чрезмерно широкие суперсети (маска < 8)
@@ -171,7 +171,7 @@ class ASNResolver:
                 continue
             try:
                 net = IPv4Network(prefix, strict=False)
-                if _is_valid_prefix(net):
+                if is_valid_prefix(net):
                     prefixes.append(net)
             except ValueError:
                 continue
@@ -205,7 +205,7 @@ class ASNResolver:
                 seen_prefixes.add(text)
                 try:
                     net = IPv4Network(text, strict=False)
-                    if _is_valid_prefix(net):
+                    if is_valid_prefix(net):
                         prefixes.append(net)
                 except ValueError:
                     continue
@@ -231,26 +231,6 @@ class ASNResolver:
 _default_asn_resolver = ASNResolver()
 
 
-def get_prefixes_ripe(asn: int, timeout: int = 30) -> list[IPv4Network] | None:
-    """Функция модуля для обратной совместимости."""
-    return _default_asn_resolver.get_prefixes_ripe(asn, timeout=timeout)
-
-
-def get_prefixes_he(asn: int, timeout: int = 30) -> list[IPv4Network]:
-    """Функция модуля для обратной совместимости."""
-    return _default_asn_resolver.get_prefixes_he(asn, timeout=timeout)
-
-
 def resolve_asn(asn: Any) -> list[IPv4Network]:
-    """Функция модуля для обратной совместимости."""
-    clean = _clean_asn(asn)
-    if clean is None:
-        return []
-
-    # Используем глобальные имена get_prefixes_ripe / get_prefixes_he для совместимости с патчами тестов
-    prefixes = get_prefixes_ripe(clean)
-    if prefixes:
-        return prefixes
-
-    logger.info("Falling back to bgp.he.net for AS%s", clean)
-    return get_prefixes_he(clean)
+    """Резолвит ASN общим экземпляром ASNResolver (общая сессия и rate limit)."""
+    return _default_asn_resolver.resolve(asn)

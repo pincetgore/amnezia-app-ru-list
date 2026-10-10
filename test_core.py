@@ -21,6 +21,15 @@ from resolvers.asn import ASNResolver
 from resolvers.dns import DNSResolver
 
 
+def _dns_stub(results: dict[str, list[IPv4Network]]):
+    """DNS-заглушка: домен из results резолвится, остальные дают предупреждение."""
+
+    def resolve(domains: list[str]) -> dict[str, tuple[list[IPv4Network], str | None]]:
+        return {d: (results[d], None) if d in results else ([], d) for d in domains}
+
+    return resolve
+
+
 class TestCoreModels:
     """Tests domain models and their backwards-compatibility behaviors."""
 
@@ -30,26 +39,6 @@ class TestCoreModels:
         assert "77.88.8.8" in dns_cfg.nameservers
         assert dns_cfg.timeout == 10.0
         assert dns_cfg.max_workers == 20
-
-    def test_service_result_dict_access_compatibility(self):
-        net = IPv4Network("192.0.2.0/24")
-        result = ServiceResult(name="TestSvc", domains=["test.ru"], networks=[net])
-
-        assert result["name"] == "TestSvc"
-        assert result["domains"] == ["test.ru"]
-        assert result["networks"] == [net]
-        assert result.get("name") == "TestSvc"
-        assert result.get("unknown_key", "default") == "default"
-
-        with pytest.raises(KeyError):
-            _ = result["non_existent"]
-
-        legacy_dict = result.to_dict()
-        assert legacy_dict == {
-            "name": "TestSvc",
-            "domains": ["test.ru"],
-            "networks": [net],
-        }
 
     def test_pipeline_result_metrics(self):
         res1 = ServiceResult(name="S1", networks=[IPv4Network("10.0.0.0/24")])
@@ -64,14 +53,32 @@ class TestCoreModels:
         )
 
         assert pipeline_result.total_raw_prefixes == 2
-        assert pipeline_result.has_networks is True
         assert len(pipeline_result.collect_all_networks()) == 2
 
     def test_pipeline_result_empty(self):
         empty_result = PipelineResult()
         assert empty_result.total_raw_prefixes == 0
-        assert empty_result.has_networks is False
+        assert empty_result.failure_reason() is None
         assert empty_result.collect_all_networks() == []
+
+    @pytest.mark.parametrize(
+        ("asn_failed", "asn_total", "dns_failed", "domain_total", "blocked"),
+        [
+            (0, 10, 0, 10, False),
+            (5, 10, 5, 10, False),  # ровно половина — ещё допустимо
+            (6, 10, 0, 10, True),
+            (0, 10, 6, 10, True),
+            (0, 0, 0, 0, False),  # только статические ip_ranges
+        ],
+    )
+    def test_failure_reason_blocks_mass_failures(self, asn_failed, asn_total, dns_failed, domain_total, blocked):
+        result = PipelineResult(
+            asn_warnings=["x"] * asn_failed,
+            dns_warnings=["y"] * dns_failed,
+            asn_total=asn_total,
+            domain_total=domain_total,
+        )
+        assert (result.failure_reason() is not None) is blocked
 
 
 class TestCoreConfig:
@@ -112,11 +119,10 @@ class TestCorePipeline:
 
     def test_pipeline_run_with_custom_resolvers(self):
         mock_asn_func = MagicMock(return_value=[IPv4Network("1.2.3.0/24")])
-        mock_dns_func = MagicMock(return_value=([IPv4Network("4.5.6.7/32")], []))
 
         pipeline = ListBuilderPipeline(
-            asn_resolver=mock_asn_func,
-            dns_resolver_factory=lambda _cfg: mock_dns_func,
+            asn_resolve=mock_asn_func,
+            dns_resolve=_dns_stub({"test.example": [IPv4Network("4.5.6.7/32")]}),
         )
 
         config = AppConfig(
@@ -152,27 +158,15 @@ class TestCorePipeline:
         assert result.stats[0].raw_prefix_count == 3
         assert result.asn_warnings == []
         assert result.dns_warnings == []
+        assert result.asn_total == 1
+        assert result.domain_total == 1
 
     def test_pipeline_collects_warnings_on_failures(self):
-        def failing_asn(_asn):
-            return []
-
-        def failing_dns(_domains):
-            return [], ["broken.domain"]
-
-        pipeline = ListBuilderPipeline(
-            asn_resolver=failing_asn,
-            dns_resolver_factory=lambda _cfg: failing_dns,
-        )
+        pipeline = ListBuilderPipeline(asn_resolve=lambda _asn: [], dns_resolve=_dns_stub({}))
 
         config = AppConfig(
             services=[
-                ServiceConfig(
-                    name="FlakyService",
-                    asn=[99999],
-                    domains=["broken.domain"],
-                    ip_ranges=["invalid-range"],
-                )
+                ServiceConfig(name="FlakyService", asn=[99999], domains=["broken.domain"]),
             ]
         )
 
@@ -182,6 +176,56 @@ class TestCorePipeline:
         assert "AS99999 (FlakyService)" in result.asn_warnings[0]
         assert result.dns_warnings == ["broken.domain"]
         assert result.stats[0].raw_prefix_count == 0
+        assert result.failure_reason() is not None
+
+    def test_pipeline_resolves_shared_domain_once_for_all_services(self):
+        """Домен из нескольких сервисов резолвится один раз, но попадает в каждый сервис."""
+        dns_resolve = MagicMock(side_effect=_dns_stub({"shared.ru": [IPv4Network("4.5.6.7/32")]}))
+        pipeline = ListBuilderPipeline(asn_resolve=lambda _asn: [], dns_resolve=dns_resolve)
+        config = AppConfig(
+            services=[
+                ServiceConfig(name="A", domains=["shared.ru"]),
+                ServiceConfig(name="B", domains=["shared.ru", "bad.ru"]),
+            ]
+        )
+
+        result = pipeline.run(config)
+
+        dns_resolve.assert_called_once_with(["shared.ru", "shared.ru", "bad.ru"])
+        assert [r.networks for r in result.service_results] == [[IPv4Network("4.5.6.7/32")]] * 2
+        assert result.dns_warnings == ["bad.ru"]
+        assert result.domain_total == 2
+
+    def test_pipeline_marks_all_domains_failed_when_dns_crashes(self):
+        def crashing_dns(_domains):
+            raise RuntimeError("boom")
+
+        pipeline = ListBuilderPipeline(asn_resolve=lambda _asn: [], dns_resolve=crashing_dns)
+        config = AppConfig(services=[ServiceConfig(name="A", domains=["a.ru", "b.ru"])])
+
+        result = pipeline.run(config)
+
+        assert sorted(result.dns_warnings) == ["a.ru", "b.ru"]
+        assert result.failure_reason() is not None
+
+    def test_pipeline_default_dns_uses_float_timeout_from_config(self, monkeypatch):
+        """Дробный timeout из конфига не обрезается до целого (0.5 -> 0 отключало DNS)."""
+        seen = {}
+
+        def fake_resolve(self, domains):
+            seen["timeout"] = self.timeout
+            return {d: ([IPv4Network("4.5.6.7/32")], None) for d in domains}
+
+        monkeypatch.setattr(DNSResolver, "resolve", fake_resolve)
+        config = AppConfig(
+            services=[ServiceConfig(name="A", domains=["a.ru"])],
+            dns=DnsConfig(timeout=0.5),
+        )
+
+        result = ListBuilderPipeline(asn_resolve=lambda _asn: []).run(config)
+
+        assert seen["timeout"] == 0.5
+        assert result.dns_warnings == []
 
 
 class TestCoreReporter:
@@ -238,6 +282,18 @@ class TestResolverClasses:
 
         assert len(prefixes) == 1
         assert prefixes[0] == IPv4Network("198.51.100.0/24")
+
+    def test_asn_resolver_falls_back_to_he_when_ripe_empty(self):
+        ripe = MagicMock()
+        ripe.json.return_value = {"data": {"prefixes": []}}
+        he = MagicMock(text='<table id="table_prefixes4"><tr><td>203.0.113.0/24</td></tr></table>')
+        session = MagicMock()
+        session.get.side_effect = [ripe, he]
+
+        prefixes = ASNResolver(session=session, rate_limit_interval=0.0).resolve("AS64500")
+
+        assert prefixes == [IPv4Network("203.0.113.0/24")]
+        assert "bgp.he.net" in session.get.call_args_list[1].args[0]
 
     def test_dns_resolver_custom_instance(self):
         resolver = DNSResolver(nameservers=["8.8.8.8"], timeout=5.0, max_workers=5)

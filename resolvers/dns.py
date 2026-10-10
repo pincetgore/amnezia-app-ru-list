@@ -9,30 +9,15 @@
 
 import concurrent.futures
 import logging
-import threading
 from ipaddress import IPv4Network
 
 import dns.exception
 import dns.resolver
 
 from core.models import DEFAULT_NAMESERVERS
+from resolvers.asn import is_valid_prefix
 
 logger = logging.getLogger(__name__)
-
-_thread_local = threading.local()
-
-
-def _is_valid_ip(net: IPv4Network) -> bool:
-    """Проверяет валидность полученного через DNS IPv4-адреса.
-
-    Исключает:
-    - Неопределенные адреса (0.0.0.0/8, 0.0.0.0/32)
-    - Loopback адреса (127.0.0.0/8, 127.0.0.1)
-    - Multicast / Class E (>= 224.0.0.0/4)
-    """
-    if net.is_unspecified or net.is_loopback or net.is_multicast:
-        return False
-    return not str(net.network_address).startswith("0.")
 
 
 def _to_ascii_domain(domain: str) -> str:
@@ -42,25 +27,6 @@ def _to_ascii_domain(domain: str) -> str:
         return clean_domain.encode("idna").decode("ascii")
     except Exception:
         return clean_domain
-
-
-def _get_worker_resolver(base_resolver: dns.resolver.Resolver) -> dns.resolver.Resolver:
-    """Возвращает локальный для потока Resolver во избежание race conditions."""
-    res = getattr(_thread_local, "resolver", None)
-    if res is None:
-        try:
-            res = dns.resolver.Resolver(configure=False)
-            res.nameservers = list(base_resolver.nameservers)
-            res.timeout = base_resolver.timeout
-            res.lifetime = base_resolver.lifetime
-        except Exception:
-            res = base_resolver
-        _thread_local.resolver = res
-    elif res is not base_resolver and (res.nameservers != base_resolver.nameservers or res.timeout != base_resolver.timeout):
-        res.nameservers = list(base_resolver.nameservers)
-        res.timeout = base_resolver.timeout
-        res.lifetime = base_resolver.lifetime
-    return res
 
 
 def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> tuple[list[IPv4Network], str | None]:
@@ -74,7 +40,7 @@ def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> tupl
             ip = str(rdata)
             try:
                 net = IPv4Network(f"{ip}/32", strict=False)
-                if _is_valid_ip(net):
+                if is_valid_prefix(net):
                     networks.append(net)
                     logger.debug("DNS %s -> %s", domain, ip)
                 else:
@@ -97,12 +63,6 @@ def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> tupl
     return networks, warning
 
 
-def _worker_resolve(domain: str, base_resolver: dns.resolver.Resolver) -> tuple[list[IPv4Network], str | None]:
-    """Воркер с получением потокобезопасного экземпляра Resolver."""
-    resolver = _get_worker_resolver(base_resolver)
-    return _resolve_single_domain(domain, resolver)
-
-
 class DNSResolver:
     """Многопоточный DNS-резолвер с настраиваемыми DNS-серверами и пулом воркеров."""
 
@@ -120,43 +80,25 @@ class DNSResolver:
             raise ValueError("At least one DNS nameserver must be configured")
 
         self.nameservers = list(nameservers) if nameservers is not None else list(DEFAULT_NAMESERVERS)
-        if not self.nameservers:
-            raise ValueError("At least one DNS nameserver must be configured")
-
         self.timeout = float(timeout)
         self.max_workers = int(max_workers)
 
-    def _create_base_resolver(self) -> dns.resolver.Resolver:
+    def _create_resolver(self) -> dns.resolver.Resolver:
         resolver = dns.resolver.Resolver(configure=False)
         resolver.nameservers = list(self.nameservers)
         resolver.timeout = max(1.0, self.timeout / len(resolver.nameservers))
         resolver.lifetime = self.timeout
         return resolver
 
-    def resolve(self, domains: list[str]) -> tuple[list[IPv4Network], list[str]]:
-        """Разрешает список доменов параллельно и возвращает список сетей и предупреждений."""
-        base_resolver = self._create_base_resolver()
-        networks: list[IPv4Network] = []
-        warnings: list[str] = []
+    def _resolve_one(self, domain: str) -> tuple[list[IPv4Network], str | None]:
+        # Свой Resolver на каждый домен: объект не делится между потоками.
+        return _resolve_single_domain(domain, self._create_resolver())
 
-        effective_workers = min(self.max_workers, len(domains)) if domains else self.max_workers
-        with concurrent.futures.ThreadPoolExecutor(max_workers=effective_workers) as executor:
-            futures = [executor.submit(_worker_resolve, domain, base_resolver) for domain in domains]
-            for future in concurrent.futures.as_completed(futures):
-                nets, warn = future.result()
-                networks.extend(nets)
-                if warn:
-                    warnings.append(warn)
-
-        return networks, warnings
-
-
-def resolve_domains(
-    domains: list[str],
-    timeout: int = 10,
-    max_workers: int = 20,
-    nameservers: list[str] | None = None,
-) -> tuple[list[IPv4Network], list[str]]:
-    """Функция модуля для обратной совместимости."""
-    resolver = DNSResolver(nameservers=nameservers, timeout=timeout, max_workers=max_workers)
-    return resolver.resolve(domains)
+    def resolve(self, domains: list[str]) -> dict[str, tuple[list[IPv4Network], str | None]]:
+        """Резолвит уникальные домены одним общим пулом: {домен: (сети, предупреждение)}."""
+        unique = list(dict.fromkeys(domains))
+        if not unique:
+            return {}
+        workers = min(self.max_workers, len(unique))
+        with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
+            return dict(zip(unique, executor.map(self._resolve_one, unique), strict=True))
