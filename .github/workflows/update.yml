@@ -62,7 +62,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create or Update Release and Upload Artifacts
+      - name: Recreate Release and Upload Artifacts
         run: |
           cat > release-notes.md <<'EOF'
           Автоматически сгенерированный список IP-адресов и доменов российских сервисов.
@@ -74,21 +74,22 @@ jobs:
           - `cidrs.txt` — простой список CIDR-диапазонов.
           EOF
 
+          # Релиз пересоздаётся при каждом запуске: GitHub не позволяет обновить дату
+          # публикации (published_at), и при `gh release edit` страница показывала бы
+          # дату первой публикации. Цена: несколько секунд ссылка на файлы отдаёт 404,
+          # а счётчик скачиваний обнуляется.
           if gh release view latest >/dev/null 2>&1; then
-            echo "Release 'latest' exists. Updating title, notes and artifacts..."
-            gh release edit latest \
-              --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
-              --notes-file release-notes.md \
-              --latest
-            gh release upload latest ip-list.json cidrs.txt --clobber
-          else
-            echo "Creating release 'latest'..."
-            gh release create latest \
-              ip-list.json \
-              cidrs.txt \
-              --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
-              --notes-file release-notes.md \
-              --latest
+            echo "Deleting previous 'latest' release and tag..."
+            gh release delete latest --yes --cleanup-tag
           fi
+
+          echo "Creating release 'latest' at $GITHUB_SHA..."
+          gh release create latest \
+            ip-list.json \
+            cidrs.txt \
+            --target "$GITHUB_SHA" \
+            --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
+            --notes-file release-notes.md \
+            --latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
