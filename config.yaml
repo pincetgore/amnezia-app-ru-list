@@ -2282,7 +2282,6 @@ services:
 
   - name: "Timeweb"
     asn:
-      - 9123
       - 51789
     domains:
       - timeweb.cloud
