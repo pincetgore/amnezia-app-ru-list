@@ -439,7 +439,6 @@ services:
   # ============================================================
   - name: "Сбербанк"
     asn:
-      - 33844
       - 35237
       - 42974
       - 43396
@@ -451,6 +450,9 @@ services:
       - 206673
       - 208165
       - 209701
+      - 205221
+      - 208117
+      - 211631
     domains:
       - online.sberbank.ru
       - sber-zvuk.com
@@ -500,6 +502,7 @@ services:
       - 41430
       - 41551
       - 57930
+      - 60702
     domains:
       - invest.vtb.ru
       - online.vtb.ru
@@ -542,10 +545,9 @@ services:
 
   - name: "Промсвязьбанк"
     asn:
-      - 35090
-      - 41584
-      - 42488
-      - 207038
+      - 42231
+      - 42554
+      - 42758
     domains:
       - ib.psbank.ru
       - psb.ru
@@ -561,8 +563,7 @@ services:
       - sovcombank.ru
 
   - name: "Райффайзен Банк"
-    asn:
-      - 25253
+    asn: []
     domains:
       - online.raiffeisen.ru
       - raiffeisen.ru
@@ -583,8 +584,7 @@ services:
       - open.ru
 
   - name: "Росбанк"
-    asn:
-      - 25501
+    asn: []
     domains:
       - rosbank.ru
 
@@ -622,7 +622,7 @@ services:
 
   - name: "МТС Банк"
     asn:
-      - 42777
+      - 51771
     domains:
       - dbo-dengi.online
       - mtsbank.ru
@@ -654,7 +654,8 @@ services:
       - tochka.com
 
   - name: "Модульбанк"
-    asn: []
+    asn:
+      - 49729
     domains:
       - modulbank.ru
 
@@ -664,56 +665,55 @@ services:
       - blank.ru
 
   - name: "Почта Банк"
-    asn:
-      - 200424
+    asn: []
     domains:
       - pochtabank.ru
 
   - name: "Банк Санкт-Петербург"
     asn:
-      - 34978
+      - 24913
+      - 39254
     domains:
       - bspb.ru
 
   - name: "Уралсиб"
     asn:
-      - 29076
+      - 20872
+      - 21252
     domains:
       - uralsib.ru
 
   - name: "Ак Барс Банк"
     asn:
-      - 31200
+      - 201757
     domains:
       - akbars.ru
 
   - name: "Банк ДОМ.РФ"
-    asn:
-      - 39169
+    asn: []
     domains:
       - domrfbank.ru
 
   - name: "Ренессанс Банк"
     asn:
-      - 41703
+      - 34802
     domains:
       - rencredit.ru
 
   - name: "ОТП Банк"
     asn:
-      - 42668
+      - 39688
     domains:
       - otpbank.ru
 
   - name: "Центр-инвест"
     asn:
-      - 34863
+      - 208177
     domains:
       - centrinvest.ru
 
   - name: "БКС Мир Инвестиций"
-    asn:
-      - 44256
+    asn: []
     domains:
       - bcs.ru
       - bcsexpress.ru
@@ -740,7 +740,9 @@ services:
 
   - name: "Золотая Корона (KoronaPay)"
     asn:
-      - 42691
+      - 212264
+      - 8848
+      - 57628
     domains:
       - korona.ru
       - koronapay.com
@@ -748,14 +750,13 @@ services:
 
   - name: "Цифра Банк (Freedom Finance)"
     asn:
-      - 207012
+      - 58341
     domains:
       - cifra-bank.ru
       - cifrabank.ru
 
   - name: "РНКБ (Группа ВТБ)"
-    asn:
-      - 21235
+    asn: []
     domains:
       - rncb.ru
 
@@ -829,7 +830,8 @@ services:
       - lk.domru.ru
 
   - name: "Виртуальные мобильные операторы (Т-Мобайл, СберМобайл, ВТБ Мобайл, ГПБ Мобайл)"
-    asn: []
+    asn:
+      - 202498
     domains:
       - gpbmobile.ru
       - sbermobile.ru
@@ -894,33 +896,32 @@ services:
 
   - name: "DNS Shop"
     asn:
-      - 43547
+      - 57898
     domains:
       - dns-shop.net
       - dns-shop.ru
 
   - name: "М.Видео / Эльдорадо"
-    asn:
-      - 43977
+    asn: []
     domains:
       - eldorado.ru
       - mvideo.ru
 
   - name: "Ситилинк"
     asn:
-      - 42888
+      - 206904
     domains:
       - citilink.ru
 
   - name: "Леруа Мерлен"
-    asn:
-      - 42358
+    asn: []
     domains:
       - lemanapro.ru
 
   - name: "Золотое Яблоко"
     asn:
-      - 208753
+      - 208629
+      - 210443
     domains:
       - api.goldapple.ru
       - gacdn.ru
@@ -930,7 +931,7 @@ services:
 
   - name: "Детский мир"
     asn:
-      - 44641
+      - 42661
     domains:
       - catalog-cdn.detmir.st
       - detmir.ru
@@ -956,8 +957,7 @@ services:
       - vseinstrumenti.ru
 
   - name: "Петрович"
-    asn:
-      - 50444
+    asn: []
     domains:
       - petrovich.ru
 
@@ -968,20 +968,19 @@ services:
 
   - name: "Спортмастер"
     asn:
-      - 41885
+      - 57512
     domains:
       - sportmaster.ru
 
   - name: "Л'Этуаль"
     asn:
-      - 42549
+      - 198821
     domains:
       - api.letu.ru
       - letu.ru
 
   - name: "Рив Гош"
-    asn:
-      - 43486
+    asn: []
     domains:
       - rivegauche.ru
 
@@ -992,8 +991,7 @@ services:
       - ostin.ru
 
   - name: "Melon Fashion Group (Befree, Zarina, Love Republic, Sela)"
-    asn:
-      - 43577
+    asn: []
     domains:
       - befree.ru
       - loverepublic.ru
@@ -1017,21 +1015,20 @@ services:
       - holodilnik.ru
 
   - name: "Четыре Лапы"
-    asn:
-      - 202359
+    asn: []
     domains:
       - 4lapy.ru
       - api.4lapy.ru
 
   - name: "Читай-город / Буквоед"
-    asn:
-      - 207604
+    asn: []
     domains:
       - bookvoed.ru
       - chitai-gorod.ru
 
   - name: "Лабиринт"
-    asn: []
+    asn:
+      - 60598
     domains:
       - labirint.ru
 
@@ -1060,7 +1057,10 @@ services:
 
   - name: "СДЭК"
     asn:
-      - 50488
+      - 42524
+      - 202250
+      - 210787
+      - 212211
     domains:
       - ad-cdek.ru
       - cdek.ru
@@ -1068,20 +1068,19 @@ services:
       - lk.cdek.ru
 
   - name: "Boxberry"
-    asn:
-      - 204646
+    asn: []
     domains:
       - boxberry.ru
 
   - name: "Деловые Линии"
     asn:
-      - 44633
+      - 201800
     domains:
       - dellin.ru
 
   - name: "ПЭК (Первая Экспедиционная Компания)"
     asn:
-      - 41893
+      - 197756
     domains:
       - pecom.ru
 
@@ -1117,7 +1116,8 @@ services:
 
   - name: "Магнит"
     asn:
-      - 206126
+      - 57319
+      - 60691
     domains:
       - dostavka.magnit.ru
       - magnit.app
@@ -1126,13 +1126,16 @@ services:
 
   - name: "Лента"
     asn:
-      - 41809
+      - 201394
+      - 49012
     domains:
       - lenta.com
       - online.lenta.com
 
   - name: "Metro Cash and Carry"
-    asn: []
+    asn:
+      - 34381
+      - 204474
     domains:
       - api.metro-cc.ru
       - metro-cc.ru
@@ -1151,7 +1154,8 @@ services:
       - dixy.ru
 
   - name: "ВкусВилл"
-    asn: []
+    asn:
+      - 213506
     domains:
       - api-sd.vkusvill.ru
       - api.vkusvill.ru
@@ -1217,13 +1221,12 @@ services:
 
   - name: "Ашан"
     asn:
-      - 39744
+      - 204696
     domains:
       - auchan.ru
 
   - name: "Азбука Вкуса"
-    asn:
-      - 43292
+    asn: []
     domains:
       - av.ru
       - azbukavkusa.ru
@@ -1236,20 +1239,18 @@ services:
 
   - name: "О'КЕЙ"
     asn:
-      - 43431
+      - 60832
     domains:
       - okmarket.ru
 
   - name: "Красное & Белое"
-    asn:
-      - 204670
+    asn: []
     domains:
       - k-b.ru
       - krasnoeibeloe.ru
 
   - name: "Винлаб"
-    asn:
-      - 206089
+    asn: []
     domains:
       - winelab.ru
 
@@ -1297,7 +1298,8 @@ services:
       - static.rutube.ru
 
   - name: "IVI"
-    asn: []
+    asn:
+      - 57629
     domains:
       - api.ivi.ru
       - images.ivi.ru
@@ -1305,7 +1307,8 @@ services:
       - ivi.tv
 
   - name: "Okko"
-    asn: []
+    asn:
+      - 211609
     domains:
       - api.okko.tv
       - okko.tv
@@ -1323,7 +1326,9 @@ services:
       - wink.tv
 
   - name: "START"
-    asn: []
+    asn:
+      - 60283
+      - 213075
     domains:
       - start.ru
       - start.video
@@ -1346,15 +1351,15 @@ services:
       - matchtv.ru
 
   - name: "Смотрим / ВГТРК"
-    asn: []
+    asn:
+      - 25292
     domains:
       - russia.tv
       - smotrim.ru
       - vgtrk.ru
 
   - name: "Триколор Кино и ТВ"
-    asn:
-      - 44034
+    asn: []
     domains:
       - kino.tricolor.tv
       - tricolor.tv
@@ -1369,7 +1374,7 @@ services:
   # ============================================================
   - name: "РБК"
     asn:
-      - 29074
+      - 20848
     domains:
       - quote.ru
       - rbc.ru
@@ -1382,7 +1387,8 @@ services:
 
   - name: "РИА Новости"
     asn:
-      - 41829
+      - 44479
+      - 57352
     domains:
       - 1prime.ru
       - ria.ru
@@ -1390,7 +1396,7 @@ services:
 
   - name: "Коммерсантъ"
     asn:
-      - 34818
+      - 41619
     domains:
       - kommersant.ru
 
@@ -1401,7 +1407,7 @@ services:
 
   - name: "Рамблер (Lenta, Gazeta, Чемпионат)"
     asn:
-      - 39561
+      - 24638
     domains:
       - championat.com
       - gazeta.ru
@@ -1489,10 +1495,7 @@ services:
       - pos.gosuslugi.ru
 
   - name: "ФНС / Налоговая"
-    asn:
-      - 25514
-      - 41892
-      - 209635
+    asn: []
     domains:
       - ebs.ru
       - goskey.ru
@@ -1505,7 +1508,7 @@ services:
 
   - name: "СФР / Социальный фонд России"
     asn:
-      - 42360
+      - 199922
     domains:
       - pfr.gov.ru
       - sfr.gov.ru
@@ -1521,14 +1524,13 @@ services:
 
   - name: "ЦБ РФ"
     asn:
-      - 21272
+      - 8904
     domains:
       - cbr.ru
       - finmarket.ru
 
   - name: "Почта России"
-    asn:
-      - 41457
+    asn: []
     domains:
       - mobileapp.russianpost.ru
       - pochta.ru
@@ -1536,7 +1538,7 @@ services:
 
   - name: "Честный знак"
     asn:
-      - 207867
+      - 56565
     domains:
       - xn--80ajghhoc2aj1c8b.xn--p1ai
 
@@ -1550,8 +1552,7 @@ services:
       - sudrf.ru
 
   - name: "ФССП (Судебные приставы)"
-    asn:
-      - 48721
+    asn: []
     domains:
       - fssp.gov.ru
       - fssprus.ru
@@ -1643,25 +1644,27 @@ services:
 
   - name: "Аэрофлот"
     asn:
-      - 34571
+      - 21231
     domains:
       - aeroflot.ru
       - api.aeroflot.ru
 
   - name: "S7 Airlines"
     asn:
-      - 41801
+      - 198716
+      - 198817
+      - 214951
     domains:
       - s7.ru
 
   - name: "Победа"
-    asn: []
+    asn:
+      - 203627
     domains:
       - pobeda.aero
 
   - name: "Уральские авиалинии"
-    asn:
-      - 43455
+    asn: []
     domains:
       - uralairlines.ru
 
@@ -1788,16 +1791,15 @@ services:
 
   - name: "Лукойл (АЗС / Ликард)"
     asn:
-      - 21245
-      - 44583
+      - 57645
+      - 60065
     domains:
       - auto.lukoil.ru
       - licard.ru
       - lukoil.ru
 
   - name: "Газпромнефть (АЗС / ОПТИ 24)"
-    asn:
-      - 41655
+    asn: []
     domains:
       - gazprom-neft.ru
       - opti-24.com
@@ -1805,8 +1807,8 @@ services:
 
   - name: "Роснефть (Семейная команда)"
     asn:
-      - 35297
-      - 41618
+      - 41706
+      - 39911
     domains:
       - komandacard.ru
       - rn-card.ru
@@ -1814,19 +1816,20 @@ services:
 
   - name: "Татнефть"
     asn:
-      - 41793
+      - 50164
     domains:
       - club.tatneft.ru
       - tatneft.ru
 
   - name: "Utair"
     asn:
-      - 35316
+      - 198877
     domains:
       - utair.ru
 
   - name: "Smartavia"
-    asn: []
+    asn:
+      - 64461
     domains:
       - flysmartavia.com
       - smartavia.ru
@@ -1869,7 +1872,7 @@ services:
   # ============================================================
   - name: "StarLine"
     asn:
-      - 44117
+      - 201511
     domains:
       - starline-online.ru
       - starline.ru
@@ -1886,8 +1889,7 @@ services:
   # НЕДВИЖИМОСТЬ
   # ============================================================
   - name: "ЦИАН"
-    asn:
-      - 200449
+    asn: []
     domains:
       - api.cian.ru
       - cian.ru
@@ -1904,12 +1906,14 @@ services:
       - domrf.ru
 
   - name: "ПИК (Группа ПИК и ПИК.Комфорт)"
-    asn: []
+    asn:
+      - 201851
     domains:
       - pik.ru
 
   - name: "Девелопер Самолет"
-    asn: []
+    asn:
+      - 34639
     domains:
       - samolet.ru
 
@@ -1927,7 +1931,7 @@ services:
 
   - name: "SuperJob"
     asn:
-      - 44046
+      - 47652
     domains:
       - superjob.ru
 
@@ -1937,7 +1941,8 @@ services:
       - rabota.ru
 
   - name: "Хабр"
-    asn: []
+    asn:
+      - 204671
     domains:
       - career.habr.com
       - habr.com
@@ -1950,9 +1955,8 @@ services:
 
   - name: "ЭДО и Бизнес (Контур, СБИС, 1С)"
     asn:
-      - 41807
-      - 44280
-      - 34833
+      - 49675
+      - 39864
     domains:
       - 1c.ru
       - b2b-center.ru
@@ -2022,7 +2026,8 @@ services:
       - uchebnik.mos.ru
 
   - name: "Дневник.ру"
-    asn: []
+    asn:
+      - 199866
     domains:
       - dnevnik.me
       - dnevnik.ru
@@ -2058,20 +2063,17 @@ services:
       - sberhealth.ru
 
   - name: "Аптека.ру"
-    asn:
-      - 34812
+    asn: []
     domains:
       - apteka.ru
 
   - name: "Еаптека"
-    asn:
-      - 208390
+    asn: []
     domains:
       - eapteka.ru
 
   - name: "Аптеки Столички"
-    asn:
-      - 206967
+    asn: []
     domains:
       - api.stolichki.ru
       - stolichki.ru
@@ -2092,13 +2094,14 @@ services:
 
   - name: "Invitro"
     asn:
-      - 43846
+      - 197379
     domains:
       - invitro.ru
       - lk.invitro.ru
 
   - name: "Медси"
-    asn: []
+    asn:
+      - 206295
     domains:
       - medsi-premium.ru
       - medsi.com
@@ -2146,7 +2149,9 @@ services:
       - gorzdrav.org
 
   - name: "Ригла / Будь Здоров"
-    asn: []
+    asn:
+      - 50218
+      - 60553
     domains:
       - budzdorov.ru
       - rigla.ru
@@ -2158,13 +2163,13 @@ services:
 
   - name: "Гемотест"
     asn:
-      - 200787
+      - 205567
     domains:
       - gemotest.ru
 
   - name: "Хеликс"
     asn:
-      - 57677
+      - 212748
     domains:
       - helix.ru
 
@@ -2186,7 +2191,7 @@ services:
   # ============================================================
   - name: "Ингосстрах"
     asn:
-      - 42861
+      - 15707
     domains:
       - ingos.ru
 
@@ -2212,26 +2217,26 @@ services:
 
   - name: "ВСК"
     asn:
-      - 43644
+      - 51641
     domains:
       - shop.vsk.ru
       - vsk.ru
 
   - name: "Росгосстрах"
     asn:
-      - 21396
+      - 49886
     domains:
       - my.rgs.ru
       - rgs.ru
 
   - name: "Согласие"
-    asn: []
+    asn:
+      - 198873
     domains:
       - soglasie.ru
 
   - name: "АльфаСтрахование"
-    asn:
-      - 42484
+    asn: []
     domains:
       - alfastrah.ru
 
@@ -2277,7 +2282,8 @@ services:
 
   - name: "Timeweb"
     asn:
-      - 51115
+      - 9123
+      - 51789
     domains:
       - timeweb.cloud
 
@@ -2285,7 +2291,6 @@ services:
     asn:
       - 34879
       - 204878
-      - 205312
     domains:
       - ngenix.net
 
@@ -2342,20 +2347,19 @@ services:
   # ПРОЧЕЕ
   # ============================================================
   - name: "Литрес"
-    asn: []
+    asn:
+      - 61306
     domains:
       - litres.ru
 
   - name: "Kaspersky"
-    asn:
-      - 200187
+    asn: []
     domains:
       - kaspersky.com
       - kaspersky.ru
 
   - name: "Dreamehome"
-    asn:
-      - 137280
+    asn: []
     domains:
       - dreametech.com
       - ru.dreametech.com
