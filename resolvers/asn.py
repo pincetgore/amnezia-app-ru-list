@@ -126,7 +126,10 @@ class ASNResolver:
             return None
 
         data_section = data.get("data") if isinstance(data, dict) else None
-        entries = data_section.get("prefixes", []) if isinstance(data_section, dict) else []
+        if not isinstance(data_section, dict):
+            logger.warning("RIPE API returned malformed data for AS%s", asn)
+            return None
+        entries = data_section.get("prefixes", [])
         prefixes: list[IPv4Network] = []
         for entry in entries:
             if not isinstance(entry, dict):
@@ -179,10 +182,11 @@ class ASNResolver:
         return prefixes
 
     def resolve(self, asn: int, timeout: int | None = None) -> list[IPv4Network]:
-        """Получает все IPv4-префиксы для ASN (сначала RIPE, затем fallback на bgp.he.net)."""
+        """Получает все IPv4-префиксы для ASN (сначала RIPE, при его сбое — bgp.he.net)."""
         req_timeout = timeout or self.default_timeout
         prefixes = self.get_prefixes_ripe(asn, timeout=req_timeout)
-        if prefixes:
+        # Пустой ответ RIPE — ASN ничего не анонсирует; bgp.he.net тогда отдаёт устаревшие префиксы
+        if prefixes is not None:
             return prefixes
 
         logger.info("Falling back to bgp.he.net for AS%s", asn)

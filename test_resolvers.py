@@ -92,13 +92,13 @@ class TestASNResolver:
         assert result is None
 
     def test_get_prefixes_ripe_none_data(self):
-        """Проверяет устойчивость к ответу RIPE с data: null."""
+        """Ответ RIPE с data: null считается сбоем — возвращает None для fallback."""
         mock_response = MagicMock()
         mock_response.json.return_value = {"data": None}
 
         result = _resolver(mock_response).get_prefixes_ripe(12389)
 
-        assert result == []
+        assert result is None
 
     def test_get_prefixes_ripe_json_decode_error_returns_none(self):
         """Проверяет обработку некорректного JSON от RIPE (возвращает None для fallback)."""
@@ -182,18 +182,16 @@ class TestASNResolver:
             assert result == mock_he
             mock_he_func.assert_called_once_with(12389, timeout=30)
 
-    def test_resolve_asn_fallback_to_he_on_empty_ripe(self):
-        """Проверяет fallback на bgp.he.net, когда RIPE возвращает пустой список префиксов []."""
-        mock_he = [IPv4Network("4.5.6.0/24")]
-
+    def test_resolve_asn_no_fallback_on_empty_ripe(self):
+        """Пустой список от RIPE — ASN ничего не анонсирует, bgp.he.net не запрашивается."""
         with (
             patch.object(ASNResolver, "get_prefixes_ripe", return_value=[]),
-            patch.object(ASNResolver, "get_prefixes_he", return_value=mock_he) as mock_he_func,
+            patch.object(ASNResolver, "get_prefixes_he") as mock_he_func,
         ):
             result = resolve_asn(33844)
 
-            assert result == mock_he
-            mock_he_func.assert_called_once_with(33844, timeout=30)
+            assert result == []
+            mock_he_func.assert_not_called()
 
 
 class TestDNSResolver:
