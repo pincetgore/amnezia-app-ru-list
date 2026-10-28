@@ -8,10 +8,8 @@
 
 import logging
 import re
-import threading
 import time
 from ipaddress import IPv4Network
-from typing import Any
 from urllib.parse import quote
 
 import requests
@@ -30,9 +28,6 @@ CIDR_RE = re.compile(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2}$")
 
 # Временная метка последнего запроса к API (используется для ограничения скорости)
 _last_request_time = 0.0
-
-# Мьютекс для потокобезопасного ограничения скорости запросов
-_rate_limit_lock = threading.Lock()
 
 
 def _create_session_with_retries() -> requests.Session:
@@ -77,18 +72,10 @@ _session = _create_session_with_retries()
 def _rate_limit(min_interval: float = 1.0) -> None:
     """Обеспечивает минимальный интервал между последовательными запросами к API."""
     global _last_request_time
-    sleep_time = 0.0
-    with _rate_limit_lock:
-        now = time.monotonic()
-        elapsed = now - _last_request_time
-        if _last_request_time > 0 and elapsed < min_interval:
-            sleep_time = min_interval - elapsed
-            _last_request_time = now + sleep_time
-        else:
-            _last_request_time = now
-
-    if sleep_time > 0.0:
-        time.sleep(sleep_time)
+    elapsed = time.monotonic() - _last_request_time
+    if _last_request_time > 0 and elapsed < min_interval:
+        time.sleep(min_interval - elapsed)
+    _last_request_time = time.monotonic()
 
 
 def is_valid_prefix(net: IPv4Network) -> bool:
@@ -105,28 +92,6 @@ def is_valid_prefix(net: IPv4Network) -> bool:
     if net.is_unspecified or net.is_loopback or net.is_multicast:
         return False
     return not str(net.network_address).startswith("0.")
-
-
-def _clean_asn(asn: Any) -> int | None:
-    """Нормализует входное значение ASN в положительное целое число."""
-    if isinstance(asn, bool):
-        logger.error("Invalid ASN %r: booleans are not valid ASNs", asn)
-        return None
-
-    if isinstance(asn, int):
-        if asn > 0:
-            return asn
-    elif isinstance(asn, str):
-        normalized = asn.strip().upper()
-        if normalized.startswith("AS"):
-            normalized = normalized[2:]
-        if normalized.isdigit():
-            val = int(normalized)
-            if val > 0:
-                return val
-
-    logger.error("Invalid ASN %r: must be a positive integer (e.g. 12389, 'AS12389')", asn)
-    return None
 
 
 class ASNResolver:
@@ -213,24 +178,20 @@ class ASNResolver:
         logger.debug("bgp.he.net AS%s: found %d IPv4 prefixes", asn, len(prefixes))
         return prefixes
 
-    def resolve(self, asn: Any, timeout: int | None = None) -> list[IPv4Network]:
+    def resolve(self, asn: int, timeout: int | None = None) -> list[IPv4Network]:
         """Получает все IPv4-префиксы для ASN (сначала RIPE, затем fallback на bgp.he.net)."""
-        clean = _clean_asn(asn)
-        if clean is None:
-            return []
-
         req_timeout = timeout or self.default_timeout
-        prefixes = self.get_prefixes_ripe(clean, timeout=req_timeout)
+        prefixes = self.get_prefixes_ripe(asn, timeout=req_timeout)
         if prefixes:
             return prefixes
 
-        logger.info("Falling back to bgp.he.net for AS%s", clean)
-        return self.get_prefixes_he(clean, timeout=req_timeout)
+        logger.info("Falling back to bgp.he.net for AS%s", asn)
+        return self.get_prefixes_he(asn, timeout=req_timeout)
 
 
 _default_asn_resolver = ASNResolver()
 
 
-def resolve_asn(asn: Any) -> list[IPv4Network]:
+def resolve_asn(asn: int) -> list[IPv4Network]:
     """Резолвит ASN общим экземпляром ASNResolver (общая сессия и rate limit)."""
     return _default_asn_resolver.resolve(asn)

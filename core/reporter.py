@@ -14,11 +14,11 @@ def format_statistics_report(result: PipelineResult) -> str:
     buf.write("Statistics:\n")
     buf.write("=" * 50 + "\n")
 
-    for stat in result.stats:
-        buf.write(f"  {stat.name}: {stat.raw_prefix_count} raw prefixes\n")
+    for res in result.service_results:
+        buf.write(f"  {res.name}: {len(res.networks)} raw prefixes\n")
 
     buf.write("-" * 50 + "\n")
-    buf.write(f"  Services processed: {len(result.stats)}\n")
+    buf.write(f"  Services processed: {len(result.service_results)}\n")
     buf.write(f"  Total raw prefixes: {result.total_raw_prefixes}\n")
 
     if result.asn_warnings:

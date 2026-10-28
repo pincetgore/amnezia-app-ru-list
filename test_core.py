@@ -13,7 +13,6 @@ from core.models import (
     PipelineResult,
     ServiceConfig,
     ServiceResult,
-    ServiceStats,
 )
 from core.pipeline import ListBuilderPipeline
 from core.reporter import format_statistics_report, print_aggregation_summary, print_statistics_report
@@ -43,11 +42,9 @@ class TestCoreModels:
     def test_pipeline_result_metrics(self):
         res1 = ServiceResult(name="S1", networks=[IPv4Network("10.0.0.0/24")])
         res2 = ServiceResult(name="S2", networks=[IPv4Network("10.1.0.0/24")])
-        stats = [ServiceStats(name="S1", raw_prefix_count=1), ServiceStats(name="S2", raw_prefix_count=1)]
 
         pipeline_result = PipelineResult(
             service_results=[res1, res2],
-            stats=stats,
             asn_warnings=["AS123 (S1)"],
             dns_warnings=["fail.ru"],
         )
@@ -136,15 +133,7 @@ class TestCorePipeline:
             ]
         )
 
-        callback_calls = []
-
-        def on_progress(name: str, index: int, total: int):
-            callback_calls.append((name, index, total))
-
-        result = pipeline.run(config, progress_callback=on_progress)
-
-        assert len(callback_calls) == 1
-        assert callback_calls[0] == ("TestService", 0, 1)
+        result = pipeline.run(config)
 
         assert len(result.service_results) == 1
         svc_res = result.service_results[0]
@@ -154,8 +143,7 @@ class TestCorePipeline:
         assert IPv4Network("4.5.6.7/32") in svc_res.networks
         assert IPv4Network("10.0.0.0/24") in svc_res.networks
 
-        assert len(result.stats) == 1
-        assert result.stats[0].raw_prefix_count == 3
+        assert result.total_raw_prefixes == 3
         assert result.asn_warnings == []
         assert result.dns_warnings == []
         assert result.asn_total == 1
@@ -175,7 +163,7 @@ class TestCorePipeline:
         assert len(result.asn_warnings) == 1
         assert "AS99999 (FlakyService)" in result.asn_warnings[0]
         assert result.dns_warnings == ["broken.domain"]
-        assert result.stats[0].raw_prefix_count == 0
+        assert result.total_raw_prefixes == 0
         assert result.failure_reason() is not None
 
     def test_pipeline_resolves_shared_domain_once_for_all_services(self):
@@ -234,7 +222,6 @@ class TestCoreReporter:
     def test_format_statistics_report_output(self):
         result = PipelineResult(
             service_results=[ServiceResult(name="SvcA", networks=[IPv4Network("1.1.1.0/24")])],
-            stats=[ServiceStats(name="SvcA", raw_prefix_count=1)],
             asn_warnings=["AS100 (SvcA)"],
             dns_warnings=["bad.domain"],
         )
@@ -252,7 +239,6 @@ class TestCoreReporter:
     def test_print_statistics_report_stream(self):
         result = PipelineResult(
             service_results=[],
-            stats=[],
             asn_warnings=[],
             dns_warnings=[],
         )
@@ -290,7 +276,7 @@ class TestResolverClasses:
         session = MagicMock()
         session.get.side_effect = [ripe, he]
 
-        prefixes = ASNResolver(session=session, rate_limit_interval=0.0).resolve("AS64500")
+        prefixes = ASNResolver(session=session, rate_limit_interval=0.0).resolve(64500)
 
         assert prefixes == [IPv4Network("203.0.113.0/24")]
         assert "bgp.he.net" in session.get.call_args_list[1].args[0]

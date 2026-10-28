@@ -195,26 +195,6 @@ class TestASNResolver:
             assert result == mock_he
             mock_he_func.assert_called_once_with(33844, timeout=30)
 
-    def test_resolve_asn_with_string_format(self):
-        """Проверяет корректность обработки строковых ASN (например, 'AS12389')."""
-        mock_prefixes = [IPv4Network("1.2.3.0/24")]
-
-        for raw in ("AS12389", "12389"):
-            with patch.object(ASNResolver, "get_prefixes_ripe", return_value=mock_prefixes) as mock_ripe:
-                result = resolve_asn(raw)
-                assert result == mock_prefixes
-                mock_ripe.assert_called_once_with(12389, timeout=30)
-
-    def test_resolve_asn_with_invalid_string(self):
-        """Проверяет обработку невалидной строки ASN."""
-        result = resolve_asn("invalid_asn")
-        assert result == []
-
-    @pytest.mark.parametrize("invalid_asn", [True, False, 0, -1, None, [], {}])
-    def test_resolve_asn_rejects_non_positive_and_non_int(self, invalid_asn):
-        """Проверяет отклонение boolean, неположительных и некорректных типов ASN."""
-        assert resolve_asn(invalid_asn) == []
-
 
 class TestDNSResolver:
     """Тесты для DNS резолвера."""

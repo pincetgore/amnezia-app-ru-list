@@ -40,16 +40,7 @@ class ServiceResult:
     """Result of resolving a single service."""
 
     name: str
-    domains: list[str] = field(default_factory=list)
     networks: list[IPv4Network] = field(default_factory=list)
-
-
-@dataclass(slots=True, frozen=True)
-class ServiceStats:
-    """Raw metrics for a processed service."""
-
-    name: str
-    raw_prefix_count: int
 
 
 @dataclass(slots=True)
@@ -57,7 +48,6 @@ class PipelineResult:
     """Aggregated output from running the list generation pipeline."""
 
     service_results: list[ServiceResult] = field(default_factory=list)
-    stats: list[ServiceStats] = field(default_factory=list)
     asn_warnings: list[str] = field(default_factory=list)
     dns_warnings: list[str] = field(default_factory=list)
     asn_total: int = 0
@@ -66,7 +56,7 @@ class PipelineResult:
     @property
     def total_raw_prefixes(self) -> int:
         """Sum of all raw prefixes collected across services."""
-        return sum(s.raw_prefix_count for s in self.stats)
+        return sum(len(res.networks) for res in self.service_results)
 
     def failure_reason(self, max_failed_share: float = 0.5) -> str | None:
         """Returns why the run must not be published, or None if it is healthy.
