@@ -3,21 +3,18 @@
 import logging
 from collections.abc import Callable, Mapping
 from ipaddress import IPv4Network
-from typing import Any
 
 from core.models import (
     AppConfig,
     PipelineResult,
     ServiceResult,
-    ServiceStats,
 )
 from resolvers.asn import resolve_asn
 from resolvers.dns import DNSResolver
 
 logger = logging.getLogger(__name__)
 
-ProgressCallback = Callable[[str, int, int], object]
-ASNResolve = Callable[[Any], list[IPv4Network]]
+ASNResolve = Callable[[int], list[IPv4Network]]
 DNSResolve = Callable[[list[str]], Mapping[str, tuple[list[IPv4Network], str | None]]]
 
 
@@ -47,11 +44,7 @@ class ListBuilderPipeline:
             logger.debug("Exception details:", exc_info=True)
             return {domain: ([], domain) for domain in all_domains}
 
-    def run(
-        self,
-        config: AppConfig,
-        progress_callback: ProgressCallback | None = None,
-    ) -> PipelineResult:
+    def run(self, config: AppConfig) -> PipelineResult:
         """Executes the pipeline over all services in the configuration."""
         dns_results = self._resolve_all_domains(config)
         result = PipelineResult(
@@ -60,11 +53,7 @@ class ListBuilderPipeline:
             domain_total=len(dns_results),
         )
 
-        total_services = len(config.services)
-        for index, service in enumerate(config.services):
-            if progress_callback is not None:
-                progress_callback(service.name, index, total_services)
-
+        for service in config.services:
             networks: list[IPv4Network] = []
             for asn in service.asn:
                 try:
@@ -86,9 +75,6 @@ class ListBuilderPipeline:
             # Validated by core.config.validate_config before the pipeline runs.
             networks.extend(IPv4Network(ip_range, strict=False) for ip_range in service.ip_ranges)
 
-            result.service_results.append(
-                ServiceResult(name=service.name, domains=list(service.domains), networks=networks)
-            )
-            result.stats.append(ServiceStats(name=service.name, raw_prefix_count=len(networks)))
+            result.service_results.append(ServiceResult(name=service.name, networks=networks))
 
         return result

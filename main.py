@@ -9,8 +9,6 @@ import argparse
 import logging
 import sys
 
-from tqdm import tqdm
-
 from core.config import load_config
 from core.pipeline import ListBuilderPipeline
 from core.reporter import print_aggregation_summary, print_statistics_report
@@ -69,10 +67,7 @@ def main() -> None:
     # resolve_asn берётся из модуля main, чтобы тесты могли подменить его через monkeypatch.
     pipeline = ListBuilderPipeline(asn_resolve=resolve_asn)
 
-    with tqdm(
-        total=len(config.services), desc="Processing services", unit="svc", disable=not sys.stdout.isatty()
-    ) as pbar:
-        pipeline_result = pipeline.run(config, progress_callback=lambda _name, _idx, _total: pbar.update(1))
+    pipeline_result = pipeline.run(config)
 
     print_statistics_report(pipeline_result)
 
