@@ -16,7 +16,7 @@ import pytest
 
 from core.models import DEFAULT_NAMESERVERS
 from resolvers.asn import ASNResolver, is_valid_prefix, resolve_asn
-from resolvers.dns import DNSResolver, _resolve_single_domain
+from resolvers.dns import ECS_CLIENT_SUBNET, DNSResolver, _resolve_single_domain
 
 
 class _DummyRdata:
@@ -288,6 +288,8 @@ class TestDNSResolver:
         assert resolver.nameservers == ["8.8.8.8", "1.1.1.1"]
         assert resolver.timeout == 2.0
         assert resolver.lifetime == 4.0
+        assert resolver.edns == 0
+        assert [o.to_text() for o in resolver.ednsoptions] == [f"ECS {ECS_CLIENT_SUBNET}/24 scope/0"]
 
     def test_resolve_deduplicates_and_maps_each_domain(self):
         """Повторяющиеся домены резолвятся один раз; результат — словарь по доменам."""

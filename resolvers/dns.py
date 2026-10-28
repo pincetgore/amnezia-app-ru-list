@@ -11,6 +11,7 @@ import concurrent.futures
 import logging
 from ipaddress import IPv4Network
 
+import dns.edns
 import dns.exception
 import dns.resolver
 
@@ -18,6 +19,9 @@ from core.models import DEFAULT_NAMESERVERS
 from resolvers.asn import is_valid_prefix
 
 logger = logging.getLogger(__name__)
+
+# Подсеть клиента (ECS) в Москве: раннер CI в США, а CDN-домены отдают edge-IP по местоположению клиента.
+ECS_CLIENT_SUBNET = "95.165.0.0"
 
 
 def _to_ascii_domain(domain: str) -> str:
@@ -88,6 +92,7 @@ class DNSResolver:
         resolver.nameservers = list(self.nameservers)
         resolver.timeout = max(1.0, self.timeout / len(resolver.nameservers))
         resolver.lifetime = self.timeout
+        resolver.use_edns(0, 0, 1232, options=[dns.edns.ECSOption(ECS_CLIENT_SUBNET, 24)])
         return resolver
 
     def _resolve_one(self, domain: str) -> tuple[list[IPv4Network], str | None]:
