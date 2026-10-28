@@ -12,6 +12,7 @@ env:
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write # Дает права на создание/обновление релиза и тега
 
@@ -83,13 +84,19 @@ jobs:
             gh release delete latest --yes --cleanup-tag
           fi
 
-          echo "Creating release 'latest' at $GITHUB_SHA..."
-          gh release create latest \
-            ip-list.json \
-            cidrs.txt \
-            --target "$GITHUB_SHA" \
-            --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
-            --notes-file release-notes.md \
-            --latest
+          # Повторы: релиз уже удалён, и сбой здесь оставил бы ссылки на файлы с 404 до следующего запуска.
+          for attempt in 1 2 3; do
+            echo "Creating release 'latest' at $GITHUB_SHA (attempt $attempt)..."
+            gh release create latest \
+              ip-list.json \
+              cidrs.txt \
+              --target "$GITHUB_SHA" \
+              --title "Актуальный список IP-адресов (${{ env.CURRENT_DATE }}) [${{ env.RELEASE_LABEL }}]" \
+              --notes-file release-notes.md \
+              --latest && exit 0
+            sleep 15
+            gh release delete latest --yes --cleanup-tag 2>/dev/null || true
+          done
+          exit 1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
