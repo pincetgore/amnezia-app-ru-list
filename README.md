@@ -177,10 +177,10 @@ dns:
 | МТС | `api.mts.ru`, `id.mts.ru`, `login.mts.ru`, `mts.me` и др. |
 | МегаФон | `api.megafon.ru`, `id.megafon.ru`, `lk.megafon.ru`, `megafon.ru` и др. |
 | Билайн | `api.beeline.ru`, `beeline.ru`, `id.beeline.ru`, `lk.beeline.ru` и др. |
-| Теле2 | `b2c-digest.ru`, `my.tele2.ru`, `t2.com`, `t2.ru` и др. |
+| Теле2 | `b2c-digest.ru`, `my.tele2.ru`, `t2.ru`, `tele2.ru` и др. |
 | Ростелеком | `lk.rt.ru`, `rostelecom.ru`, `rt.ru` |
 | Дом.ру | `domru.ru`, `ertelecom.ru`, `lk.domru.ru` |
-| Виртуальные мобильные операторы (Т-Мобайл, СберМобайл, ВТБ Мобайл, ГПБ Мобайл) | `gpbmobile.ru`, `sbermobile.ru`, `tinkoffmobile.ru`, `vtbmobile.ru` |
+| Виртуальные мобильные операторы (Т-Мобайл, СберМобайл, ВТБ Мобайл, ГПБ Мобайл) | `gpbmobile.ru`, `sbermobile.ru`, `vtbmobile.ru` |
 
 ### E-commerce и маркетплейсы
 
@@ -269,8 +269,8 @@ dns:
 | Rutube | AS207353 | `pic.rutube.ru`, `rutube.ru`, `static.rutube.ru` |
 | IVI | — | `api.ivi.ru`, `images.ivi.ru`, `ivi.ru`, `ivi.tv` |
 | Okko | — | `api.okko.tv`, `okko.tv` |
-| KION | — | `kion.ru`, `kion.tv` |
-| Wink | — | `wink.ru`, `wink.tv` |
+| KION | — | `kion.ru` |
+| Wink | — | `wink.ru` |
 | START | — | `start.ru`, `start.video` |
 | Premier | — | `premier.one` |
 | Звук (Сбер) | — | `zvuk.com`, `zvuk.ru` |
@@ -425,7 +425,7 @@ dns:
 
 | Сервис | ASN | Домены |
 | ------ | ------ | ------ |
-| СберЗдоровье | — | `doctoronline.ru`, `sberhealth.ru` |
+| СберЗдоровье | — | `sberhealth.ru` |
 | Аптека.ру | AS34812 | `apteka.ru` |
 | Еаптека | AS208390 | `eapteka.ru` |
 | Аптеки Столички | AS206967 | `api.stolichki.ru`, `stolichki.ru` |

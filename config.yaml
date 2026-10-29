@@ -65,7 +65,6 @@ services:
       - icloud-content.com
       - icloud.ch
       - icloud.com
-      - icloud.com.cn
       - icloud.de
       - icloud.ee
       - icloud.fi
@@ -647,7 +646,6 @@ services:
     domains:
       - b2c-digest.ru
       - my.tele2.ru
-      - t2.com
       - t2.ru
       - tele2.ru
 
@@ -671,7 +669,6 @@ services:
     domains:
       - gpbmobile.ru
       - sbermobile.ru
-      - tinkoffmobile.ru
       - vtbmobile.ru
 
   # ============================================================
@@ -1162,13 +1159,11 @@ services:
     asn: []
     domains:
       - kion.ru
-      - kion.tv
 
   - name: "Wink"
     asn: []
     domains:
       - wink.ru
-      - wink.tv
 
   - name: "START"
     asn:
@@ -1902,7 +1897,6 @@ services:
   - name: "СберЗдоровье"
     asn: []
     domains:
-      - doctoronline.ru
       - sberhealth.ru
 
   - name: "Аптека.ру"
