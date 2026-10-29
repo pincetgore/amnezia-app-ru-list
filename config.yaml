@@ -1913,10 +1913,9 @@ services:
     domains:
       - foxford.ru
 
-  - name: "Научные библиотеки (eLibrary, КиберЛенинка)"
+  - name: "Научные библиотеки (eLibrary)"
     asn: []
     domains:
-      - cyberleninka.ru
       - elibrary.ru
 
   # ============================================================

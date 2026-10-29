@@ -419,7 +419,7 @@ dns:
 | Сферум | `sferum.ru` |
 | Учи.ру | `uchi.ru` |
 | Фоксфорд | `foxford.ru` |
-| Научные библиотеки (eLibrary, КиберЛенинка) | `cyberleninka.ru`, `elibrary.ru` |
+| Научные библиотеки (eLibrary) | `elibrary.ru` |
 
 ### Медицина и здоровье
 
