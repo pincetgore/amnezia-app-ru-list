@@ -54,8 +54,6 @@ services:
       - configuration.apple.com
       - courier.push.apple.com
       - crl.apple.com
-      - crl3.digicert.com
-      - crl4.digicert.com
       - fcs-keys-pub-prod.cdn-apple.com
       - gdmf-ados.apple.com
       - gdmf.apple.com
@@ -105,21 +103,15 @@ services:
       - mesu.apple.com
       - myicloud.net
       - ocsp.apple.com
-      - ocsp.digicert.cn
-      - ocsp.digicert.com
       - ocsp2.apple.com
-      - oscdn.apple.com
       - osrecovery.apple.com
       - skl.apple.com
       - swcdn.apple.com
       - swdist.apple.com
       - swdownload.apple.com
-      - swscan.apple.com
       - updates-http.cdn-apple.com
-      - updates.cdn-apple.com
       - valid.apple.com
       - wkms-public.apple.com
-      - www-cdn.icloud.com.akadns.net
       - xp.apple.com
 
   - name: "Google FCM и системные сервисы Android"
@@ -328,7 +320,6 @@ services:
       - lps-public-api.t-bank-app.ru
       - sage-collector.tbank.ru
       - static.tinkoff.ru
-      - t-bank.com
       - t-bank.ru
       - t-capital.ru
       - t-pay.ru
@@ -708,7 +699,6 @@ services:
       - 207986
       - 44386
     domains:
-      - ozon.app
       - ozon.com
       - ozon.dev
       - ozon.ru
@@ -736,7 +726,6 @@ services:
     asn:
       - 57906
     domains:
-      - lamoda.co
       - lamoda.ru
 
   - name: "DNS Shop"
@@ -791,10 +780,8 @@ services:
   - name: "Aliexpress"
     asn: []
     domains:
-      - alicdn.com
       - aliexpress.ru
       - api.aliexpress.ru
-      - static.alicdn.com
 
   - name: "ВсеИнструменты.ру"
     asn: []
@@ -1004,7 +991,6 @@ services:
     domains:
       - api-sd.vkusvill.ru
       - api.vkusvill.ru
-      - app.vkusvill.ru
       - cdn-mobile-backend.vkusvill.ru
       - img.vkusvill.ru
       - mobile-advrep.vkusvill.ru
@@ -1020,7 +1006,6 @@ services:
     asn: []
     domains:
       - api.myspar.ru
-      - app.myspar.ru
       - myspar.ru
 
   - name: "Rendez-vous"
@@ -1227,7 +1212,8 @@ services:
   - name: "Амедиатека (Amediateka)"
     asn: []
     domains:
-      - amediateka.ru
+      - api.amediateka.tech
+      - www.amediateka.ru
 
   # ============================================================
   # СМИ, ПРЕССА И МЕДИА
@@ -1599,7 +1585,6 @@ services:
     asn: []
     domains:
       - api.delimobil.ru
-      - delimobil.com
       - delimobil.ru
 
   - name: "Ситидрайв / Ситимобил"
@@ -1889,7 +1874,6 @@ services:
     asn:
       - 199866
     domains:
-      - dnevnik.me
       - dnevnik.ru
 
   - name: "Сферум"
@@ -2183,7 +2167,6 @@ services:
     asn: []
     domains:
       - firstvds.ru
-      - ispsystem.com
       - ispsystem.ru
 
   - name: "SpaceWeb"
@@ -2230,7 +2213,6 @@ services:
   - name: "Dreamehome"
     asn: []
     domains:
-      - dreametech.com
       - ru.dreametech.com
       - ru.iot.dreame.tech
       - smarthome.dreame.tech
@@ -2252,7 +2234,6 @@ services:
     asn: []
     domains:
       - api.yclients.com
-      - app.yclients.com
       - assets.yclients.com
       - b1.yclients.com
       - yclients.com

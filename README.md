@@ -187,10 +187,10 @@ dns:
 | Сервис | ASN | Домены |
 | ------ | ------ | ------ |
 | Wildberries | AS49053, AS57073 и др. | `digital.wildberries.ru`, `seller.wildberries.ru`, `wb.ru`, `wbstatic.net` и др. |
-| Ozon | AS207986, AS44386 | `ozon.app`, `ozon.com`, `ozon.dev`, `ozon.ru` и др. |
+| Ozon | AS207986, AS44386 | `ozon.com`, `ozon.dev`, `ozon.ru`, `ozone.ru` и др. |
 | Авито | AS201012 | `avito.com`, `avito.ru`, `avito.st`, `m.avito.ru` и др. |
 | СберМегаМаркет | — | `megamarket.ru`, `sbermegamarket.ru` |
-| Lamoda | AS57906 | `lamoda.co`, `lamoda.ru` |
+| Lamoda | AS57906 | `lamoda.ru` |
 | DNS Shop | AS43547 | `dns-shop.net`, `dns-shop.ru` |
 | М.Видео / Эльдорадо | AS43977 | `eldorado.ru`, `mvideo.ru` |
 | Ситилинк | AS42888 | `citilink.ru` |
@@ -198,7 +198,7 @@ dns:
 | Золотое Яблоко | AS208753 | `api.goldapple.ru`, `gacdn.ru`, `goldapple.ru`, `juicyscore.ru` и др. |
 | Детский мир | AS44641 | `catalog-cdn.detmir.st`, `detmir.ru`, `go.detmir.st`, `img.detmir.st` |
 | Hoff | — | `hoff.ru` |
-| Aliexpress | — | `alicdn.com`, `aliexpress.ru`, `api.aliexpress.ru`, `static.alicdn.com` |
+| Aliexpress | — | `aliexpress.ru`, `api.aliexpress.ru` |
 | ВсеИнструменты.ру | — | `vseinstrumenti.ru` |
 | Петрович | AS50444 | `petrovich.ru` |
 | Максидом | — | `maxidom.ru` |
@@ -237,8 +237,8 @@ dns:
 | Metro Cash and Carry | — | `api.metro-cc.ru`, `metro-cc.ru`, `online.metro-cc.ru` |
 | FixPrice | — | `fix-price.com`, `fix-price.ru` |
 | Дикси | AS202760 | `dixy.ru` |
-| ВкусВилл | — | `api-sd.vkusvill.ru`, `api.vkusvill.ru`, `app.vkusvill.ru`, `cdn-mobile-backend.vkusvill.ru` и др. |
-| SPAR | — | `api.myspar.ru`, `app.myspar.ru`, `myspar.ru` |
+| ВкусВилл | — | `api-sd.vkusvill.ru`, `api.vkusvill.ru`, `cdn-mobile-backend.vkusvill.ru` и др. |
+| SPAR | — | `api.myspar.ru`, `myspar.ru` |
 | Rendez-vous | — | `api.rendez-vous.ru`, `rendez-vous.ru` |
 | One Price Coffee | — | `api.onepricecoffee.com`, `cloud.onepricecoffee.com`, `delivery.onepricecoffee.com`, `onepricecoffee.com` |
 | Best Benefits | — | `app.bestbenefits.ru`, `bestbenefits.ru`, `mobile.bestbenefits.ru` |
@@ -277,7 +277,7 @@ dns:
 | Матч ТВ | — | `matchpremier.ru`, `matchtv.ru` |
 | Смотрим / ВГТРК | — | `russia.tv`, `smotrim.ru`, `vgtrk.ru` |
 | Триколор Кино и ТВ | AS44034 | `kino.tricolor.tv`, `tricolor.tv` |
-| Амедиатека (Amediateka) | — | `amediateka.ru` |
+| Амедиатека (Amediateka) | — | `api.amediateka.tech`, `www.amediateka.ru` |
 
 ### СМИ, пресса и медиа
 
@@ -350,7 +350,7 @@ dns:
 | Drom.ru | — | `auto.drom.ru`, `drom.ru` |
 | Автотека | — | `autoteka.ru` |
 | Автодор | AS20698 | `avtodor-tr.ru` |
-| Делимобиль | — | `api.delimobil.ru`, `delimobil.com`, `delimobil.ru` |
+| Делимобиль | — | `api.delimobil.ru`, `delimobil.ru` |
 | Ситидрайв / Ситимобил | — | `city-mobil.ru`, `citydrive.ru` |
 | Drivee | — | `drivee.ru` |
 | Uber Russia | — | `uber.ru` |
@@ -415,7 +415,7 @@ dns:
 | Нетология | `netology.ru` |
 | Skyeng | `skyeng.ru`, `student.skyeng.ru` |
 | МЭШ (Московская электронная школа) | `dnevnik.mos.ru`, `school.mos.ru`, `uchebnik.mos.ru` |
-| Дневник.ру | `dnevnik.me`, `dnevnik.ru` |
+| Дневник.ру | `dnevnik.ru` |
 | Сферум | `sferum.ru` |
 | Учи.ру | `uchi.ru` |
 | Фоксфорд | `foxford.ru` |
@@ -479,7 +479,7 @@ dns:
 | Gitverse | — | `gitverse.ru` |
 | GitFlic | — | `gitflic.ru` |
 | Beget | — | `beget.com`, `beget.ru` |
-| FirstVDS / ISPsystem | — | `firstvds.ru`, `ispsystem.com`, `ispsystem.ru` |
+| FirstVDS / ISPsystem | — | `firstvds.ru`, `ispsystem.ru` |
 | SpaceWeb | — | `sweb.ru` |
 | RUVDS | — | `ruvds.com` |
 | Cloud.ru | — | `cloud.ru`, `console.cloud.ru` |
@@ -492,10 +492,10 @@ dns:
 | ------ | ------ | ------ |
 | Литрес | — | `litres.ru` |
 | Kaspersky | AS200187 | `kaspersky.com`, `kaspersky.ru` |
-| Dreamehome | AS137280 | `dreametech.com`, `ru.dreametech.com`, `ru.iot.dreame.tech`, `smarthome.dreame.tech` |
+| Dreamehome | AS137280 | `ru.dreametech.com`, `ru.iot.dreame.tech`, `smarthome.dreame.tech` |
 | Мой умный дом (Уфанет) | — | `dom.ufanet.ru`, `secretapi.ufanet.ru`, `ufanet.ru`, `ufanetgroup.com` |
 | kojima.ru | — | `kojima.ru` |
-| yclients | — | `api.yclients.com`, `app.yclients.com`, `assets.yclients.com`, `b1.yclients.com` и др. |
+| yclients | — | `api.yclients.com`, `assets.yclients.com`, `b1.yclients.com` и др. |
 
 ## Автообновление
 
