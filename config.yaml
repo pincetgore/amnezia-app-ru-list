@@ -157,155 +157,6 @@ services:
       - ru.resolver.msg.global.xiaomi.net
 
   # ============================================================
-  # IP И GEO ЧЕККЕРЫ
-  # ============================================================
-  - name: "Проверка IP на признак включения VPN"
-    asn: []
-    domains:
-      - 2ip.io
-      - 51degrees.com
-      - abstractapi.com
-      - apiip.net
-      - apivoid.com
-      - bigdatacloud.net
-      - check-host.net
-      - checkip.amazonaws.com
-      - checkip.dyn.com
-      - checkip.dyndns.org
-      - checkip.org
-      - country.is
-      - curlmyip.net
-      - db-ip.com
-      - extreme-ip-lookup.com
-      - find-my-ip.com
-      - find-my-ip.net
-      - findip.net
-      - flagfox.net
-      - fraudguard.io
-      - fraudlogix.com
-      - freegeoip.app
-      - freeipapi.com
-      - geodatatool.com
-      - geojs.io
-      - geolocation-db.com
-      - geoplugin.com
-      - geoplugin.net
-      - getipintel.net
-      - greip.io
-      - hackertarget.com
-      - httpbin.org
-      - i.pn
-      - icanhazip.com
-      - ident.me
-      - ifconfig.co
-      - ifconfig.es
-      - ifconfig.io
-      - ifconfig.me
-      - ip-adress.com
-      - ip-api.com
-      - ip-api.io
-      - ip-check.info
-      - ip.comss.net
-      - ip.hetzner.com
-      - ip.me
-      - ip.pe.kr
-      - ip.sb
-      - ip2c.org
-      - ip2location.com
-      - ip2location.io
-      - ip2ruscity.com
-      - ip4.me
-      - ip6.me
-      - ip8.com
-      - ipaddr.site
-      - ipaddress.com
-      - ipaddress.my
-      - ipaddress.sh
-      - ipapi.co
-      - ipapi.com
-      - ipapi.is
-      - ipbase.com
-      - ipbot.com
-      - ipcalf.com
-      - ipchicken.com
-      - ipdata.co
-      - ipecho.net
-      - ipfind.io
-      - ipfinder.io
-      - ipgeo.vercel.app
-      - ipgeolocation.io
-      - ipify.cn
-      - ipify.org
-      - ipinfo.io
-      - ipip.net
-      - iplark.com
-      - ipleak.net
-      - ipligence.com
-      - iplocate.io
-      - iplocation.com
-      - iplocation.io
-      - iplocation.net
-      - iplookup.it
-      - ipqualityscore.com
-      - ipquery.io
-      - ipregistry.co
-      - iproyal.com
-      - ipstack.com
-      - ipv4-check-perf.radar.cloudflare.com
-      - ipv4-internet.yandex.net
-      - ipv4.internet.yandex.net
-      - ipwho.is
-      - ipwhois.io
-      - ipxapi.com
-      - l2.io
-      - maxmind.com
-      - mon-ip.com
-      - monip.org
-      - my-ip.io
-      - my.ipinfo.app
-      - myexternalip.com
-      - myip.com
-      - myip.expert
-      - myip.la
-      - myip.ms
-      - myip.wtf
-      - myipaddress.com
-      - myiplookup.com
-      - mylocation.org
-      - nodedata.io
-      - osint.sh
-      - proxycheck.io
-      - realip.cc
-      - seeip.org
-      - showip.net
-      - showmyip.com
-      - showmyipaddress.com
-      - spur.us
-      - sxgeo.city
-      - sypexgeo.net
-      - tnx.nl
-      - tracemyip.org
-      - trustmyip.com
-      - wgetip.com
-      - whatismyip.akamai.com
-      - whatismyip.com
-      - whatismyip.net
-      - whatismyip.org
-      - whatismyipaddress.com
-      - whatismyipaddress.net
-      - whatismyisp.com
-      - whatismyv6.com
-      - whatsmyip.com
-      - whatsmyip.org
-      - where-am-i.co
-      - whoer.net
-      - whoerip.com
-      - whois.pconline.com.cn
-      - whoisxmlapi.com
-      - wieistmeineip.de
-      - wtfismyip.com
-
-  # ============================================================
   # БИГТЕХ И СУПЕРАПЫ
   # ============================================================
   - name: "Яндекс"
@@ -1265,8 +1116,23 @@ services:
   - name: "Додо Пицца"
     asn: []
     domains:
+      - api.dodopizza.ru
+      - auth.dodois.io
       - dodopizza.com
       - dodopizza.ru
+      - mapi.dodopizza.ru
+
+  - name: "Дринкит"
+    asn: []
+    domains:
+      - app.drinkit.io
+      - drinkit.io
+      - drinkit.ru
+
+  - name: "Ароматный мир"
+    asn: []
+    domains:
+      - amwine.ru
 
   - name: "Ростикс"
     asn: []
@@ -2292,6 +2158,17 @@ services:
       - 204878
     domains:
       - ngenix.net
+
+  # API приложений за этими сетями блокируют иностранные IP
+  - name: "ServicePipe (Додо Пицца, Дринкит и др.)"
+    asn:
+      - 201706
+    domains: []
+
+  - name: "HLL (Ароматный мир и др.)"
+    asn:
+      - 51115
+    domains: []
 
   - name: "Gitverse"
     asn: []

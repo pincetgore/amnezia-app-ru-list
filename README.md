@@ -110,12 +110,6 @@ dns:
 | Google FCM и системные сервисы Android | — | `mtalk.google.com`, `fcm.googleapis.com`, `connectivitycheck.gstatic.com` и др. |
 | Push-уведомления вендоров Android (Xiaomi, Huawei) | — | `ru-api.xmpush.global.xiaomi.com`, `push.hicloud.com`, `connect.rom.miui.com` и др. |
 
-### IP и GEO чеккеры
-
-| Сервис | Домены |
-| ------ | ------ |
-| Проверка IP на признак включения VPN | `2ip.io`, `51degrees.com`, `abstractapi.com`, `apiip.net` и др. |
-
 ### Бигтех и супераппы
 
 | Сервис | ASN | Домены |
@@ -261,7 +255,9 @@ dns:
 | Сервис | Домены |
 | ------ | ------ |
 | Вкусно — и точка | `vkusnoitochka.ru` |
-| Додо Пицца | `dodopizza.com`, `dodopizza.ru` |
+| Додо Пицца | `dodopizza.ru`, `api.dodopizza.ru`, `mapi.dodopizza.ru`, `auth.dodois.io` и др. |
+| Дринкит | `drinkit.ru`, `drinkit.io`, `app.drinkit.io` |
+| Ароматный мир | `amwine.ru` |
 | Ростикс | `kfc.ru`, `rostics.ru` |
 | Бургер Кинг | `burgerking.ru`, `burgerkingrus.ru` |
 | Тануки / Якитория | `tanuki.ru`, `yakitoriya.ru` |
@@ -478,6 +474,8 @@ dns:
 | REG.RU | — | `reg.ru` |
 | Timeweb | AS51115 | `timeweb.cloud` |
 | Ngenix.net | AS34879, AS204878 и др. | `ngenix.net` |
+| ServicePipe (Додо Пицца, Дринкит и др.) | AS201706 | — |
+| HLL (Ароматный мир и др.) | AS51115 | — |
 | Gitverse | — | `gitverse.ru` |
 | GitFlic | — | `gitflic.ru` |
 | Beget | — | `beget.com`, `beget.ru` |
