@@ -107,7 +107,7 @@ dns:
 | Сервис | IP-диапазоны | Домены |
 | ------ | ------ | ------ |
 | Apple (Push-уведомления APNs, iCloud и сервисы) | `17.249.0.0/16`, `17.252.0.0/16`, `17.57.144.0/22`, `17.188.128.0/18`, `17.188.20.0/23` | `courier.push.apple.com`, `identity.apple.com`, `icloud.com` и др. |
-| Google FCM и системные сервисы Android | — | `mtalk.google.com`, `fcm.googleapis.com`, `connectivitycheck.gstatic.com` и др. |
+| Google FCM и системные сервисы Android | — | `mtalk.google.com`, `fcm.googleapis.com`, `time.android.com` и др. |
 | Push-уведомления вендоров Android (Xiaomi, Huawei) | — | `ru-api.xmpush.global.xiaomi.com`, `push.hicloud.com`, `connect.rom.miui.com` и др. |
 
 ### Бигтех и супераппы
