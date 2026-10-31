@@ -61,23 +61,18 @@ services:
       - 17.57.144.0/22
       - 17.188.128.0/18
       - 17.188.20.0/23
+      # CDN Apple: домены обновлений и сертификатов отдают адреса отсюда или из Akamai/Fastly
+      - 17.253.0.0/16
     domains:
       - api-adservices.apple.com
       - apple.com
-      - appldnld.apple.com
-      - captive.apple.com
-      - certs.apple.com
-      - configuration.apple.com
       - courier.push.apple.com
-      - crl.apple.com
-      - fcs-keys-pub-prod.cdn-apple.com
       - gdmf-ados.apple.com
       - gdmf.apple.com
       - gg.apple.com
       - gs.apple.com
       - gsra.apple.com
       - iad.apple.com
-      - iadsdk.apple.com
       - icloud-content.com
       - icloud.ch
       - icloud.com
@@ -115,19 +110,11 @@ services:
       - identity.apple.com
       - ig.apple.com
       - me.com
-      - mesu.apple.com
       - myicloud.net
-      - ocsp.apple.com
-      - ocsp2.apple.com
       - osrecovery.apple.com
       - skl.apple.com
-      - swcdn.apple.com
-      - swdist.apple.com
       - swdownload.apple.com
-      - updates-http.cdn-apple.com
-      - valid.apple.com
       - wkms-public.apple.com
-      - xp.apple.com
 
   - name: "Google FCM и системные сервисы Android"
     asn: []
@@ -149,8 +136,6 @@ services:
     asn: []
     domains:
       - api.xmpush.global.xiaomi.com
-      - connect.rom.miui.com
-      - connectivitycheck.platform.hicloud.com
       - push.hicloud.com
       - register.xmpush.xiaomi.com
       - ru-api.xmpush.global.xiaomi.com
@@ -1716,11 +1701,10 @@ services:
       - neftm.ru
       - teboil.ru
 
-  - name: "Отели, бронирование и туры (Купибилет, Слетать.ру, Броневик)"
+  - name: "Отели, бронирование и туры (Слетать.ру, Броневик)"
     asn: []
     domains:
       - bronevik.com
-      - kupibilet.ru
       - sletat.ru
 
   # ============================================================
