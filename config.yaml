@@ -257,6 +257,7 @@ services:
       - 205221
       - 208117
       - 211631
+      - 56537
     domains:
       - online.sberbank.ru
       - sber-zvuk.com
@@ -362,7 +363,8 @@ services:
       - sovcombank.ru
 
   - name: "Райффайзен Банк"
-    asn: []
+    asn:
+      - 31174
     domains:
       - online.raiffeisen.ru
       - raiffeisen.ru
@@ -484,7 +486,8 @@ services:
       - akbars.ru
 
   - name: "Банк ДОМ.РФ"
-    asn: []
+    asn:
+      - 60343
     domains:
       - domrfbank.ru
 
@@ -507,13 +510,16 @@ services:
       - centrinvest.ru
 
   - name: "БКС Мир Инвестиций"
-    asn: []
+    asn:
+      - 42558
     domains:
       - bcs.ru
       - bcsexpress.ru
 
   - name: "Финам"
-    asn: []
+    asn:
+      - 43527
+      - 209351
     domains:
       - finam.ru
 
@@ -537,6 +543,7 @@ services:
       - 212264
       - 8848
       - 57628
+      - 59957
     domains:
       - korona.ru
       - koronapay.com
@@ -690,7 +697,8 @@ services:
       - dns-shop.ru
 
   - name: "М.Видео / Эльдорадо"
-    asn: []
+    asn:
+      - 52047
     domains:
       - eldorado.ru
       - mvideo.ru
@@ -777,7 +785,8 @@ services:
       - ostin.ru
 
   - name: "Melon Fashion Group (Befree, Zarina, Love Republic, Sela)"
-    asn: []
+    asn:
+      - 42119
     domains:
       - befree.ru
       - loverepublic.ru
@@ -865,7 +874,9 @@ services:
       - pecom.ru
 
   - name: "Транспортные компании и курьерская доставка (DPD, Достависта, Байкал Сервис, ЖДЭ, Возовоз)"
-    asn: []
+    asn:
+      - 42972
+      - 204507
     domains:
       - baikalsr.ru
       - dostavista.ru
@@ -956,7 +967,8 @@ services:
       - myspar.ru
 
   - name: "Rendez-vous"
-    asn: []
+    asn:
+      - 61326
     domains:
       - api.rendez-vous.ru
       - rendez-vous.ru
@@ -1007,7 +1019,8 @@ services:
       - azbukavkusa.ru
 
   - name: "Глобус"
-    asn: []
+    asn:
+      - 205324
     domains:
       - globus.ru
       - online.globus.ru
@@ -1130,7 +1143,8 @@ services:
       - zvuk.com
 
   - name: "Матч ТВ"
-    asn: []
+    asn:
+      - 48061
     domains:
       - matchpremier.ru
       - matchtv.ru
@@ -1144,7 +1158,8 @@ services:
       - vgtrk.ru
 
   - name: "Триколор Кино и ТВ"
-    asn: []
+    asn:
+      - 56846
     domains:
       - kino.tricolor.tv
       - tricolor.tv
@@ -1217,7 +1232,8 @@ services:
   # БИЛЕТЫ И АФИША
   # ============================================================
   - name: "Кассир.ру"
-    asn: []
+    asn:
+      - 21314
     domains:
       - api.kassir.ru
       - kassir.ru
@@ -1234,7 +1250,8 @@ services:
       - afisha.ru
 
   - name: "Кинотеатры (Формула Кино, Синема Парк, КАРО)"
-    asn: []
+    asn:
+      - 60523
     domains:
       - karofilm.ru
       - kinoteatr.ru
@@ -1245,6 +1262,7 @@ services:
   - name: "Правительство и Президент РФ (RSNet)"
     asn:
       - 8291
+      - 43797
     domains:
       - council.gov.ru
       - duma.gov.ru
@@ -1254,6 +1272,7 @@ services:
   - name: "Федеральные ведомства (РКН, Роспотребнадзор, ФАС, Минобороны)"
     asn:
       - 61280
+      - 62422
     domains:
       - edu.gov.ru
       - www.edu.ru
@@ -1300,6 +1319,8 @@ services:
   - name: "Мос.ру"
     asn:
       - 8901
+      - 62268
+      - 203891
     domains:
       - mos.ru
       - mosreg.ru
@@ -1314,7 +1335,8 @@ services:
       - finmarket.ru
 
   - name: "Почта России"
-    asn: []
+    asn:
+      - 49002
     domains:
       - mobileapp.russianpost.ru
       - pochta.ru
@@ -1355,13 +1377,16 @@ services:
       - xn--90adear.xn--p1ai
 
   - name: "ФНП / Нотариат"
-    asn: []
+    asn:
+      - 198062
     domains:
       - notariat.ru
       - reestr-dover.ru
 
   - name: "ГИС ЖКХ и коммунальные услуги"
-    asn: []
+    asn:
+      - 62358
+      - 44048
     domains:
       - dom.gosuslugi.ru
       - eirc.spb.ru
@@ -1375,7 +1400,8 @@ services:
       - pesc.ru
 
   - name: "Региональные Госуслуги (СПб)"
-    asn: []
+    asn:
+      - 203725
     domains:
       - gu.spb.ru
 
@@ -1395,20 +1421,25 @@ services:
       - roskazna.gov.ru
 
   - name: "Федресурс и Банкротства (ЕФРСБ)"
-    asn: []
+    asn:
+      - 51309
     domains:
       - bankrot.fedresurs.ru
       - fedresurs.ru
 
   - name: "Электронные торговые площадки (Госзакупки)"
-    asn: []
+    asn:
+      - 59673
+      - 203203
     domains:
       - roseltorg.ru
       - rts-tender.ru
       - sberbank-ast.ru
 
   - name: "Правовые справочные системы (Консультант / Гарант)"
-    asn: []
+    asn:
+      - 44014
+      - 8441
     domains:
       - consultant.ru
       - garant.ru
@@ -1486,7 +1517,8 @@ services:
       - onetwotrip.ru
 
   - name: "Московский метрополитен"
-    asn: []
+    asn:
+      - 202173
     domains:
       - mosmetro.ru
       - wi-fi.ru
@@ -1575,7 +1607,8 @@ services:
       - lukoil.ru
 
   - name: "Газпромнефть (АЗС / ОПТИ 24)"
-    asn: []
+    asn:
+      - 202070
     domains:
       - gazprom-neft.ru
       - opti-24.com
@@ -1593,6 +1626,7 @@ services:
   - name: "Татнефть"
     asn:
       - 50164
+      - 203972
     domains:
       - club.tatneft.ru
       - tatneft.ru
@@ -1653,7 +1687,8 @@ services:
       - starline.ru
 
   - name: "Pandora"
-    asn: []
+    asn:
+      - 60818
     domains:
       - alarmtrade.ru
       - p-on.ru
@@ -1731,6 +1766,8 @@ services:
     asn:
       - 49675
       - 39864
+      - 61293
+      - 42024
     domains:
       - 1c.ru
       - b2b-center.ru
@@ -1941,7 +1978,8 @@ services:
       - helix.ru
 
   - name: "Медицинские лаборатории (KDL, Ситилаб)"
-    asn: []
+    asn:
+      - 210914
     domains:
       - citilab.ru
       - kdl.ru
@@ -1974,7 +2012,8 @@ services:
       - ya.reso.ru
 
   - name: "РСА (Российский союз автостраховщиков)"
-    asn: []
+    asn:
+      - 201804
     domains:
       - autoins.ru
       - nsis.ru
