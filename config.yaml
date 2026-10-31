@@ -303,9 +303,11 @@ services:
       - 41551
       - 57930
       - 60702
+      - 5589
     domains:
       - invest.vtb.ru
       - online.vtb.ru
+      - open.ru
       - vtb-group.ru
       - vtb.ru
       - vtbconnect.ru
@@ -375,12 +377,6 @@ services:
     domains:
       - mkb.ru
       - online.mkb.ru
-
-  - name: "Открытие"
-    asn:
-      - 5589
-    domains:
-      - open.ru
 
   - name: "Росбанк"
     asn: []
@@ -840,12 +836,6 @@ services:
       - cdn.samokat.ru
       - cm.samokat.ru
       - samokat.ru
-
-  - name: "Delivery Club"
-    asn: []
-    domains:
-      - dclub.ru
-      - delivery-club.ru
 
   - name: "СДЭК"
     asn:
@@ -1549,11 +1539,6 @@ services:
     domains:
       - drivee.ru
 
-  - name: "Uber Russia"
-    asn: []
-    domains:
-      - uber.ru
-
   - name: "Парковки России"
     asn: []
     domains:
@@ -2043,12 +2028,6 @@ services:
     domains:
       - api.vkplay.ru
       - vkplay.ru
-
-  - name: "MY.GAMES"
-    asn: []
-    domains:
-      - api.my.games
-      - my.games
 
   # ============================================================
   # ОБЛАКА И ХОСТИНГИ
