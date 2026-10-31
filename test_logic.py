@@ -155,34 +155,9 @@ def test_config_yaml_is_valid():
         validate_config(yaml.safe_load(f))
 
 
-def test_no_duplicate_domains():
-    """Проверяет отсутствие дубликатов доменов во всем config.yaml."""
-    with open(CONFIG_PATH, encoding="utf-8") as f:
-        config = yaml.safe_load(f)
-
-    seen_domains = {}
-    duplicates = []
-
-    for service in config.get("services", []):
-        service_name = service.get("name", "Unknown")
-        for domain in service.get("domains") or []:
-            if domain in seen_domains:
-                duplicates.append(f"{domain} (в '{service_name}' и '{seen_domains[domain]}')")
-            else:
-                seen_domains[domain] = service_name
-
-    assert not duplicates, "Найдены дублирующиеся домены:\n" + "\n".join(duplicates)
-
-
-@pytest.mark.parametrize(
-    "field_name,item_type",
-    [
-        ("asn", "ASN"),
-        ("ip_ranges", "IP range"),
-    ],
-)
-def test_no_duplicates_config(field_name, item_type):
-    """Проверяет отсутствие дубликатов в конфигурации (ASN, IP ranges)."""
+@pytest.mark.parametrize("field_name", ["domains", "asn", "ip_ranges"])
+def test_no_duplicates_config(field_name):
+    """Проверяет отсутствие дубликатов доменов, ASN и IP-диапазонов во всем config.yaml."""
     with open(CONFIG_PATH, encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
@@ -192,13 +167,12 @@ def test_no_duplicates_config(field_name, item_type):
     for service in config.get("services", []):
         service_name = service.get("name", "Unknown")
         for item in service.get(field_name) or []:
-            item_str = f"AS{item}" if field_name == "asn" else str(item)
             if item in seen_items:
-                duplicates.append(f"{item_str} (в '{service_name}' и '{seen_items[item]}')")
+                duplicates.append(f"{item} (в '{service_name}' и '{seen_items[item]}')")
             else:
                 seen_items[item] = service_name
 
-    assert not duplicates, f"Найдены дублирующиеся {item_type}:\n" + "\n".join(duplicates)
+    assert not duplicates, f"Найдены дубликаты в '{field_name}':\n" + "\n".join(duplicates)
 
 
 def test_loopback_covers_localhost():
