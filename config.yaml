@@ -74,43 +74,10 @@ services:
       - gsra.apple.com
       - iad.apple.com
       - icloud-content.com
-      - icloud.ch
       - icloud.com
-      - icloud.de
-      - icloud.ee
-      - icloud.fi
-      - icloud.fr
-      - icloud.hu
-      - icloud.ie
-      - icloud.is
-      - icloud.jp
-      - icloud.lv
-      - icloud.om
-      - icloud.org
-      - icloud.pt
-      - icloud.ro
-      - icloud.se
-      - icloud.si
-      - icloud.sk
-      - icloud.vn
-      - icloudads.net
-      - icloudbox.net
-      - icloudbrowser.net
-      - icloude.com
-      - icloudmail.net
-      - icloudmusic.net
-      - icloudnet.net
-      - icloudo.com
-      - icloudo.de
-      - icloudo.net
-      - icloudos.de
-      - icloudos.net
-      - icloudpay.net
-      - icloudsecure.net
       - identity.apple.com
       - ig.apple.com
       - me.com
-      - myicloud.net
       - osrecovery.apple.com
       - skl.apple.com
       - swdownload.apple.com
@@ -321,13 +288,10 @@ services:
       - sage-collector.tbank.ru
       - static.tinkoff.ru
       - t-bank.ru
-      - t-capital.ru
-      - t-pay.ru
       - tbank.ru
       - tinkoff.ru
       - tinkoffinsurance.ru
       - tinkoffjournal.ru
-      - tinkoffpay.ru
       - tinsurance.ru
 
   - name: "ВТБ"
@@ -347,7 +311,6 @@ services:
       - vtbconnect.ru
       - vtbins.ru
       - vtbinvest.ru
-      - vtbonline.ru
 
   - name: "Альфа-Банк"
     asn:
@@ -466,9 +429,10 @@ services:
       - tvoyodbo.online
 
   - name: "Ozon банк"
-    asn: []
+    asn:
+      - 207986
     domains:
-      - ozonbank.ru
+      - finance.ozon.ru
 
   - name: "Мосбиржа"
     asn:
@@ -612,7 +576,6 @@ services:
       - api.mts.ru
       - id.mts.ru
       - login.mts.ru
-      - mts.me
       - mts.ru
       - mtsmedia.ru
       - mymts.ru
@@ -694,7 +657,6 @@ services:
 
   - name: "Ozon"
     asn:
-      - 207986
       - 44386
     domains:
       - ozon.com
@@ -950,7 +912,6 @@ services:
       - 60691
     domains:
       - dostavka.magnit.ru
-      - magnit.app
       - magnit.com
       - magnit.ru
 
@@ -1036,8 +997,6 @@ services:
       - feedback.zoozavr.ru
       - info.zoozavr.ru
       - krasnodog.zoozavr.ru
-      - mail.zoozavr.ru
-      - mta-sts.mail.zoozavr.ru
       - new1.zoozavr.ru
       - promo.zoozavr.ru
       - services.zoozavr.ru
@@ -1074,7 +1033,6 @@ services:
   - name: "Красное & Белое"
     asn: []
     domains:
-      - k-b.ru
       - krasnoeibeloe.ru
 
   - name: "Винлаб"
@@ -1172,7 +1130,6 @@ services:
       - 213075
     domains:
       - start.ru
-      - start.video
 
   - name: "Premier"
     asn: []
@@ -1183,7 +1140,6 @@ services:
     asn: []
     domains:
       - zvuk.com
-      - zvuk.ru
 
   - name: "Матч ТВ"
     asn: []
@@ -1583,10 +1539,9 @@ services:
       - api.delimobil.ru
       - delimobil.ru
 
-  - name: "Ситидрайв / Ситимобил"
+  - name: "Ситидрайв"
     asn: []
     domains:
-      - city-mobil.ru
       - citydrive.ru
 
   - name: "Drivee"
@@ -1621,7 +1576,6 @@ services:
     domains:
       - api.whoosh.bike
       - whoosh.bike
-      - whoosh.ru
 
   - name: "Юрент"
     asn: []
@@ -1720,9 +1674,8 @@ services:
   - name: "Pandora"
     asn: []
     domains:
-      - p-on.ru
       - alarmtrade.ru
-      - pandora.ru
+      - p-on.ru
       - pro.p-on.ru
 
   # ============================================================
@@ -1950,7 +1903,6 @@ services:
     asn: []
     domains:
       - beauty-forma.com
-      - lk-dev.beauty-forma.com
       - lk.beauty-forma.com
       - shop.beauty-forma.com
 
@@ -1958,12 +1910,9 @@ services:
     asn:
       - 42996
     domains:
-      - autodiscover.vitaexpress.ru
       - cloud.vitaexpress.ru
-      - mailimage.vitaexpress.ru
       - mobapp-api.vitaexpress.ru
       - mobapp.vitaexpress.ru
-      - mx.vitaexpress.ru
       - my.vitaexpress.ru
       - static.vitaexpress.ru
       - vitaexpress.ru
@@ -2016,12 +1965,11 @@ services:
       - citilab.ru
       - kdl.ru
 
-  - name: "Мониторинг диабета и уровня глюкозы (FreeStyle Libre, Medtrum, Sinocare iCan)"
+  - name: "Мониторинг диабета и уровня глюкозы (FreeStyle Libre, Sinocare iCan)"
     asn: []
     domains:
       - freestylediabetes.ru
       - ican-sinocare.ru
-      - medtrum.ru
 
   # ============================================================
   # СТРАХОВАНИЕ
@@ -2037,11 +1985,9 @@ services:
       - 39266
     domains:
       - agent.reso.ru
-      - j7h6i8.reso.ru
       - lms.reso.ru
       - reso.ru
       - sc.ya.reso.ru
-      - secureportal.citrix.reso.ru
       - www.lms.reso.ru
       - www.reso.ru
       - ya.reso.ru
