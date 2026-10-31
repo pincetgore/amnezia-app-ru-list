@@ -150,41 +150,9 @@ def test_write_output_replaces_existing_file_atomically(tmp_path: Path):
 
 
 def test_config_yaml_is_valid():
-    """Проверяет, что рабочий config.yaml имеет правильную структуру."""
+    """Рабочий config.yaml проходит ту же валидацию, что и при запуске."""
     with open(CONFIG_PATH, encoding="utf-8") as f:
-        config = yaml.safe_load(f)
-
-    assert isinstance(config, dict), "Конфиг должен быть словарем"
-    assert "services" in config, "Конфиг должен содержать ключ 'services'"
-    services = config["services"]
-    assert isinstance(services, list), "services должен быть списком"
-    validate_config(config)
-
-    for entry in services:
-        assert "name" in entry, f"Отсутствует 'name' в записи: {entry}"
-        assert "asn" in entry or "domains" in entry or "ip_ranges" in entry, (
-            f"Запись {entry['name']} должна иметь asn, domains или ip_ranges"
-        )
-
-        if entry.get("asn"):
-            assert isinstance(entry["asn"], list), f"ASN в {entry['name']} должен быть списком"
-            for asn in entry["asn"]:
-                assert isinstance(asn, int), f"ASN {asn} должен быть числом"
-
-
-def test_domains_format():
-    """Проверяет отсутствие опечаток (например http://) в доменах."""
-    with open(CONFIG_PATH, encoding="utf-8") as f:
-        config = yaml.safe_load(f)
-    services = config.get("services", [])
-    for entry in services:
-        for domain in entry.get("domains", []):
-            assert not (domain.startswith("http://") or domain.startswith("https://")), (
-                f"Домен не должен содержать протокол: {domain}"
-            )
-            assert not domain.endswith("/"), f"Домен не должен заканчиваться на слеш: {domain}"
-            assert " " not in domain, f"Домен не должен содержать пробелы: '{domain}'"
-            assert not domain.startswith("*"), f"Wildcard-домены (*.domain) не поддерживаются: {domain}"
+        validate_config(yaml.safe_load(f))
 
 
 def test_no_duplicate_domains():
