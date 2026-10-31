@@ -568,6 +568,28 @@ services:
       - delo.ru
       - sinara.ru
 
+  - name: "Русский Стандарт"
+    asn: []
+    domains:
+      - rsb.ru
+
+  - name: "Экспобанк"
+    asn: []
+    domains:
+      - expobank.ru
+
+  - name: "Локо-Банк"
+    asn:
+      - 51811
+    domains:
+      - lockobank.ru
+
+  - name: "ЮниКредит Банк"
+    asn:
+      - 51721
+    domains:
+      - unicredit.ru
+
   # ============================================================
   # ТЕЛЕКОМ И СВЯЗЬ
   # ============================================================
@@ -826,6 +848,21 @@ services:
       - 60598
     domains:
       - labirint.ru
+
+  - name: "Улыбка радуги"
+    asn: []
+    domains:
+      - r-ulybka.ru
+
+  - name: "Подружка"
+    asn: []
+    domains:
+      - podrygka.ru
+
+  - name: "Леонардо"
+    asn: []
+    domains:
+      - leonardo.ru
 
   # ============================================================
   # ДОСТАВКА И ЛОГИСТИКА
@@ -1171,6 +1208,16 @@ services:
     domains:
       - api.amediateka.tech
       - www.amediateka.ru
+
+  - name: "НТВ"
+    asn: []
+    domains:
+      - ntv.ru
+
+  - name: "Платформа"
+    asn: []
+    domains:
+      - plvideo.ru
 
   # ============================================================
   # СМИ, ПРЕССА И МЕДИА
@@ -1663,6 +1710,12 @@ services:
     domains:
       - nordwindairlines.ru
 
+  - name: "Авиакомпания «Россия»"
+    asn:
+      - 59722
+    domains:
+      - rossiya-airlines.com
+
   - name: "Автозапчасти и автотовары (Exist, Автодок, Emex, ЕвроАвто, Колеса Даром)"
     asn:
       - 204159
@@ -2001,6 +2054,21 @@ services:
     domains:
       - freestylediabetes.ru
       - ican-sinocare.ru
+
+  - name: "Озерки"
+    asn: []
+    domains:
+      - ozerki.ru
+
+  - name: "Ютека"
+    asn: []
+    domains:
+      - uteka.ru
+
+  - name: "АСНА"
+    asn: []
+    domains:
+      - asna.ru
 
   # ============================================================
   # СТРАХОВАНИЕ
