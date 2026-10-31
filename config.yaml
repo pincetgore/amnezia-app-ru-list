@@ -1161,7 +1161,9 @@ services:
     asn:
       - 56846
     domains:
+      - kino.tricolor.ru
       - kino.tricolor.tv
+      - tricolor.ru
       - tricolor.tv
 
   - name: "Амедиатека (Amediateka)"
@@ -1305,6 +1307,7 @@ services:
       - gov.ru
       - lkfl2.nalog.ru
       - lkip2.nalog.ru
+      - lknpd.nalog.ru
       - lkul.nalog.ru
       - nalog.gov.ru
       - nalog.ru
@@ -1366,6 +1369,8 @@ services:
   - name: "Росреестр"
     asn: []
     domains:
+      - lk.rosreestr.ru
+      - nspd.gov.ru
       - pkk.rosreestr.ru
       - rosreestr.gov.ru
       - rosreestr.ru
@@ -1374,6 +1379,7 @@ services:
     asn: []
     domains:
       - gibdd.ru
+      - xn--80aebkobnwfcnsfk1e0h.xn--p1ai
       - xn--90adear.xn--p1ai
 
   - name: "ФНП / Нотариат"
@@ -1435,6 +1441,7 @@ services:
       - roseltorg.ru
       - rts-tender.ru
       - sberbank-ast.ru
+      - zakupki.gov.ru
 
   - name: "Правовые справочные системы (Консультант / Гарант)"
     asn:
@@ -1565,6 +1572,7 @@ services:
   - name: "Drivee"
     asn: []
     domains:
+      - drivee.com
       - drivee.ru
 
   - name: "Парковки России"
@@ -1611,8 +1619,9 @@ services:
       - 202070
     domains:
       - gazprom-neft.ru
-      - opti-24.com
       - gpnbonus.ru
+      - opti-24.com
+      - opti-24.ru
 
   - name: "Роснефть (Семейная команда)"
     asn:
@@ -1774,6 +1783,7 @@ services:
       - cryptopro.ru
       - diadoc.ru
       - kontur.ru
+      - saby.ru
       - sbis.ru
       - tensor.ru
 
@@ -1920,7 +1930,9 @@ services:
   - name: "АГНИ"
     asn: []
     domains:
+      - agnipharm.ru
       - beauty-forma.com
+      - lk.agnipharm.ru
       - lk.beauty-forma.com
       - shop.beauty-forma.com
 
