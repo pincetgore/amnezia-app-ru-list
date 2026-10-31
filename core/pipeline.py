@@ -18,6 +18,15 @@ ASNResolve = Callable[[int], list[IPv4Network]]
 DNSResolve = Callable[[list[str]], Mapping[str, tuple[list[IPv4Network], str | None]]]
 
 
+def _excluding_asn(net: IPv4Network, excluded: Mapping[IPv4Network, int]) -> int | None:
+    """Возвращает ASN из excluded, чей префикс содержит net, или None."""
+    for prefixlen in range(net.prefixlen, 7, -1):
+        asn = excluded.get(net.supernet(new_prefix=prefixlen))
+        if asn is not None:
+            return asn
+    return None
+
+
 class ListBuilderPipeline:
     """Orchestrates resolution of ASN prefixes, DNS domain names, and static IP ranges."""
 
@@ -44,9 +53,24 @@ class ListBuilderPipeline:
             logger.debug("Exception details:", exc_info=True)
             return {domain: ([], domain) for domain in all_domains}
 
+    def _excluded_networks(self, config: AppConfig) -> dict[IPv4Network, int]:
+        """Collects prefixes of dns.exclude_asn networks as {prefix: ASN}."""
+        excluded: dict[IPv4Network, int] = {}
+        for asn in config.dns.exclude_asn:
+            try:
+                prefixes = self._asn_resolve(asn)
+            except Exception as e:
+                logger.warning("Failed to resolve excluded AS%s: %s", asn, e)
+                continue
+            if not prefixes:
+                logger.warning("No prefixes resolved for excluded AS%s", asn)
+            excluded.update(dict.fromkeys(prefixes, asn))
+        return excluded
+
     def run(self, config: AppConfig) -> PipelineResult:
         """Executes the pipeline over all services in the configuration."""
         dns_results = self._resolve_all_domains(config)
+        excluded = self._excluded_networks(config) if dns_results else {}
         result = PipelineResult(
             asn_total=sum(len(s.asn) for s in config.services),
             dns_warnings=[warning for _nets, warning in dns_results.values() if warning],
@@ -70,7 +94,13 @@ class ListBuilderPipeline:
                     result.asn_warnings.append(f"AS{asn} ({service.name})")
 
             for domain in service.domains:
-                networks.extend(dns_results[domain][0])
+                for net in dns_results[domain][0]:
+                    # Адрес глобального CDN общий с посторонними сайтами: их трафик ушёл бы мимо VPN.
+                    excluded_asn = _excluding_asn(net, excluded)
+                    if excluded_asn is None:
+                        networks.append(net)
+                    else:
+                        logger.info("Skipping %s for %s: address of excluded AS%s", net, domain, excluded_asn)
 
             # Validated by core.config.validate_config before the pipeline runs.
             networks.extend(IPv4Network(ip_range, strict=False) for ip_range in service.ip_ranges)

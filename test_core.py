@@ -95,6 +95,7 @@ class TestCoreConfig:
                 "nameservers": ["1.1.1.1"],
                 "timeout": 5,
                 "max_workers": 10,
+                "exclude_asn": [13335],
             },
         }
         validate_config(raw)
@@ -109,6 +110,7 @@ class TestCoreConfig:
         assert cfg.dns.nameservers == ["1.1.1.1"]
         assert cfg.dns.timeout == 5.0
         assert cfg.dns.max_workers == 10
+        assert cfg.dns.exclude_asn == [13335]
 
 
 class TestCorePipeline:
@@ -183,6 +185,28 @@ class TestCorePipeline:
         assert [r.networks for r in result.service_results] == [[IPv4Network("4.5.6.7/32")]] * 2
         assert result.dns_warnings == ["bad.ru"]
         assert result.domain_total == 2
+
+    def test_pipeline_drops_dns_addresses_of_excluded_asn(self):
+        """Адреса из DNS в сетях dns.exclude_asn отбрасываются, ASN и ip_ranges сервиса — нет."""
+        prefixes = {13335: [IPv4Network("104.16.0.0/13")], 100: [IPv4Network("104.18.0.0/24")]}
+        pipeline = ListBuilderPipeline(
+            asn_resolve=lambda asn: prefixes.get(asn, []),
+            dns_resolve=_dns_stub({"a.ru": [IPv4Network("104.18.1.1/32"), IPv4Network("5.6.7.8/32")]}),
+        )
+        config = AppConfig(
+            services=[ServiceConfig(name="A", asn=[100], domains=["a.ru"], ip_ranges=["104.17.0.0/24"])],
+            dns=DnsConfig(exclude_asn=[13335]),
+        )
+
+        result = pipeline.run(config)
+
+        assert result.service_results[0].networks == [
+            IPv4Network("104.18.0.0/24"),
+            IPv4Network("5.6.7.8/32"),
+            IPv4Network("104.17.0.0/24"),
+        ]
+        assert result.asn_total == 1
+        assert result.asn_warnings == []
 
     def test_pipeline_marks_all_domains_failed_when_dns_crashes(self):
         def crashing_dns(_domains):

@@ -89,6 +89,13 @@ def validate_config(config: dict[str, Any]) -> None:
             value = dns_config[field]
             if isinstance(value, bool) or not isinstance(value, (int, float)) or value <= 0:
                 raise ValueError(f"'dns.{field}' must be a positive number")
+    exclude_asn = dns_config.get("exclude_asn")
+    if exclude_asn is not None:
+        if not isinstance(exclude_asn, list):
+            raise ValueError("'dns.exclude_asn' must be a list")
+        for asn in exclude_asn:
+            if isinstance(asn, bool) or not isinstance(asn, int) or asn <= 0:
+                raise ValueError(f"Invalid ASN in 'dns.exclude_asn': {asn!r}")
 
 
 def parse_config(config: dict[str, Any]) -> AppConfig:
@@ -115,6 +122,7 @@ def parse_config(config: dict[str, Any]) -> AppConfig:
         nameservers=list(dns_nameservers),
         timeout=dns_timeout,
         max_workers=dns_max_workers,
+        exclude_asn=list(dns_raw.get("exclude_asn") or []),
     )
 
     return AppConfig(services=parsed_services, dns=dns_cfg)

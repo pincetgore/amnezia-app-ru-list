@@ -3,7 +3,8 @@
 from dataclasses import dataclass, field
 from ipaddress import IPv4Network
 
-DEFAULT_NAMESERVERS: list[str] = ["77.88.8.8", "77.88.8.1", "8.8.8.8", "1.1.1.1"]
+# Google первым: он учитывает ECS (московскую подсеть), а Яндекс.DNS его игнорирует и из CI отвечает как зарубежному клиенту.
+DEFAULT_NAMESERVERS: list[str] = ["8.8.8.8", "77.88.8.8", "77.88.8.1", "1.1.1.1"]
 DEFAULT_DNS_TIMEOUT: float = 10.0
 DEFAULT_DNS_MAX_WORKERS: int = 20
 
@@ -15,6 +16,7 @@ class DnsConfig:
     nameservers: list[str] = field(default_factory=lambda: list(DEFAULT_NAMESERVERS))
     timeout: float = DEFAULT_DNS_TIMEOUT
     max_workers: int = DEFAULT_DNS_MAX_WORKERS
+    exclude_asn: list[int] = field(default_factory=list)
 
 
 @dataclass(slots=True, frozen=True)

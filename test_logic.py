@@ -58,6 +58,8 @@ def test_aggregate_cidrs_ignores_default_route():
         {"services": [{"name": "Service", "domains": ["example.com/"]}]},  # Слеш на конце
         {"services": [], "dns": {"nameservers": []}},
         {"services": [], "dns": {"timeout": 0}},
+        {"services": [], "dns": {"exclude_asn": 13335}},
+        {"services": [], "dns": {"exclude_asn": ["13335"]}},
     ],
 )
 def test_validate_config_rejects_invalid_values(config):
