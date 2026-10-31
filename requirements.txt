@@ -2,5 +2,4 @@ requests==2.34.2
 dnspython==2.9.0
 pyyaml==6.0.3
 pytest==9.1.1
-beautifulsoup4==4.15.0
 

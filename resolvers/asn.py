@@ -13,7 +13,6 @@ from ipaddress import IPv4Network
 from urllib.parse import quote
 
 import requests
-from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
@@ -25,6 +24,8 @@ HE_BGP_URL = "https://bgp.he.net/AS{asn}#_prefixes4"
 
 # Предварительно скомпилированное регулярное выражение для поиска CIDR
 CIDR_RE = re.compile(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2}$")
+# CIDR как текст HTML-элемента (<td>1.2.3.0/24</td>), а не внутри href="/net/1.2.3.0/24"
+CIDR_TEXT_RE = re.compile(r">\s*(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2})\s*<")
 
 # Временная метка последнего запроса к API (используется для ограничения скорости)
 _last_request_time = 0.0
@@ -161,22 +162,23 @@ class ASNResolver:
             logger.error("bgp.he.net request failed for AS%s: %s", asn, e)
             return []
 
-        soup = BeautifulSoup(resp.text, "html.parser")
-        prefixes: list[IPv4Network] = []
-        seen_prefixes: set[str] = set()
+        # Только таблица IPv4-префиксов: в остальных (пиры, IX) чужие сети.
+        html = resp.text
+        start = html.find("table_prefixes4")
+        if start == -1:
+            start = html.find("<table")
+        if start != -1:
+            end = html.find("</table>", start)
+            html = html[start : end if end != -1 else len(html)]
 
-        table = soup.find("table", id="table_prefixes4") or soup.find("table")
-        search_root = table if table is not None else soup
-        for elem in search_root.find_all(["a", "td"]):
-            text = elem.get_text().strip()
-            if CIDR_RE.match(text) and text not in seen_prefixes:
-                seen_prefixes.add(text)
-                try:
-                    net = IPv4Network(text, strict=False)
-                    if is_valid_prefix(net):
-                        prefixes.append(net)
-                except ValueError:
-                    continue
+        prefixes: list[IPv4Network] = []
+        for text in dict.fromkeys(CIDR_TEXT_RE.findall(html)):
+            try:
+                net = IPv4Network(text, strict=False)
+            except ValueError:
+                continue
+            if is_valid_prefix(net):
+                prefixes.append(net)
 
         logger.debug("bgp.he.net AS%s: found %d IPv4 prefixes", asn, len(prefixes))
         return prefixes

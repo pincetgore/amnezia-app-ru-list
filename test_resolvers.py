@@ -136,8 +136,10 @@ class TestASNResolver:
             <table id="table_peers">
                 <tr><td><a href="/net/8.8.8.0/24">8.8.8.0/24</a></td></tr>
             </table>
-            <table id="table_prefixes4">
-                <tr><td><a href="/net/1.2.3.0/24">1.2.3.0/24</a></td></tr>
+            <table id='table_prefixes4' class='sortable w100p hidden'>
+                <tr><td class='nowrap'>
+                    <a href="/net/1.2.3.0/24">1.2.3.0/24</a>
+                </td></tr>
             </table>
         """
 
