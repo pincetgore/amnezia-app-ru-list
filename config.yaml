@@ -2267,6 +2267,57 @@ services:
       - ufanet.ru
       - ufanetgroup.com
 
+  - name: "РосДомофон"
+    asn: []
+    # Основной кластер РосДомофона (API, SIP/RTP, Janus/WebRTC и облачные видеосерверы RDVA)
+    ip_ranges:
+      - 185.111.219.0/24
+    domains:
+      - kck.rosdomofon.com
+      - my.rosdomofon.com
+      - payment.rosdomofon.com
+      - rdba.rosdomofon.com
+      - rdba.rosdomofon.ru
+      - rddc.rosdomofon.com
+      - rdea.rosdomofon.com
+      - rdmfn.ru
+      - rdva104.rosdomofon.com
+      - rdva105.rosdomofon.com
+      - rdva107.rosdomofon.com
+      - rdva12.rosdomofon.com
+      - rdva13.rosdomofon.com
+      - rdva16.rosdomofon.com
+      - rdva18.rosdomofon.com
+      - rdva33.rosdomofon.com
+      - rdva36.rosdomofon.com
+      - rdva37.rosdomofon.com
+      - rdva39.rosdomofon.com
+      - rdva40.rosdomofon.com
+      - rdva41.rosdomofon.com
+      - rdva47.rosdomofon.com
+      - rdva49.rosdomofon.com
+      - rdva53.rosdomofon.com
+      - rdva54.rosdomofon.com
+      - rdva57.rosdomofon.com
+      - rdva58.rosdomofon.com
+      - rdva6.rosdomofon.com
+      - rdva63.rosdomofon.com
+      - rdva64.rosdomofon.com
+      - rdva7.rosdomofon.com
+      - rdva81.rosdomofon.com
+      - rdva88.rosdomofon.com
+      - rdva90.rosdomofon.com
+      - rdva91.rosdomofon.com
+      - rdva93.rosdomofon.com
+      - rdva94.rosdomofon.com
+      - rdva95.rosdomofon.com
+      - rdva97.rosdomofon.com
+      - rosdomofon.com
+      - rosdomofon.ru
+      - sip.rosdomofon.com
+      - sip2.rosdomofon.com
+      - ws.rosdomofon.com
+
   - name: "kojima.ru"
     asn: []
     domains:

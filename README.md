@@ -507,14 +507,15 @@ Google DNS стоит первым, потому что учитывает по�
 
 ### Прочее
 
-| Сервис | ASN | Домены |
-| ------ | ------ | ------ |
-| Литрес | AS61306 | `litres.ru` |
-| Kaspersky | — | `kaspersky.com`, `kaspersky.ru` |
-| Dreamehome | — | `ru.dreametech.com`, `ru.iot.dreame.tech`, `smarthome.dreame.tech` |
-| Мой умный дом (Уфанет) | — | `dom.ufanet.ru`, `secretapi.ufanet.ru`, `ufanet.ru`, `ufanetgroup.com` |
-| kojima.ru | — | `kojima.ru` |
-| yclients | — | `api.yclients.com`, `assets.yclients.com`, `b1.yclients.com` и др. |
+| Сервис | ASN | IP-диапазоны | Домены |
+| ------ | ------ | ------ | ------ |
+| Литрес | AS61306 | — | `litres.ru` |
+| Kaspersky | — | — | `kaspersky.com`, `kaspersky.ru` |
+| Dreamehome | — | — | `ru.dreametech.com`, `ru.iot.dreame.tech`, `smarthome.dreame.tech` |
+| Мой умный дом (Уфанет) | — | — | `dom.ufanet.ru`, `secretapi.ufanet.ru`, `ufanet.ru`, `ufanetgroup.com` |
+| РосДомофон | — | `185.111.219.0/24` | `kck.rosdomofon.com`, `my.rosdomofon.com`, `payment.rosdomofon.com`, `rdba.rosdomofon.com` и др. |
+| kojima.ru | — | — | `kojima.ru` |
+| yclients | — | — | `api.yclients.com`, `assets.yclients.com`, `b1.yclients.com` и др. |
 
 ## Автообновление
 
