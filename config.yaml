@@ -301,7 +301,6 @@ services:
       - 41226
       - 41430
       - 41551
-      - 57930
       - 60702
       - 5589
     domains:
@@ -311,7 +310,6 @@ services:
       - vtb-group.ru
       - vtb.ru
       - vtbconnect.ru
-      - vtbins.ru
       - vtbinvest.ru
 
   - name: "Альфа-Банк"
@@ -1273,8 +1271,6 @@ services:
   - name: "Госуслуги"
     asn:
       - 196747
-      - 48287
-      - 39494
     domains:
       - esia.gosuslugi.ru
       - gosuslugi.ru
@@ -2007,6 +2003,14 @@ services:
     asn: []
     domains:
       - alfastrah.ru
+
+  - name: "СОГАЗ / Газпром страхование"
+    asn:
+      - 51748
+      - 57930
+    domains:
+      - gazpromins.ru
+      - sogaz.ru
 
   # ============================================================
   # МЕССЕНДЖЕРЫ И ИГРЫ
