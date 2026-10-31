@@ -54,16 +54,15 @@ class ListBuilderPipeline:
             return {domain: ([], domain) for domain in all_domains}
 
     def _excluded_networks(self, config: AppConfig) -> dict[IPv4Network, int]:
-        """Collects prefixes of dns.exclude_asn networks as {prefix: ASN}."""
+        """Collects prefixes of dns.exclude_asn networks as {prefix: ASN}.
+
+        Fails instead of skipping: without these prefixes CDN addresses would be published.
+        """
         excluded: dict[IPv4Network, int] = {}
         for asn in config.dns.exclude_asn:
-            try:
-                prefixes = self._asn_resolve(asn)
-            except Exception as e:
-                logger.warning("Failed to resolve excluded AS%s: %s", asn, e)
-                continue
+            prefixes = self._asn_resolve(asn)
             if not prefixes:
-                logger.warning("No prefixes resolved for excluded AS%s", asn)
+                raise RuntimeError(f"No prefixes resolved for excluded AS{asn}")
             excluded.update(dict.fromkeys(prefixes, asn))
         return excluded
 

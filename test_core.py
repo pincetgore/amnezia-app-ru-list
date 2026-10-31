@@ -208,6 +208,17 @@ class TestCorePipeline:
         assert result.asn_total == 1
         assert result.asn_warnings == []
 
+    def test_pipeline_fails_when_excluded_asn_has_no_prefixes(self):
+        """Без префиксов исключаемой сети запуск останавливается, а не публикует адреса CDN."""
+        pipeline = ListBuilderPipeline(
+            asn_resolve=lambda _asn: [],
+            dns_resolve=_dns_stub({"a.ru": [IPv4Network("104.18.1.1/32")]}),
+        )
+        config = AppConfig(services=[ServiceConfig(name="A", domains=["a.ru"])], dns=DnsConfig(exclude_asn=[13335]))
+
+        with pytest.raises(RuntimeError, match="AS13335"):
+            pipeline.run(config)
+
     def test_pipeline_marks_all_domains_failed_when_dns_crashes(self):
         def crashing_dns(_domains):
             raise RuntimeError("boom")
