@@ -60,11 +60,12 @@ class PipelineResult:
         """Sum of all raw prefixes collected across services."""
         return sum(len(res.networks) for res in self.service_results)
 
-    def failure_reason(self, max_failed_share: float = 0.5) -> str | None:
+    def failure_reason(self, max_failed_share: float = 0.1) -> str | None:
         """Returns why the run must not be published, or None if it is healthy.
 
         Static ip_ranges always resolve, so "some networks collected" does not prove
-        that RIPE or DNS worked. A mass failure would publish a near-empty list.
+        that RIPE or DNS worked. A partial outage would publish a list missing services.
+        A normal run fails ~0% (0 of 231 ASN, 1 of 815 domains on 2026-11-12), so 10% is an outage.
         """
         checks = (
             ("ASN", len(self.asn_warnings), self.asn_total),

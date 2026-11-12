@@ -62,9 +62,9 @@ class TestCoreModels:
         ("asn_failed", "asn_total", "dns_failed", "domain_total", "blocked"),
         [
             (0, 10, 0, 10, False),
-            (5, 10, 5, 10, False),  # ровно половина — ещё допустимо
-            (6, 10, 0, 10, True),
-            (0, 10, 6, 10, True),
+            (10, 100, 10, 100, False),  # ровно 10% — ещё допустимо
+            (11, 100, 0, 100, True),
+            (0, 100, 11, 100, True),
             (0, 0, 0, 0, False),  # только статические ip_ranges
         ],
     )
