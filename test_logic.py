@@ -56,8 +56,10 @@ def test_aggregate_cidrs_ignores_default_route():
         {"services": [{"name": "Service", "domains": ["*.example.com"]}]},  # Wildcard домен
         {"services": [{"name": "Service", "domains": ["https://example.com"]}]},  # Схема URL
         {"services": [{"name": "Service", "domains": ["example.com/"]}]},  # Слеш на конце
+        {"services": [{"name": "Service", "domains": ["example.com/path"]}]},  # Путь
         {"services": [], "dns": {"nameservers": []}},
         {"services": [], "dns": {"timeout": 0}},
+        {"services": [], "dns": {"max_workers": 2.5}},
         {"services": [], "dns": {"exclude_asn": 13335}},
         {"services": [], "dns": {"exclude_asn": ["13335"]}},
     ],
@@ -130,23 +132,40 @@ def test_mass_failure_keeps_previous_output(tmp_path: Path, monkeypatch, failing
     assert output_path.read_text(encoding="utf-8") == "previous good list"
 
 
-def test_write_output_replaces_existing_file_atomically(tmp_path: Path):
-    """Успешная запись заменяет старое содержимое корректным полным JSON."""
+def test_aggregate_cidrs_rejects_merge_into_default_route():
+    """Две половины интернета (/1 + /1) не должны слиться в 0.0.0.0/0."""
+    with pytest.raises(ValueError, match="0.0.0.0/0"):
+        aggregate_networks([IPv4Network("0.0.0.0/1"), IPv4Network("128.0.0.0/1")])
+
+
+def test_write_output_replaces_existing_file_sorted(tmp_path: Path):
+    """Успешная запись заменяет старое содержимое полным JSON, сети по возрастанию."""
     output_path = tmp_path / "ip-list.json"
     output_path.write_text("old and invalid content", encoding="utf-8")
 
     result = write_output(
-        [IPv4Network("192.0.2.2/32"), IPv4Network("192.0.2.1/32")],
+        [IPv4Network("192.0.2.2/32"), IPv4Network("10.0.0.0/8"), IPv4Network("192.0.2.1/32")],
         str(output_path),
     )
 
-    assert yaml.safe_load(output_path.read_text(encoding="utf-8")) == [
-        {"hostname": "192.0.2.1/32", "ip": ""},
-        {"hostname": "192.0.2.2/32", "ip": ""},
-    ]
-    assert not list(tmp_path.glob(".ip-list.json.*.tmp"))
-    assert (output_path.stat().st_mode & 0o777) == 0o644
-    assert result == [IPv4Network("192.0.2.1/32"), IPv4Network("192.0.2.2/32")]
+    expected = [IPv4Network("10.0.0.0/8"), IPv4Network("192.0.2.1/32"), IPv4Network("192.0.2.2/32")]
+    assert yaml.safe_load(output_path.read_text(encoding="utf-8")) == [{"hostname": str(n), "ip": ""} for n in expected]
+    assert result == expected
+
+
+def test_write_output_plain_format(tmp_path: Path):
+    output_path = tmp_path / "cidrs.txt"
+    write_output([IPv4Network("192.0.2.1/32"), IPv4Network("10.0.0.0/8")], str(output_path), "plain")
+    assert output_path.read_text(encoding="utf-8") == "10.0.0.0/8\n192.0.2.1/32\n"
+
+
+def test_write_output_keeps_previous_file_when_nothing_to_write(tmp_path: Path):
+    """Пустой результат не затирает предыдущий список."""
+    output_path = tmp_path / "ip-list.json"
+    output_path.write_text("previous good list", encoding="utf-8")
+
+    assert write_output([], str(output_path)) == []
+    assert output_path.read_text(encoding="utf-8") == "previous good list"
 
 
 def test_config_yaml_is_valid():

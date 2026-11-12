@@ -59,8 +59,8 @@ def validate_config(config: dict[str, Any]) -> None:
                 raise ValueError(f"Wildcard domains are not supported in service '{name}': {domain!r}")
             if "://" in domain:
                 raise ValueError(f"Domain must not contain URL scheme in service '{name}': {domain!r}")
-            if domain.endswith("/"):
-                raise ValueError(f"Domain must not end with slash in service '{name}': {domain!r}")
+            if "/" in domain:
+                raise ValueError(f"Domain must not contain a path or slash in service '{name}': {domain!r}")
         for ip_range in service.get("ip_ranges") or []:
             if not isinstance(ip_range, str):
                 raise ValueError(f"Invalid IP range for service '{name}': {ip_range!r}")
@@ -84,11 +84,11 @@ def validate_config(config: dict[str, Any]) -> None:
                 IPv4Address(nameserver)
             except ValueError as exc:
                 raise ValueError(f"Invalid DNS nameserver: {nameserver!r}") from exc
-    for field in ("timeout", "max_workers"):
+    for field, kinds in (("timeout", (int, float)), ("max_workers", int)):
         if field in dns_config:
             value = dns_config[field]
-            if isinstance(value, bool) or not isinstance(value, (int, float)) or value <= 0:
-                raise ValueError(f"'dns.{field}' must be a positive number")
+            if isinstance(value, bool) or not isinstance(value, kinds) or value <= 0:
+                raise ValueError(f"'dns.{field}' must be a positive {'integer' if kinds is int else 'number'}")
     exclude_asn = dns_config.get("exclude_asn")
     if exclude_asn is not None:
         if not isinstance(exclude_asn, list):

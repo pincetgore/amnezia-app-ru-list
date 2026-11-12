@@ -10,7 +10,6 @@ import logging
 import re
 import time
 from ipaddress import IPv4Network
-from urllib.parse import quote
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -22,8 +21,6 @@ logger = logging.getLogger(__name__)
 RIPE_API_URL = "https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS{asn}"
 HE_BGP_URL = "https://bgp.he.net/AS{asn}#_prefixes4"
 
-# Предварительно скомпилированное регулярное выражение для поиска CIDR
-CIDR_RE = re.compile(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2}$")
 # CIDR как текст HTML-элемента (<td>1.2.3.0/24</td>), а не внутри href="/net/1.2.3.0/24"
 CIDR_TEXT_RE = re.compile(r">\s*(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2})\s*<")
 
@@ -108,18 +105,11 @@ class ASNResolver:
         self.default_timeout = default_timeout
         self.rate_limit_interval = rate_limit_interval
 
-    def _apply_rate_limit(self) -> None:
+    def get_prefixes_ripe(self, asn: int) -> list[IPv4Network] | None:
+        """Получает анонсированные IPv4-префиксы из RIPE NCC Stat API (None — сбой, нужен fallback)."""
         _rate_limit(self.rate_limit_interval)
-
-    def get_prefixes_ripe(self, asn: int, timeout: int | None = None) -> list[IPv4Network] | None:
-        """Получает анонсированные IPv4-префиксы из RIPE NCC Stat API."""
-        self._apply_rate_limit()
-        req_timeout = timeout if timeout is not None else self.default_timeout
         try:
-            resp = self.session.get(
-                RIPE_API_URL.format(asn=quote(str(asn), safe="")),
-                timeout=req_timeout,
-            )
+            resp = self.session.get(RIPE_API_URL.format(asn=asn), timeout=self.default_timeout)
             resp.raise_for_status()
             data = resp.json()
         except Exception as e:
@@ -127,36 +117,31 @@ class ASNResolver:
             return None
 
         data_section = data.get("data") if isinstance(data, dict) else None
-        if not isinstance(data_section, dict):
+        entries = data_section.get("prefixes") if isinstance(data_section, dict) else None
+        if not isinstance(entries, list):
             logger.warning("RIPE API returned malformed data for AS%s", asn)
             return None
-        entries = data_section.get("prefixes", [])
         prefixes: list[IPv4Network] = []
         for entry in entries:
-            if not isinstance(entry, dict):
-                continue
-            prefix = entry.get("prefix")
-            if not prefix or not isinstance(prefix, str) or not CIDR_RE.match(prefix):
+            prefix = entry.get("prefix") if isinstance(entry, dict) else None
+            # Только строки: IPv4Network(int) молча превратил бы число в адрес /32.
+            if not isinstance(prefix, str):
                 continue
             try:
                 net = IPv4Network(prefix, strict=False)
-                if is_valid_prefix(net):
-                    prefixes.append(net)
-            except ValueError:
+            except ValueError:  # IPv6 и мусор
                 continue
+            if is_valid_prefix(net):
+                prefixes.append(net)
 
         logger.debug("RIPE API AS%s: found %d IPv4 prefixes", asn, len(prefixes))
         return prefixes
 
-    def get_prefixes_he(self, asn: int, timeout: int | None = None) -> list[IPv4Network]:
+    def get_prefixes_he(self, asn: int) -> list[IPv4Network]:
         """Парсит анонсированные IPv4-префиксы с bgp.he.net (резервный источник)."""
-        self._apply_rate_limit()
-        req_timeout = timeout if timeout is not None else self.default_timeout
+        _rate_limit(self.rate_limit_interval)
         try:
-            resp = self.session.get(
-                HE_BGP_URL.format(asn=quote(str(asn), safe="")),
-                timeout=req_timeout,
-            )
+            resp = self.session.get(HE_BGP_URL.format(asn=asn), timeout=self.default_timeout)
             resp.raise_for_status()
         except Exception as e:
             logger.error("bgp.he.net request failed for AS%s: %s", asn, e)
@@ -166,10 +151,10 @@ class ASNResolver:
         html = resp.text
         start = html.find("table_prefixes4")
         if start == -1:
-            start = html.find("<table")
-        if start != -1:
-            end = html.find("</table>", start)
-            html = html[start : end if end != -1 else len(html)]
+            logger.error("bgp.he.net page for AS%s has no IPv4 prefix table", asn)
+            return []
+        end = html.find("</table>", start)
+        html = html[start : end if end != -1 else len(html)]
 
         prefixes: list[IPv4Network] = []
         for text in dict.fromkeys(CIDR_TEXT_RE.findall(html)):
@@ -183,16 +168,15 @@ class ASNResolver:
         logger.debug("bgp.he.net AS%s: found %d IPv4 prefixes", asn, len(prefixes))
         return prefixes
 
-    def resolve(self, asn: int, timeout: int | None = None) -> list[IPv4Network]:
+    def resolve(self, asn: int) -> list[IPv4Network]:
         """Получает все IPv4-префиксы для ASN (сначала RIPE, при его сбое — bgp.he.net)."""
-        req_timeout = timeout or self.default_timeout
-        prefixes = self.get_prefixes_ripe(asn, timeout=req_timeout)
+        prefixes = self.get_prefixes_ripe(asn)
         # Пустой ответ RIPE — ASN ничего не анонсирует; bgp.he.net тогда отдаёт устаревшие префиксы
         if prefixes is not None:
             return prefixes
 
         logger.info("Falling back to bgp.he.net for AS%s", asn)
-        return self.get_prefixes_he(asn, timeout=req_timeout)
+        return self.get_prefixes_he(asn)
 
 
 _default_asn_resolver = ASNResolver()

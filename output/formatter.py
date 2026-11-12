@@ -1,39 +1,32 @@
 """
 Форматтер вывода для AmneziaVPN и простых текстовых форматов (plain-text).
 
-Принимает результаты резолвинга по сервисам (домены + IP-сети) и создает
-либо совместимый с AmneziaVPN JSON-файл, либо простой текстовый список CIDR.
+Агрегирует IP-сети всех сервисов и создает либо совместимый с AmneziaVPN
+JSON-файл, либо простой текстовый список CIDR.
 
 Формат AmneziaVPN:
-  Массив объектов JSON: [{"hostname": "<domain_or_cidr>", "ip": ""}, ...]
+  Массив объектов JSON: [{"hostname": "<cidr>", "ip": ""}, ...]
 """
 
 import json
-import os
-import tempfile
 from ipaddress import IPv4Network, collapse_addresses
 from pathlib import Path
 
 
 def aggregate_networks(networks: list[IPv4Network]) -> list[IPv4Network]:
-    """Удаляет дубликаты и агрегирует сети.
+    """Удаляет дубликаты, сливает перекрывающиеся и смежные сети, возвращает их по возрастанию.
 
-    Использует collapse_addresses() из стандартной библиотеки для слияния перекрывающихся/смежных подсетей
-    и удаления отдельных IP-адресов, которые уже покрыты более широким префиксом.
-    Исключает 0.0.0.0/0 и некорректные суперсети, чтобы не схлопнуть весь интернет в 1 маршрут.
+    0.0.0.0/0 отбрасывается на входе. Если сети всё равно слились в 0.0.0.0/0
+    (например, 0.0.0.0/1 + 128.0.0.0/1), это ошибка: весь трафик ушёл бы мимо VPN.
     """
-    if not networks:
-        return []
-    valid_networks = [net for net in networks if net.prefixlen > 0 and not net.is_unspecified]
-    return list(collapse_addresses(valid_networks))
+    aggregated = list(collapse_addresses(net for net in networks if net.prefixlen > 0))
+    if any(net.prefixlen == 0 for net in aggregated):
+        raise ValueError("Networks merge into 0.0.0.0/0: check ip_ranges in config")
+    return aggregated
 
 
 def format_amnezia(sorted_nets: list[IPv4Network]) -> list[dict[str, str]]:
-    """Формирует JSON-структуру для AmneziaVPN из результатов по каждому сервису.
-
-    Структура вывода:
-      1. Агрегированные записи CIDR (фактические правила маршрутизации)
-    """
+    """Формирует JSON-структуру для AmneziaVPN: одна запись CIDR на сеть."""
     return [{"hostname": str(net), "ip": ""} for net in sorted_nets]
 
 
@@ -43,20 +36,13 @@ def format_plain(sorted_nets: list[IPv4Network]) -> str:
 
 
 def write_output(networks: list[IPv4Network], output_path: str, fmt: str = "amnezia") -> list[IPv4Network]:
-    """Записывает отформатированный вывод в файл.
+    """Агрегирует сети и записывает их в файл в формате "amnezia" (JSON) или "plain" (CIDR на строку).
 
-    Поддерживаемые форматы:
-      - "amnezia": массив JSON для импорта в AmneziaVPN
-      - "plain":   один CIDR на строку (для других VPN-клиентов или брандмауэров)
-
-    Возвращает список агрегированных объектов IPv4Network.
+    Возвращает агрегированные сети. Если сетей нет, файл не трогается и возвращается [].
     """
-    path = Path(output_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-
-    # Агрегируем все CIDR-диапазоны из всех сервисов и сортируем их
-    aggregated = aggregate_networks(networks)
-    sorted_nets = sorted(aggregated, key=lambda n: (n.network_address, n.prefixlen))
+    sorted_nets = aggregate_networks(networks)
+    if not sorted_nets:
+        return []
 
     if fmt == "amnezia":
         content = json.dumps(format_amnezia(sorted_nets), indent=2, ensure_ascii=False) + "\n"
@@ -65,18 +51,8 @@ def write_output(networks: list[IPv4Network], output_path: str, fmt: str = "amne
     else:
         raise ValueError(f"Unknown format: {fmt}")
 
-    # Записываем во временный файл в той же директории, затем атомарно заменяем цель.
-    # Это не оставляет частично записанный список при прерывании процесса или ошибке I/O.
-    fd, temporary_path = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent)
-    try:
-        with os.fdopen(fd, "w", encoding="utf-8") as temporary_file:
-            temporary_file.write(content)
-            temporary_file.flush()
-            os.fsync(temporary_file.fileno())
-        os.chmod(temporary_path, 0o644)
-        os.replace(temporary_path, path)
-    except BaseException:
-        Path(temporary_path).unlink(missing_ok=True)
-        raise
-
+    path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    # Без атомарной замены: CI публикует файл, только если скрипт завершился с кодом 0.
+    path.write_text(content, encoding="utf-8")
     return sorted_nets
