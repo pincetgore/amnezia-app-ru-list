@@ -70,11 +70,12 @@ def test_validate_config_rejects_invalid_values(config):
         validate_config(config)
 
 
+# По 10 ASN и доменов: один сбой — ровно 10%, это ещё предупреждение, а не остановка.
 CLI_CONFIG = (
     "services:\n"
     "  - name: TestService\n"
-    "    asn: [12345, 23456]\n"
-    "    domains: [good.example, bad.example]\n"
+    f"    asn: [12345, 23456, {', '.join(str(64500 + i) for i in range(8))}]\n"
+    f"    domains: [good.example, bad.example, {', '.join(f'd{i}.example' for i in range(8))}]\n"
     "    ip_ranges: [192.0.2.1/32]\n"
 )
 
