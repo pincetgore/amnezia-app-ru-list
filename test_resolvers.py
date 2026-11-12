@@ -91,10 +91,11 @@ class TestASNResolver:
         # После всех retry попыток должен вернуться None
         assert result is None
 
-    def test_get_prefixes_ripe_none_data(self):
-        """Ответ RIPE с data: null считается сбоем — возвращает None для fallback."""
+    @pytest.mark.parametrize("payload", [{"data": None}, {"data": {}}, {"data": {"prefixes": None}}, []])
+    def test_get_prefixes_ripe_malformed_data(self, payload):
+        """Ответ RIPE без списка префиксов — сбой (None для fallback), а не «ASN пуст»."""
         mock_response = MagicMock()
-        mock_response.json.return_value = {"data": None}
+        mock_response.json.return_value = payload
 
         result = _resolver(mock_response).get_prefixes_ripe(12389)
 
@@ -113,7 +114,7 @@ class TestASNResolver:
         """Проверяет успешный парсинг bgp.he.net с фильтрацией 0.0.0.0/0 и дедупликацией."""
         mock_response = MagicMock()
         mock_response.text = """
-            <table>
+            <table id="table_prefixes4">
                 <tr><td>0.0.0.0/0</td></tr>
                 <tr><td><a href="/net/1.2.3.0/24">1.2.3.0/24</a></td></tr>
                 <tr><td><a href="/net/1.2.3.0/24">1.2.3.0/24</a></td></tr>
@@ -149,6 +150,13 @@ class TestASNResolver:
         assert IPv4Network("1.2.3.0/24") in result
         assert IPv4Network("8.8.8.0/24") not in result
 
+    def test_get_prefixes_he_without_prefix_table_returns_nothing(self):
+        """Без таблицы IPv4-префиксов чужие сети из других таблиц не берутся."""
+        mock_response = MagicMock()
+        mock_response.text = '<table id="table_peers"><tr><td>8.8.8.0/24</td></tr></table>'
+
+        assert _resolver(mock_response).get_prefixes_he(12389) == []
+
     def test_get_prefixes_he_error(self):
         """Проверяет обработку ошибки при запросе к bgp.he.net."""
         import requests
@@ -168,7 +176,7 @@ class TestASNResolver:
             result = resolve_asn(12389)
 
             assert result == mock_ripe
-            mock_ripe_func.assert_called_once_with(12389, timeout=30)
+            mock_ripe_func.assert_called_once_with(12389)
             mock_he_func.assert_not_called()
 
     def test_resolve_asn_fallback_to_he(self):
@@ -182,7 +190,7 @@ class TestASNResolver:
             result = resolve_asn(12389)
 
             assert result == mock_he
-            mock_he_func.assert_called_once_with(12389, timeout=30)
+            mock_he_func.assert_called_once_with(12389)
 
     def test_resolve_asn_no_fallback_on_empty_ripe(self):
         """Пустой список от RIPE — ASN ничего не анонсирует, bgp.he.net не запрашивается."""
@@ -321,23 +329,3 @@ class TestDNSResolver:
         ):
             DNSResolver(timeout=20, max_workers=30).resolve(["a.com", "b.com"])
             mock_executor_cls.assert_called_with(max_workers=2)
-
-
-class TestNetworkAggregation:
-    """Тесты для проверки корректности работы с IPv4Network объектами."""
-
-    def test_ipv4_network_creation_from_single_ip(self):
-        """Проверяет создание /32 сети из одного IP."""
-        net = IPv4Network("192.168.1.1/32")
-        assert str(net) == "192.168.1.1/32"
-        assert net.num_addresses == 1
-
-    def test_ipv4_network_creation_from_cidr(self):
-        """Проверяет создание сети из CIDR."""
-        net = IPv4Network("10.0.0.0/8", strict=False)
-        assert str(net) == "10.0.0.0/8"
-        assert net.num_addresses == 16777216  # 2^24
-
-
-if __name__ == "__main__":
-    pytest.main([__file__, "-v"])

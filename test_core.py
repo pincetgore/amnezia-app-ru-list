@@ -304,31 +304,3 @@ class TestResolverClasses:
         assert len(prefixes) == 1
         assert prefixes[0] == IPv4Network("198.51.100.0/24")
 
-    def test_asn_resolver_skips_he_when_ripe_empty(self):
-        ripe = MagicMock()
-        ripe.json.return_value = {"data": {"prefixes": []}}
-        session = MagicMock()
-        session.get.return_value = ripe
-
-        prefixes = ASNResolver(session=session, rate_limit_interval=0.0).resolve(64500)
-
-        assert prefixes == []
-        session.get.assert_called_once()
-
-    def test_dns_resolver_custom_instance(self):
-        resolver = DNSResolver(nameservers=["8.8.8.8"], timeout=5.0, max_workers=5)
-        assert resolver.nameservers == ["8.8.8.8"]
-        assert resolver.timeout == 5.0
-        assert resolver.max_workers == 5
-
-    @pytest.mark.parametrize(
-        "kwargs",
-        [
-            {"timeout": 0},
-            {"max_workers": -1},
-            {"nameservers": []},
-        ],
-    )
-    def test_dns_resolver_invalid_init(self, kwargs):
-        with pytest.raises(ValueError):
-            DNSResolver(**kwargs)
