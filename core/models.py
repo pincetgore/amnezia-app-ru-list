@@ -26,7 +26,7 @@ class ServiceConfig:
     name: str
     asn: list[int] = field(default_factory=list)
     domains: list[str] = field(default_factory=list)
-    ip_ranges: list[str] = field(default_factory=list)
+    ip_ranges: list[IPv4Network] = field(default_factory=list)
 
 
 @dataclass(slots=True, frozen=True)

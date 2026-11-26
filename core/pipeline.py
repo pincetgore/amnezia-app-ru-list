@@ -81,8 +81,7 @@ class ListBuilderPipeline:
             networks, warnings = self._asn_networks(service)
             result.asn_warnings.extend(warnings)
             networks.extend(_dns_networks(service, dns_results, excluded))
-            # Validated by core.config.validate_config before the pipeline runs.
-            networks.extend(IPv4Network(ip_range, strict=False) for ip_range in service.ip_ranges)
+            networks.extend(service.ip_ranges)
             result.service_results.append(ServiceResult(name=service.name, networks=networks))
 
         return result

@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from core.config import parse_config, validate_config
+from core.config import parse_config
 from core.models import (
     AppConfig,
     DnsConfig,
@@ -98,7 +98,6 @@ class TestCoreConfig:
                 "exclude_asn": [13335],
             },
         }
-        validate_config(raw)
         cfg = parse_config(raw)
 
         assert isinstance(cfg, AppConfig)
@@ -106,7 +105,7 @@ class TestCoreConfig:
         assert cfg.services[0].name == "ServiceA"
         assert cfg.services[0].asn == [12345]
         assert cfg.services[0].domains == ["a.ru"]
-        assert cfg.services[0].ip_ranges == ["192.168.0.0/24"]
+        assert cfg.services[0].ip_ranges == [IPv4Network("192.168.0.0/24")]
         assert cfg.dns.nameservers == ["1.1.1.1"]
         assert cfg.dns.timeout == 5.0
         assert cfg.dns.max_workers == 10
@@ -130,7 +129,7 @@ class TestCorePipeline:
                     name="TestService",
                     asn=[12345],
                     domains=["test.example"],
-                    ip_ranges=["10.0.0.0/24"],
+                    ip_ranges=[IPv4Network("10.0.0.0/24")],
                 )
             ]
         )
@@ -220,7 +219,7 @@ class TestCorePipeline:
             dns_resolve=_dns_stub({"a.ru": [IPv4Network("104.18.1.1/32"), IPv4Network("5.6.7.8/32")]}),
         )
         config = AppConfig(
-            services=[ServiceConfig(name="A", asn=[100], domains=["a.ru"], ip_ranges=["104.17.0.0/24"])],
+            services=[ServiceConfig(name="A", asn=[100], domains=["a.ru"], ip_ranges=[IPv4Network("104.17.0.0/24")])],
             dns=DnsConfig(exclude_asn=[13335]),
         )
 

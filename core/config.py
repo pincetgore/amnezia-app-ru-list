@@ -1,4 +1,7 @@
-"""Configuration loading and validation for amnezia-app-ru-list."""
+"""Configuration loading and parsing for amnezia-app-ru-list.
+
+config.yaml is parsed once, here: everything past parse_config gets typed, checked values.
+"""
 
 import logging
 import sys
@@ -22,110 +25,126 @@ logger = logging.getLogger(__name__)
 ALLOWED_SERVICE_KEYS: frozenset[str] = frozenset({"name", "asn", "domains", "ip_ranges"})
 
 
-def validate_config(config: dict[str, Any]) -> None:
-    """Validates the configuration mapping structure before performing network calls."""
+def _is_positive_int(value: Any) -> bool:
+    """ASN and worker counts: a positive int; bool is an int subclass in Python, so it is rejected explicitly."""
+    return isinstance(value, int) and not isinstance(value, bool) and value > 0
+
+
+def _list_field(raw: dict[str, Any], field: str, where: str) -> list[Any]:
+    """Value of an optional list field: missing or null means an empty list."""
+    value = raw.get(field)
+    if value is None:
+        return []
+    if not isinstance(value, list):
+        raise ValueError(f"'{field}' for {where} must be a list")
+    return value
+
+
+def _check_domain(domain: Any, name: str) -> None:
+    if not isinstance(domain, str) or not domain.strip() or " " in domain or domain != domain.strip():
+        raise ValueError(f"Invalid domain for service '{name}': {domain!r}")
+    if domain.startswith("*"):
+        raise ValueError(f"Wildcard domains are not supported in service '{name}': {domain!r}")
+    if "://" in domain:
+        raise ValueError(f"Domain must not contain URL scheme in service '{name}': {domain!r}")
+    if "/" in domain:
+        raise ValueError(f"Domain must not contain a path or slash in service '{name}': {domain!r}")
+
+
+def _parse_network(value: Any, name: str) -> IPv4Network:
+    if not isinstance(value, str):
+        raise ValueError(f"Invalid IP range for service '{name}': {value!r}")
+    try:
+        return IPv4Network(value, strict=False)
+    except ValueError as exc:
+        raise ValueError(f"Invalid IP range for service '{name}': {value!r}") from exc
+
+
+def _check_asns(asns: list[Any], where: str) -> None:
+    for asn in asns:
+        if not _is_positive_int(asn):
+            raise ValueError(f"Invalid ASN {where}: {asn!r}")
+
+
+def _service_name(index: int, raw: Any) -> str:
+    """Name of a service mapping that has only known keys."""
+    if not isinstance(raw, dict):
+        raise ValueError(f"Service at index {index} must be a mapping")
+    name = raw.get("name")
+    if not isinstance(name, str) or not name.strip():
+        raise ValueError(f"Service at index {index} must have a non-empty string 'name'")
+    extra_keys = set(raw) - ALLOWED_SERVICE_KEYS
+    if extra_keys:
+        raise ValueError(f"Service '{name}' has unknown fields: {sorted(extra_keys)}")
+    return name
+
+
+def _parse_service(index: int, raw: Any) -> ServiceConfig:
+    name = _service_name(index, raw)
+    where = f"service '{name}'"
+    asns = _list_field(raw, "asn", where)
+    domains = _list_field(raw, "domains", where)
+    ip_ranges = _list_field(raw, "ip_ranges", where)
+    if not (asns or domains or ip_ranges):
+        raise ValueError(f"Service '{name}' must define ASN, domains, or IP ranges")
+
+    _check_asns(asns, f"for {where}")
+    for domain in domains:
+        _check_domain(domain, name)
+    networks = [_parse_network(ip_range, name) for ip_range in ip_ranges]
+    return ServiceConfig(name=name, asn=list(asns), domains=list(domains), ip_ranges=networks)
+
+
+def _parse_nameservers(nameservers: Any) -> list[str]:
+    if not isinstance(nameservers, list) or not nameservers:
+        raise ValueError("'dns.nameservers' must be a non-empty list")
+    for nameserver in nameservers:
+        # Только строки: IPv4Address(int) принял бы число как адрес.
+        if not isinstance(nameserver, str):
+            raise ValueError(f"Invalid DNS nameserver: {nameserver!r}")
+        try:
+            IPv4Address(nameserver)
+        except ValueError as exc:
+            raise ValueError(f"Invalid DNS nameserver: {nameserver!r}") from exc
+    return list(nameservers)
+
+
+def _parse_dns(raw: Any) -> DnsConfig:
+    if raw is None:
+        raw = {}
+    if not isinstance(raw, dict):
+        raise ValueError("'dns' must be a mapping")
+
+    nameservers = _parse_nameservers(raw.get("nameservers", DEFAULT_NAMESERVERS))
+    timeout = raw.get("timeout", DEFAULT_DNS_TIMEOUT)
+    if isinstance(timeout, bool) or not isinstance(timeout, (int, float)) or timeout <= 0:
+        raise ValueError("'dns.timeout' must be a positive number")
+    max_workers = raw.get("max_workers", DEFAULT_DNS_MAX_WORKERS)
+    if not _is_positive_int(max_workers):
+        raise ValueError("'dns.max_workers' must be a positive integer")
+
+    exclude_asn = _list_field(raw, "exclude_asn", "'dns'")
+    _check_asns(exclude_asn, "in 'dns.exclude_asn'")
+
+    return DnsConfig(
+        nameservers=nameservers,
+        timeout=float(timeout),
+        max_workers=max_workers,
+        exclude_asn=list(exclude_asn),
+    )
+
+
+def parse_config(config: Any) -> AppConfig:
+    """Parses the raw YAML mapping into AppConfig; raises ValueError on the first invalid value."""
     if not isinstance(config, dict):
         raise ValueError("Config root must be a mapping")
-
     services = config.get("services")
     if not isinstance(services, list):
         raise ValueError("'services' must be a list")
-
-    for index, service in enumerate(services):
-        if not isinstance(service, dict):
-            raise ValueError(f"Service at index {index} must be a mapping")
-        name = service.get("name")
-        if not isinstance(name, str) or not name.strip():
-            raise ValueError(f"Service at index {index} must have a non-empty string 'name'")
-
-        extra_keys = set(service.keys()) - ALLOWED_SERVICE_KEYS
-        if extra_keys:
-            raise ValueError(f"Service '{name}' has unknown fields: {sorted(extra_keys)}")
-
-        for field in ("asn", "domains", "ip_ranges"):
-            value = service.get(field)
-            if value is not None and not isinstance(value, list):
-                raise ValueError(f"'{field}' for service '{name}' must be a list")
-        if not any(service.get(field) for field in ("asn", "domains", "ip_ranges")):
-            raise ValueError(f"Service '{name}' must define ASN, domains, or IP ranges")
-
-        for asn in service.get("asn") or []:
-            if isinstance(asn, bool) or not isinstance(asn, int) or asn <= 0:
-                raise ValueError(f"Invalid ASN for service '{name}': {asn!r}")
-        for domain in service.get("domains") or []:
-            if not isinstance(domain, str) or not domain.strip() or " " in domain or domain != domain.strip():
-                raise ValueError(f"Invalid domain for service '{name}': {domain!r}")
-            if domain.startswith("*"):
-                raise ValueError(f"Wildcard domains are not supported in service '{name}': {domain!r}")
-            if "://" in domain:
-                raise ValueError(f"Domain must not contain URL scheme in service '{name}': {domain!r}")
-            if "/" in domain:
-                raise ValueError(f"Domain must not contain a path or slash in service '{name}': {domain!r}")
-        for ip_range in service.get("ip_ranges") or []:
-            if not isinstance(ip_range, str):
-                raise ValueError(f"Invalid IP range for service '{name}': {ip_range!r}")
-            try:
-                IPv4Network(ip_range, strict=False)
-            except ValueError as exc:
-                raise ValueError(f"Invalid IP range for service '{name}': {ip_range!r}") from exc
-
-    dns_config = config.get("dns", {})
-    if dns_config is not None and not isinstance(dns_config, dict):
-        raise ValueError("'dns' must be a mapping")
-    dns_config = dns_config or {}
-    if "nameservers" in dns_config:
-        nameservers = dns_config["nameservers"]
-        if not isinstance(nameservers, list) or not nameservers:
-            raise ValueError("'dns.nameservers' must be a non-empty list")
-        for nameserver in nameservers:
-            if not isinstance(nameserver, str):
-                raise ValueError(f"Invalid DNS nameserver: {nameserver!r}")
-            try:
-                IPv4Address(nameserver)
-            except ValueError as exc:
-                raise ValueError(f"Invalid DNS nameserver: {nameserver!r}") from exc
-    for field, kinds in (("timeout", (int, float)), ("max_workers", int)):
-        if field in dns_config:
-            value = dns_config[field]
-            if isinstance(value, bool) or not isinstance(value, kinds) or value <= 0:
-                raise ValueError(f"'dns.{field}' must be a positive {'integer' if kinds is int else 'number'}")
-    exclude_asn = dns_config.get("exclude_asn")
-    if exclude_asn is not None:
-        if not isinstance(exclude_asn, list):
-            raise ValueError("'dns.exclude_asn' must be a list")
-        for asn in exclude_asn:
-            if isinstance(asn, bool) or not isinstance(asn, int) or asn <= 0:
-                raise ValueError(f"Invalid ASN in 'dns.exclude_asn': {asn!r}")
-
-
-def parse_config(config: dict[str, Any]) -> AppConfig:
-    """Parses a validated raw config dictionary into typed domain dataclasses."""
-    services_raw = config.get("services", [])
-    parsed_services: list[ServiceConfig] = []
-
-    for svc in services_raw:
-        parsed_services.append(
-            ServiceConfig(
-                name=svc["name"],
-                asn=list(svc.get("asn") or []),
-                domains=list(svc.get("domains") or []),
-                ip_ranges=list(svc.get("ip_ranges") or []),
-            )
-        )
-
-    dns_raw = config.get("dns") or {}
-    dns_nameservers = dns_raw.get("nameservers", DEFAULT_NAMESERVERS)
-    dns_timeout = float(dns_raw.get("timeout", DEFAULT_DNS_TIMEOUT))
-    dns_max_workers = int(dns_raw.get("max_workers", DEFAULT_DNS_MAX_WORKERS))
-
-    dns_cfg = DnsConfig(
-        nameservers=list(dns_nameservers),
-        timeout=dns_timeout,
-        max_workers=dns_max_workers,
-        exclude_asn=list(dns_raw.get("exclude_asn") or []),
+    return AppConfig(
+        services=[_parse_service(index, service) for index, service in enumerate(services)],
+        dns=_parse_dns(config.get("dns")),
     )
-
-    return AppConfig(services=parsed_services, dns=dns_cfg)
 
 
 def load_raw_config(path: str | Path = "config.yaml") -> dict[str, Any]:
@@ -143,11 +162,10 @@ def load_raw_config(path: str | Path = "config.yaml") -> dict[str, Any]:
 
 
 def load_config(path: str | Path = "config.yaml") -> AppConfig:
-    """Loads, validates, and parses YAML config file into AppConfig."""
+    """Loads and parses the YAML config file into AppConfig; exits with code 1 if it is invalid."""
     raw = load_raw_config(path)
     try:
-        validate_config(raw)
+        return parse_config(raw)
     except ValueError as exc:
         logger.critical("Invalid configuration: %s", exc)
         sys.exit(1)
-    return parse_config(raw)

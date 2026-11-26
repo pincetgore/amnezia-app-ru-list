@@ -5,7 +5,7 @@ import pytest
 import yaml
 
 import main as app
-from core.config import load_config, validate_config
+from core.config import load_config, parse_config
 from output.formatter import aggregate_networks, write_output
 from resolvers.dns import DNSResolver
 
@@ -74,10 +74,10 @@ def test_aggregate_cidrs_ignores_default_route():
         {"services": [], "dns": {"exclude_asn": ["13335"]}},
     ],
 )
-def test_validate_config_rejects_invalid_values(config):
+def test_parse_config_rejects_invalid_values(config):
     """Ошибочная конфигурация должна быть отклонена до сетевых запросов."""
     with pytest.raises(ValueError):
-        validate_config(config)
+        parse_config(config)
 
 
 # По 10 ASN и доменов: один сбой — ровно 10%, это ещё предупреждение, а не остановка.
@@ -199,7 +199,7 @@ def test_write_output_keeps_previous_file_when_nothing_to_write(tmp_path: Path):
 def test_config_yaml_is_valid():
     """Рабочий config.yaml проходит ту же валидацию, что и при запуске."""
     with open(CONFIG_PATH, encoding="utf-8") as f:
-        validate_config(yaml.safe_load(f))
+        parse_config(yaml.safe_load(f))
 
 
 @pytest.mark.parametrize("field_name", ["domains", "asn", "ip_ranges"])
