@@ -168,6 +168,32 @@ class TestCorePipeline:
         assert result.total_raw_prefixes == 0
         assert result.failure_reason() is not None
 
+    def test_pipeline_asn_error_is_warning_and_other_asns_still_resolve(self):
+        """Исключение резолвера ASN — предупреждение с текстом ошибки; остальные ASN собираются."""
+
+        def asn_resolve(asn):
+            if asn == 1:
+                raise RuntimeError("timeout")
+            return [IPv4Network("1.2.3.0/24")]
+
+        pipeline = ListBuilderPipeline(asn_resolve=asn_resolve, dns_resolve=_dns_stub({}))
+        result = pipeline.run(AppConfig(services=[ServiceConfig(name="A", asn=[1, 2])]))
+
+        assert result.asn_warnings == ["AS1 (A) - error: timeout"]
+        assert result.service_results[0].networks == [IPv4Network("1.2.3.0/24")]
+
+    def test_pipeline_without_domains_skips_dns_and_excluded_networks(self):
+        """Без доменов DNS не вызывается и префиксы dns.exclude_asn не запрашиваются."""
+        asn_resolve = MagicMock(return_value=[IPv4Network("1.2.3.0/24")])
+        dns_resolve = MagicMock()
+        config = AppConfig(services=[ServiceConfig(name="A", asn=[100])], dns=DnsConfig(exclude_asn=[13335]))
+
+        result = ListBuilderPipeline(asn_resolve=asn_resolve, dns_resolve=dns_resolve).run(config)
+
+        asn_resolve.assert_called_once_with(100)
+        dns_resolve.assert_not_called()
+        assert result.domain_total == 0
+
     def test_pipeline_resolves_shared_domain_once_for_all_services(self):
         """Домен из нескольких сервисов резолвится один раз, но попадает в каждый сервис."""
         dns_resolve = MagicMock(side_effect=_dns_stub({"shared.ru": [IPv4Network("4.5.6.7/32")]}))
@@ -303,4 +329,3 @@ class TestResolverClasses:
 
         assert len(prefixes) == 1
         assert prefixes[0] == IPv4Network("198.51.100.0/24")
-
