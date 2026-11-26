@@ -11,6 +11,7 @@ Unit-тесты для resolvers (ASN и DNS) с использованием м
 from ipaddress import IPv4Network
 from unittest.mock import MagicMock, patch
 
+import dns.exception
 import dns.resolver
 import pytest
 
@@ -232,6 +233,26 @@ class TestDNSResolver:
 
         assert networks == []
         assert warning == "missing.example"
+
+    @pytest.mark.parametrize(
+        "error",
+        [dns.resolver.NoAnswer(), dns.resolver.NoNameservers(), dns.exception.Timeout(), RuntimeError("boom")],
+    )
+    def test_resolve_single_domain_any_lookup_error_is_warning(self, error):
+        """Любой сбой запроса — предупреждение с доменом, а не исключение и не пустой успех."""
+        mock_resolver = MagicMock()
+        mock_resolver.resolve.side_effect = error
+
+        assert _resolve_single_domain("example.com", mock_resolver) == ([], "example.com")
+
+    def test_resolve_single_domain_unencodable_name_is_warning(self):
+        """Имя, которое нельзя перевести в punycode (метка длиннее 63 символов), не отправляется в DNS."""
+        mock_resolver = MagicMock()
+        mock_resolver.resolve.return_value = [_DummyRdata("1.2.3.4")]
+        domain = "д" * 64 + ".рф"
+
+        assert _resolve_single_domain(domain, mock_resolver) == ([], domain)
+        mock_resolver.resolve.assert_not_called()
 
     def test_resolve_single_domain_multiple_ips(self):
         """Проверяет резолвинг домена с несколькими A-записями."""

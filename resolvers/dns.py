@@ -12,7 +12,6 @@ import logging
 from ipaddress import IPv4Network
 
 import dns.edns
-import dns.exception
 import dns.resolver
 
 from core.models import DEFAULT_NAMESERVERS
@@ -24,47 +23,24 @@ logger = logging.getLogger(__name__)
 ECS_CLIENT_SUBNET = "95.165.0.0"
 
 
-def _to_ascii_domain(domain: str) -> str:
-    """Нормализует IDN (кириллические домены в punycode) для DNS-резолвинга."""
-    clean_domain = domain.strip()
-    try:
-        return clean_domain.encode("idna").decode("ascii")
-    except Exception:
-        return clean_domain
-
-
 def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> tuple[list[IPv4Network], str | None]:
-    """Вспомогательная функция для получения IP-адресов одного домена."""
-    networks: list[IPv4Network] = []
-    warning: str | None = None
-    ascii_domain = _to_ascii_domain(domain)
+    """Резолвит A-записи домена: (сети /32, None), а при любом сбое ([], домен)."""
     try:
-        answers = resolver.resolve(ascii_domain, "A")
-        for rdata in answers:
-            ip = str(rdata)
-            try:
-                net = IPv4Network(f"{ip}/32", strict=False)
-                if is_valid_prefix(net):
-                    networks.append(net)
-                    logger.debug("DNS %s -> %s", domain, ip)
-                else:
-                    logger.warning("Ignoring invalid/sinkholed IP %s for %s", ip, domain)
-            except ValueError:
-                logger.warning("Invalid IP %s returned for %s", ip, domain)
-        logger.debug("DNS %s: resolved %d valid A records", domain, len(networks))
-    except dns.resolver.NXDOMAIN:
-        logger.warning("DNS domain does not exist (NXDOMAIN) for %s", domain)
-        warning = domain
-    except (dns.resolver.NoAnswer, dns.resolver.NoNameservers) as e:
-        logger.warning("DNS resolution failed for %s: %s", domain, e)
-        warning = domain
-    except dns.exception.Timeout:
-        logger.warning("DNS timeout for %s", domain)
-        warning = domain
+        # IDN (кириллица) в punycode; имя, которое не кодируется, не существует и в DNS.
+        answers = resolver.resolve(domain.encode("idna").decode("ascii"), "A")
     except Exception as e:
-        logger.warning("DNS error for %s: %s", domain, e)
-        warning = domain
-    return networks, warning
+        logger.warning("DNS lookup failed for %s: %s", domain, e)
+        return [], domain
+
+    networks: list[IPv4Network] = []
+    for rdata in answers:
+        net = IPv4Network(f"{rdata}/32")
+        if is_valid_prefix(net):
+            networks.append(net)
+        else:
+            logger.warning("Ignoring invalid/sinkholed IP %s for %s", rdata, domain)
+    logger.debug("DNS %s: resolved %d valid A records", domain, len(networks))
+    return networks, None
 
 
 class DNSResolver:
