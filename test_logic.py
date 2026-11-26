@@ -5,7 +5,7 @@ import pytest
 import yaml
 
 import main as app
-from core.config import validate_config
+from core.config import load_config, validate_config
 from output.formatter import aggregate_networks, write_output
 from resolvers.dns import DNSResolver
 
@@ -47,6 +47,16 @@ def test_aggregate_cidrs_ignores_default_route():
     "config",
     [
         {},
+        [],  # Корень не словарь
+        {"services": ["Service"]},  # Сервис не словарь
+        {"services": [{"name": " ", "domains": ["example.com"]}]},  # Пустое имя
+        {"services": [{"name": "Service", "asn": [], "domains": []}]},  # Нет ни ASN, ни доменов, ни ip_ranges
+        {"services": [{"name": "Service", "asn": [0]}]},  # ASN не положительный
+        {"services": [{"name": "Service", "asn": [True]}]},  # bool вместо ASN
+        {"services": [{"name": "Service", "ip_ranges": [167772160]}]},  # Не строка
+        {"services": [], "dns": []},  # dns не словарь
+        {"services": [], "dns": {"nameservers": [8888]}},  # Сервер не строка
+        {"services": [], "dns": {"nameservers": ["dns.google"]}},  # Сервер не IPv4
         {"services": [{"name": "Service", "domains": "example.com"}]},
         {"services": [{"name": "Service", "ip_ranges": ["not-a-network"]}]},
         {"services": [{"name": "Service", "domain": ["example.com"]}]},  # Опечатка в ключе: domain вместо domains
@@ -71,6 +81,23 @@ def test_validate_config_rejects_invalid_values(config):
 
 
 # По 10 ASN и доменов: один сбой — ровно 10%, это ещё предупреждение, а не остановка.
+@pytest.mark.parametrize(
+    "content",
+    [None, "services: [unclosed", "services:\n  - name: S\n    domain: [a.ru]\n"],
+    ids=["missing-file", "broken-yaml", "invalid-config"],
+)
+def test_load_config_exits_with_code_1_on_bad_file(tmp_path: Path, content):
+    """Плохой файл конфигурации останавливает запуск с кодом 1 до сетевых запросов."""
+    path = tmp_path / "config.yaml"
+    if content is not None:
+        path.write_text(content, encoding="utf-8")
+
+    with pytest.raises(SystemExit) as exc_info:
+        load_config(path)
+
+    assert exc_info.value.code == 1
+
+
 CLI_CONFIG = (
     "services:\n"
     "  - name: TestService\n"
