@@ -123,22 +123,23 @@ def _run_cli(tmp_path: Path, monkeypatch, failing_asns: set[int], failing_domain
     return output_path
 
 
-def test_dns_warning_writes_output_and_reports_domain(tmp_path: Path, monkeypatch, capsys):
-    """Отдельный недоступный DNS-домен выводится как предупреждение и не останавливает выпуск."""
-    output_path = _run_cli(tmp_path, monkeypatch, failing_asns=set(), failing_domains={"bad.example"})
+@pytest.mark.parametrize(
+    ("failing_asns", "failing_domains", "heading", "item"),
+    [
+        (set(), {"bad.example"}, "Domains that could not be resolved:", "bad.example"),
+        ({12345}, set(), "ASNs that could not be resolved or returned no prefixes:", "AS12345 (TestService)"),
+    ],
+    ids=["dns", "asn"],
+)
+def test_single_failure_writes_output_and_reports_it(
+    tmp_path: Path, monkeypatch, capsys, failing_asns, failing_domains, heading, item
+):
+    """Отдельный недоступный домен или ASN выводится как предупреждение и не останавливает выпуск."""
+    output_path = _run_cli(tmp_path, monkeypatch, failing_asns=failing_asns, failing_domains=failing_domains)
     captured = capsys.readouterr()
     assert output_path.exists()
-    assert "Domains that could not be resolved:" in captured.out
-    assert "bad.example" in captured.out
-
-
-def test_asn_warning_writes_output_and_reports_asn(tmp_path: Path, monkeypatch, capsys):
-    """Отдельный недоступный или пустой ASN выводится как предупреждение и не останавливает выпуск."""
-    output_path = _run_cli(tmp_path, monkeypatch, failing_asns={12345}, failing_domains=set())
-    captured = capsys.readouterr()
-    assert output_path.exists()
-    assert "ASNs that could not be resolved or returned no prefixes:" in captured.out
-    assert "AS12345 (TestService)" in captured.out
+    assert heading in captured.out
+    assert item in captured.out
 
 
 @pytest.mark.parametrize(

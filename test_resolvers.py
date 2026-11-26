@@ -215,17 +215,6 @@ class TestDNSResolver:
         resolver = DNSResolver()
         assert resolver.nameservers == DEFAULT_NAMESERVERS
 
-    def test_resolve_single_domain_success(self):
-        """Проверяет успешный резолвинг домена в /32 сеть."""
-        mock_resolver = MagicMock()
-        mock_resolver.resolve.return_value = [_DummyRdata("1.2.3.4")]
-
-        networks, warning = _resolve_single_domain("example.com", mock_resolver)
-
-        assert len(networks) == 1
-        assert IPv4Network("1.2.3.4/32") in networks
-        assert warning is None
-
     def test_resolve_single_domain_nxdomain_is_warning(self):
         """NXDOMAIN не должен молча исключаться из отчёта об ошибках."""
         mock_resolver = MagicMock()

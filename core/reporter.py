@@ -1,7 +1,6 @@
 """Console and summary reporting for list generation runs."""
 
 import io
-import sys
 from typing import TextIO
 
 from core.models import PipelineResult
@@ -38,18 +37,9 @@ def format_statistics_report(result: PipelineResult) -> str:
 
 def print_statistics_report(result: PipelineResult, file: TextIO | None = None) -> None:
     """Prints the statistics report to stdout or a designated stream."""
-    stream = file if file is not None else sys.stdout
-    stream.write(format_statistics_report(result))
-    stream.flush()
+    print(format_statistics_report(result), end="", file=file, flush=True)
 
 
-def print_aggregation_summary(
-    aggregated_count: int,
-    output_path: str,
-    file: TextIO | None = None,
-) -> None:
+def print_aggregation_summary(aggregated_count: int, output_path: str, file: TextIO | None = None) -> None:
     """Prints post-aggregation stats and destination output path."""
-    stream = file if file is not None else sys.stdout
-    stream.write(f"  After aggregation:  {aggregated_count}\n")
-    stream.write(f"\nOutput: {output_path}\n")
-    stream.flush()
+    print(f"  After aggregation:  {aggregated_count}\n\nOutput: {output_path}", file=file, flush=True)
