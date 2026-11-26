@@ -92,6 +92,27 @@ def is_valid_prefix(net: IPv4Network) -> bool:
     return not str(net.network_address).startswith("0.")
 
 
+def parse_ripe_prefixes(data: object) -> list[IPv4Network] | None:
+    """Достаёт валидные IPv4-префиксы из JSON RIPE announced-prefixes; None — в ответе нет списка prefixes."""
+    data_section = data.get("data") if isinstance(data, dict) else None
+    entries = data_section.get("prefixes") if isinstance(data_section, dict) else None
+    if not isinstance(entries, list):
+        return None
+    prefixes: list[IPv4Network] = []
+    for entry in entries:
+        prefix = entry.get("prefix") if isinstance(entry, dict) else None
+        # Только строки: IPv4Network(int) молча превратил бы число в адрес /32.
+        if not isinstance(prefix, str):
+            continue
+        try:
+            net = IPv4Network(prefix, strict=False)
+        except ValueError:  # IPv6 и мусор
+            continue
+        if is_valid_prefix(net):
+            prefixes.append(net)
+    return prefixes
+
+
 class ASNResolver:
     """Резолвер ASN с поддержкой RIPE NCC Stat API и fallback на bgp.he.net."""
 
@@ -116,25 +137,11 @@ class ASNResolver:
             logger.warning("RIPE API failed for AS%s: %s", asn, e)
             return None
 
-        data_section = data.get("data") if isinstance(data, dict) else None
-        entries = data_section.get("prefixes") if isinstance(data_section, dict) else None
-        if not isinstance(entries, list):
+        prefixes = parse_ripe_prefixes(data)
+        if prefixes is None:
             logger.warning("RIPE API returned malformed data for AS%s", asn)
-            return None
-        prefixes: list[IPv4Network] = []
-        for entry in entries:
-            prefix = entry.get("prefix") if isinstance(entry, dict) else None
-            # Только строки: IPv4Network(int) молча превратил бы число в адрес /32.
-            if not isinstance(prefix, str):
-                continue
-            try:
-                net = IPv4Network(prefix, strict=False)
-            except ValueError:  # IPv6 и мусор
-                continue
-            if is_valid_prefix(net):
-                prefixes.append(net)
-
-        logger.debug("RIPE API AS%s: found %d IPv4 prefixes", asn, len(prefixes))
+        else:
+            logger.debug("RIPE API AS%s: found %d IPv4 prefixes", asn, len(prefixes))
         return prefixes
 
     def get_prefixes_he(self, asn: int) -> list[IPv4Network]:
