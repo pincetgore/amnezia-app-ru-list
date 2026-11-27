@@ -45,10 +45,8 @@ def _check_domain(domain: Any, name: str) -> None:
         raise ValueError(f"Invalid domain for service '{name}': {domain!r}")
     if domain.startswith("*"):
         raise ValueError(f"Wildcard domains are not supported in service '{name}': {domain!r}")
-    if "://" in domain:
-        raise ValueError(f"Domain must not contain URL scheme in service '{name}': {domain!r}")
-    if "/" in domain:
-        raise ValueError(f"Domain must not contain a path or slash in service '{name}': {domain!r}")
+    if "/" in domain:  # Ловит и схему URL: в "https://" тоже есть слеш.
+        raise ValueError(f"Domain must not contain a URL scheme, path or slash in service '{name}': {domain!r}")
 
 
 def _parse_network(value: Any, name: str) -> IPv4Network:
