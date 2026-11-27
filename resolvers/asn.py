@@ -67,7 +67,7 @@ def _create_session_with_retries() -> requests.Session:
 _session = _create_session_with_retries()
 
 
-def _rate_limit(min_interval: float = 1.0) -> None:
+def _rate_limit(min_interval: float) -> None:
     """Обеспечивает минимальный интервал между последовательными запросами к API."""
     global _last_request_time
     elapsed = time.monotonic() - _last_request_time
@@ -85,11 +85,20 @@ def is_valid_prefix(net: IPv4Network) -> bool:
     - Loopback адреса (127.0.0.0/8)
     - Multicast / Class E (>= 224.0.0.0/4)
     """
-    if net.prefixlen < 8 or net.prefixlen > 32:
+    if net.prefixlen < 8:
         return False
     if net.is_unspecified or net.is_loopback or net.is_multicast:
         return False
     return not str(net.network_address).startswith("0.")
+
+
+def _parse_prefix(text: str) -> IPv4Network | None:
+    """Префикс из текста источника, биты хоста обнуляются; None — IPv6, мусор или отсеянный is_valid_prefix."""
+    try:
+        net = IPv4Network(text, strict=False)
+    except ValueError:
+        return None
+    return net if is_valid_prefix(net) else None
 
 
 def parse_ripe_prefixes(data: object) -> list[IPv4Network] | None:
@@ -102,13 +111,8 @@ def parse_ripe_prefixes(data: object) -> list[IPv4Network] | None:
     for entry in entries:
         prefix = entry.get("prefix") if isinstance(entry, dict) else None
         # Только строки: IPv4Network(int) молча превратил бы число в адрес /32.
-        if not isinstance(prefix, str):
-            continue
-        try:
-            net = IPv4Network(prefix, strict=False)
-        except ValueError:  # IPv6 и мусор
-            continue
-        if is_valid_prefix(net):
+        net = _parse_prefix(prefix) if isinstance(prefix, str) else None
+        if net is not None:
             prefixes.append(net)
     return prefixes
 
@@ -163,14 +167,8 @@ class ASNResolver:
         end = html.find("</table>", start)
         html = html[start : end if end != -1 else len(html)]
 
-        prefixes: list[IPv4Network] = []
-        for text in dict.fromkeys(CIDR_TEXT_RE.findall(html)):
-            try:
-                net = IPv4Network(text, strict=False)
-            except ValueError:
-                continue
-            if is_valid_prefix(net):
-                prefixes.append(net)
+        nets = (_parse_prefix(text) for text in dict.fromkeys(CIDR_TEXT_RE.findall(html)))
+        prefixes = [net for net in nets if net is not None]
 
         logger.debug("bgp.he.net AS%s: found %d IPv4 prefixes", asn, len(prefixes))
         return prefixes
