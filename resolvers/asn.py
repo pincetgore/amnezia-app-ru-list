@@ -87,7 +87,7 @@ def is_valid_prefix(net: IPv4Network) -> bool:
     """
     if net.prefixlen < 8:
         return False
-    if net.is_unspecified or net.is_loopback or net.is_multicast:
+    if net.is_unspecified or net.is_loopback or net.is_multicast or net.is_reserved:
         return False
     return not str(net.network_address).startswith("0.")
 

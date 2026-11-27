@@ -22,6 +22,8 @@ from core.models import (
 
 logger = logging.getLogger(__name__)
 
+ALLOWED_ROOT_KEYS: frozenset[str] = frozenset({"services", "dns"})
+ALLOWED_DNS_KEYS: frozenset[str] = frozenset({"nameservers", "timeout", "max_workers", "exclude_asn"})
 ALLOWED_SERVICE_KEYS: frozenset[str] = frozenset({"name", "asn", "domains", "ip_ranges"})
 
 
@@ -112,6 +114,9 @@ def _parse_dns(raw: Any) -> DnsConfig:
         raw = {}
     if not isinstance(raw, dict):
         raise ValueError("'dns' must be a mapping")
+    extra_keys = set(raw) - ALLOWED_DNS_KEYS
+    if extra_keys:
+        raise ValueError(f"'dns' has unknown fields: {sorted(extra_keys)}")
 
     nameservers = _parse_nameservers(raw.get("nameservers", DEFAULT_NAMESERVERS))
     timeout = raw.get("timeout", DEFAULT_DNS_TIMEOUT)
@@ -136,6 +141,9 @@ def parse_config(config: Any) -> AppConfig:
     """Parses the raw YAML mapping into AppConfig; raises ValueError on the first invalid value."""
     if not isinstance(config, dict):
         raise ValueError("Config root must be a mapping")
+    extra_keys = set(config) - ALLOWED_ROOT_KEYS
+    if extra_keys:
+        raise ValueError(f"Config root has unknown fields: {sorted(extra_keys)}")
     services = config.get("services")
     if not isinstance(services, list):
         raise ValueError("'services' must be a list")

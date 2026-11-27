@@ -300,12 +300,22 @@ class TestDNSResolver:
         assert IPv4Network("93.184.216.34/32") in networks
         assert warning is None
 
+    def test_resolve_single_domain_only_sinkholed_ips_is_warning(self):
+        """Домен, вернувший только отброшенные адреса (0.0.0.0 / 127.0.0.1), считается неуспешным."""
+        mock_resolver = MagicMock()
+        mock_resolver.resolve.return_value = [_DummyRdata("0.0.0.0"), _DummyRdata("127.0.0.1")]
+
+        assert _resolve_single_domain("sinkholed.example", mock_resolver) == ([], "sinkholed.example")
+
     def test_is_valid_prefix_for_dns_addresses(self):
-        """Общий фильтр is_valid_prefix отсеивает sinkhole/loopback/multicast и для /32 из DNS."""
+        """Общий фильтр is_valid_prefix отсеивает sinkhole/loopback/multicast/Class E и для /32 из DNS."""
         assert is_valid_prefix(IPv4Network("93.184.216.34/32")) is True
         assert is_valid_prefix(IPv4Network("0.0.0.0/32")) is False
         assert is_valid_prefix(IPv4Network("127.0.0.1/32")) is False
         assert is_valid_prefix(IPv4Network("224.0.0.1/32")) is False
+        assert is_valid_prefix(IPv4Network("240.0.0.0/24")) is False
+        assert is_valid_prefix(IPv4Network("240.0.0.1/32")) is False
+        assert is_valid_prefix(IPv4Network("255.255.255.255/32")) is False
         assert is_valid_prefix(IPv4Network("0.1.2.3/32")) is False
 
     def test_is_valid_prefix_rejects_supernets_wider_than_slash8(self):

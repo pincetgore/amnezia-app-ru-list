@@ -73,6 +73,8 @@ def test_aggregate_cidrs_ignores_default_route():
         {"services": [], "dns": {"max_workers": 2.5}},
         {"services": [], "dns": {"exclude_asn": 13335}},
         {"services": [], "dns": {"exclude_asn": ["13335"]}},
+        {"services": [], "dns": {"exclude_asns": [13335]}},  # Опечатка в ключе dns
+        {"services": [], "dns_config": {"exclude_asn": [13335]}},  # Неизвестный корневой ключ
     ],
 )
 def test_parse_config_rejects_invalid_values(config):

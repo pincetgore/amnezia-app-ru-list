@@ -14,7 +14,7 @@ from ipaddress import IPv4Network
 import dns.edns
 import dns.resolver
 
-from core.models import DEFAULT_NAMESERVERS
+from core.models import DEFAULT_DNS_MAX_WORKERS, DEFAULT_DNS_TIMEOUT, DEFAULT_NAMESERVERS
 from resolvers.asn import is_valid_prefix
 
 logger = logging.getLogger(__name__)
@@ -40,7 +40,7 @@ def _resolve_single_domain(domain: str, resolver: dns.resolver.Resolver) -> tupl
         else:
             logger.warning("Ignoring invalid/sinkholed IP %s for %s", rdata, domain)
     logger.debug("DNS %s: resolved %d valid A records", domain, len(networks))
-    return networks, None
+    return networks, None if networks else domain
 
 
 class DNSResolver:
@@ -49,8 +49,8 @@ class DNSResolver:
     def __init__(
         self,
         nameservers: list[str] | None = None,
-        timeout: float = 10.0,
-        max_workers: int = 20,
+        timeout: float = DEFAULT_DNS_TIMEOUT,
+        max_workers: int = DEFAULT_DNS_MAX_WORKERS,
     ) -> None:
         if timeout <= 0:
             raise ValueError("DNS timeout must be positive")
