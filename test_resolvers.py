@@ -9,14 +9,16 @@ Unit-тесты для resolvers (ASN и DNS) с использованием м
 """
 
 from ipaddress import IPv4Network
+from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 import dns.exception
 import dns.resolver
 import pytest
 
+import resolvers.asn as asn_module
 from core.models import DEFAULT_NAMESERVERS
-from resolvers.asn import ASNResolver, is_valid_prefix, resolve_asn
+from resolvers.asn import ASNResolver, _rate_limit, is_valid_prefix, resolve_asn
 from resolvers.dns import ECS_CLIENT_SUBNET, DNSResolver, _resolve_single_domain
 
 
@@ -67,13 +69,26 @@ class TestASNResolver:
             }
         }
 
-        result = _resolver(mock_response).get_prefixes_ripe(12389)
+        resolver = _resolver(mock_response)
+        result = resolver.get_prefixes_ripe(12389)
 
+        resolver.session.get.assert_called_once_with(
+            "https://stat.ripe.net/data/announced-prefixes/data.json?resource=AS12389", timeout=30
+        )
         assert result is not None
         assert len(result) == 2
         assert IPv4Network("1.2.3.0/24") in result
         assert IPv4Network("4.5.6.0/24") in result
         assert IPv4Network("0.0.0.0/0") not in result
+
+    def test_get_prefixes_ripe_keeps_prefixes_after_bad_entries(self):
+        """Мусор в начале списка не обрывает разбор; биты хоста обнуляются, префикс не теряется."""
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            "data": {"prefixes": [{"prefix": 16843009}, {"prefix": "2001:db8::/32"}, {"prefix": "1.2.3.4/24"}]}
+        }
+
+        assert _resolver(mock_response).get_prefixes_ripe(12389) == [IPv4Network("1.2.3.0/24")]
 
     def test_get_prefixes_ripe_empty_data(self):
         """Проверяет обработку пустого ответа от RIPE."""
@@ -126,8 +141,10 @@ class TestASNResolver:
             </table>
         """
 
-        result = _resolver(mock_response).get_prefixes_he(12389)
+        resolver = _resolver(mock_response)
+        result = resolver.get_prefixes_he(12389)
 
+        resolver.session.get.assert_called_once_with("https://bgp.he.net/AS12389#_prefixes4", timeout=30)
         assert len(result) == 2
         assert IPv4Network("1.2.3.0/24") in result
         assert IPv4Network("4.5.6.0/24") in result
@@ -145,13 +162,23 @@ class TestASNResolver:
                     <a href="/net/1.2.3.0/24">1.2.3.0/24</a>
                 </td></tr>
             </table>
+            <table id="table_ix">
+                <tr><td><a href="/net/9.9.9.0/24">9.9.9.0/24</a></td></tr>
+            </table>
         """
 
         result = _resolver(mock_response).get_prefixes_he(12389)
 
-        assert len(result) == 1
-        assert IPv4Network("1.2.3.0/24") in result
-        assert IPv4Network("8.8.8.0/24") not in result
+        assert result == [IPv4Network("1.2.3.0/24")]
+
+    def test_get_prefixes_he_skips_bad_cidr_and_clears_host_bits(self):
+        """Невозможный адрес пропускается, следующий префикс с битами хоста приводится к сети."""
+        mock_response = MagicMock()
+        mock_response.text = (
+            '<table id="table_prefixes4"><tr><td>999.1.1.1/24</td></tr><tr><td>1.2.3.4/24</td></tr></table>'
+        )
+
+        assert _resolver(mock_response).get_prefixes_he(12389) == [IPv4Network("1.2.3.0/24")]
 
     def test_get_prefixes_he_without_prefix_table_returns_nothing(self):
         """Без таблицы IPv4-префиксов чужие сети из других таблиц не берутся."""
@@ -281,6 +308,10 @@ class TestDNSResolver:
         assert is_valid_prefix(IPv4Network("224.0.0.1/32")) is False
         assert is_valid_prefix(IPv4Network("0.1.2.3/32")) is False
 
+    def test_is_valid_prefix_rejects_supernets_wider_than_slash8(self):
+        assert is_valid_prefix(IPv4Network("8.0.0.0/8")) is True
+        assert is_valid_prefix(IPv4Network("8.0.0.0/7")) is False
+
     def test_resolver_uses_configured_nameservers_and_timeouts(self):
         """Каждый Resolver создаётся с настроенными серверами и таймаутом на сервер."""
         resolver = DNSResolver(nameservers=["8.8.8.8", "1.1.1.1"], timeout=4.0)._create_resolver()
@@ -341,3 +372,16 @@ class TestDNSResolver:
         ):
             DNSResolver(timeout=20, max_workers=30).resolve(["a.com", "b.com"])
             mock_executor_cls.assert_called_with(max_workers=2)
+
+
+def test_rate_limit_waits_out_the_rest_of_the_interval(monkeypatch):
+    """Первый запрос не ждёт, даже если часы только запустились; следующий ждёт лишь остаток интервала."""
+    clock = iter([0.5, 0.5, 0.8, 1.5])
+    sleeps: list[float] = []
+    monkeypatch.setattr(asn_module, "_last_request_time", 0.0)
+    monkeypatch.setattr(asn_module, "time", SimpleNamespace(monotonic=lambda: next(clock), sleep=sleeps.append))
+
+    _rate_limit(1.0)
+    _rate_limit(1.0)
+
+    assert sleeps == [pytest.approx(0.7)]

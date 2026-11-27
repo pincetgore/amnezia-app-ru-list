@@ -233,6 +233,16 @@ class TestCorePipeline:
         assert result.asn_total == 1
         assert result.asn_warnings == []
 
+    def test_pipeline_drops_dns_addresses_inside_excluded_slash8(self):
+        """Префикс /8 — самый широкий, что даёт is_valid_prefix; адреса внутри него тоже отбрасываются."""
+        pipeline = ListBuilderPipeline(
+            asn_resolve=lambda asn: [IPv4Network("104.0.0.0/8")] if asn == 13335 else [],
+            dns_resolve=_dns_stub({"a.ru": [IPv4Network("104.18.1.1/32"), IPv4Network("5.6.7.8/32")]}),
+        )
+        config = AppConfig(services=[ServiceConfig(name="A", domains=["a.ru"])], dns=DnsConfig(exclude_asn=[13335]))
+
+        assert pipeline.run(config).service_results[0].networks == [IPv4Network("5.6.7.8/32")]
+
     def test_pipeline_fails_when_excluded_asn_has_no_prefixes(self):
         """Без префиксов исключаемой сети запуск останавливается, а не публикует адреса CDN."""
         pipeline = ListBuilderPipeline(

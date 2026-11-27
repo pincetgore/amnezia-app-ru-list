@@ -61,6 +61,7 @@ def test_aggregate_cidrs_ignores_default_route():
         {"services": [{"name": "Service", "ip_ranges": ["not-a-network"]}]},
         {"services": [{"name": "Service", "domain": ["example.com"]}]},  # Опечатка в ключе: domain вместо domains
         {"services": [{"name": "Service", "extra_field": 123, "domains": ["example.com"]}]},  # Неизвестное поле
+        {"services": [{"name": "Service", "domains": [123]}]},  # Домен не строка
         {"services": [{"name": "Service", "domains": [" example.com "]}]},  # Пробелы по краям
         {"services": [{"name": "Service", "domains": ["exam ple.com"]}]},  # Пробел внутри
         {"services": [{"name": "Service", "domains": ["*.example.com"]}]},  # Wildcard домен
@@ -78,6 +79,17 @@ def test_parse_config_rejects_invalid_values(config):
     """Ошибочная конфигурация должна быть отклонена до сетевых запросов."""
     with pytest.raises(ValueError):
         parse_config(config)
+
+
+def test_parse_config_accepts_smallest_values_and_clears_host_bits():
+    """Единица — допустимые ASN и max_workers; ip_range с битами хоста приводится к сети."""
+    config = parse_config(
+        {"services": [{"name": "S", "asn": [1], "ip_ranges": ["10.0.0.1/24"]}], "dns": {"max_workers": 1}}
+    )
+
+    assert config.services[0].asn == [1]
+    assert config.services[0].ip_ranges == [IPv4Network("10.0.0.0/24")]
+    assert config.dns.max_workers == 1
 
 
 # По 10 ASN и доменов: один сбой — ровно 10%, это ещё предупреждение, а не остановка.
@@ -107,10 +119,12 @@ CLI_CONFIG = (
 )
 
 
-def _run_cli(tmp_path: Path, monkeypatch, failing_asns: set[int], failing_domains: set[str]) -> Path:
+def _run_cli(
+    tmp_path: Path, monkeypatch, failing_asns: set[int], failing_domains: set[str], config: str = CLI_CONFIG
+) -> Path:
     """Запускает main() с фейковыми ASN/DNS: указанные в failing_* не резолвятся."""
     config_path = tmp_path / "config.yaml"
-    config_path.write_text(CLI_CONFIG, encoding="utf-8")
+    config_path.write_text(config, encoding="utf-8")
     output_path = tmp_path / "ip-list.json"
 
     def fake_dns(_self, domains):
@@ -161,6 +175,15 @@ def test_mass_failure_keeps_previous_output(tmp_path: Path, monkeypatch, failing
     assert output_path.read_text(encoding="utf-8") == "previous good list"
 
 
+def test_config_with_only_default_route_exits_without_writing(tmp_path: Path, monkeypatch):
+    """0.0.0.0/0 отбрасывается при агрегации; пустой список не пишется, запуск падает с кодом 1."""
+    with pytest.raises(SystemExit) as exc_info:
+        _run_cli(tmp_path, monkeypatch, set(), set(), config="services:\n  - name: S\n    ip_ranges: [0.0.0.0/0]\n")
+
+    assert exc_info.value.code == 1
+    assert not (tmp_path / "ip-list.json").exists()
+
+
 def test_aggregate_cidrs_rejects_merge_into_default_route():
     """Две половины интернета (/1 + /1) не должны слиться в 0.0.0.0/0."""
     with pytest.raises(ValueError, match="0.0.0.0/0"):
@@ -177,15 +200,28 @@ def test_write_output_replaces_existing_file_sorted(tmp_path: Path):
         str(output_path),
     )
 
-    expected = [IPv4Network("10.0.0.0/8"), IPv4Network("192.0.2.1/32"), IPv4Network("192.0.2.2/32")]
-    assert yaml.safe_load(output_path.read_text(encoding="utf-8")) == [{"hostname": str(n), "ip": ""} for n in expected]
-    assert result == expected
+    # Точный текст: ip-list.json лежит в git, смена отступов дала бы шумный диф.
+    assert output_path.read_text(encoding="utf-8") == (
+        "[\n"
+        '  {\n    "hostname": "10.0.0.0/8",\n    "ip": ""\n  },\n'
+        '  {\n    "hostname": "192.0.2.1/32",\n    "ip": ""\n  },\n'
+        '  {\n    "hostname": "192.0.2.2/32",\n    "ip": ""\n  }\n'
+        "]\n"
+    )
+    assert result == [IPv4Network("10.0.0.0/8"), IPv4Network("192.0.2.1/32"), IPv4Network("192.0.2.2/32")]
 
 
-def test_write_output_plain_format(tmp_path: Path):
-    output_path = tmp_path / "cidrs.txt"
+def test_write_output_plain_format_creates_missing_dirs(tmp_path: Path):
+    output_path = tmp_path / "out" / "nested" / "cidrs.txt"
     write_output([IPv4Network("192.0.2.1/32"), IPv4Network("10.0.0.0/8")], str(output_path), "plain")
     assert output_path.read_text(encoding="utf-8") == "10.0.0.0/8\n192.0.2.1/32\n"
+
+
+def test_write_output_rejects_unknown_format_without_writing(tmp_path: Path):
+    output_path = tmp_path / "ip-list.csv"
+    with pytest.raises(ValueError, match="csv"):
+        write_output([IPv4Network("192.0.2.1/32")], str(output_path), "csv")
+    assert not output_path.exists()
 
 
 def test_write_output_keeps_previous_file_when_nothing_to_write(tmp_path: Path):
