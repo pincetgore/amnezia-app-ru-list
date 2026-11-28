@@ -121,6 +121,7 @@ services:
       - 207207
       - 210656
       - 215013
+      - 208398
     domains:
       - afisha.yandex.ru
       - alice.yandex.ru
@@ -317,7 +318,6 @@ services:
     asn:
       - 15632
       - 34838
-      - 59840
     domains:
       - alfa.me
       - alfabank.com
@@ -418,6 +418,7 @@ services:
   - name: "МТС Банк"
     asn:
       - 51771
+      - 58100
     domains:
       - dbo-dengi.online
       - mtsbank.ru
@@ -433,6 +434,7 @@ services:
   - name: "Мосбиржа"
     asn:
       - 48009
+      - 35021
     domains:
       - moex.com
 
@@ -476,6 +478,7 @@ services:
     asn:
       - 20872
       - 21252
+      - 198609
     domains:
       - uralsib.ru
 
@@ -512,6 +515,10 @@ services:
   - name: "БКС Мир Инвестиций"
     asn:
       - 42558
+      - 42559
+      - 50793
+      - 50878
+      - 60361
     domains:
       - bcs.ru
       - bcsexpress.ru
@@ -520,6 +527,8 @@ services:
     asn:
       - 43527
       - 209351
+      - 198390
+      - 209352
     domains:
       - finam.ru
 
@@ -663,7 +672,6 @@ services:
   # ============================================================
   - name: "Wildberries"
     asn:
-      - 49053
       - 57073
       - 201512
       - 201513
@@ -989,10 +997,8 @@ services:
       - cdn-mobile-backend.vkusvill.ru
       - img.vkusvill.ru
       - mobile-advrep.vkusvill.ru
-      - mobile-alt.fullstack.vkusvill.ru
       - mobile-logs.vkusvill.ru
       - mobile-longpoll.vkusvill.ru
-      - mobile.fullstack.vkusvill.ru
       - mobile.vkusvill.ru
       - online.vkusvill.ru
       - vkusvill.ru
@@ -1197,6 +1203,8 @@ services:
   - name: "Триколор Кино и ТВ"
     asn:
       - 56846
+      - 209339
+      - 209739
     domains:
       - kino.tricolor.ru
       - kino.tricolor.tv
@@ -1258,6 +1266,9 @@ services:
   - name: "Рамблер (Lenta, Gazeta, Чемпионат)"
     asn:
       - 24638
+      - 42481
+      - 44696
+      - 57306
     domains:
       - championat.com
       - gazeta.ru
@@ -1312,6 +1323,7 @@ services:
     asn:
       - 8291
       - 43797
+      - 42121
     domains:
       - council.gov.ru
       - duma.gov.ru
@@ -1322,6 +1334,7 @@ services:
     asn:
       - 61280
       - 62422
+      - 213853
     domains:
       - edu.gov.ru
       - www.edu.ru
@@ -1362,6 +1375,7 @@ services:
   - name: "СФР / Социальный фонд России"
     asn:
       - 199922
+      - 34851
     domains:
       - pfr.gov.ru
       - sfr.gov.ru
@@ -1380,6 +1394,7 @@ services:
   - name: "ЦБ РФ"
     asn:
       - 8904
+      - 209084
     domains:
       - cbr.ru
       - finmarket.ru
@@ -1664,6 +1679,8 @@ services:
   - name: "Газпромнефть (АЗС / ОПТИ 24)"
     asn:
       - 202070
+      - 39853
+      - 56669
     domains:
       - gazprom-neft.ru
       - gpnbonus.ru
@@ -1830,6 +1847,8 @@ services:
       - 39864
       - 61293
       - 42024
+      - 41775
+      - 201268
     domains:
       - 1c.ru
       - b2b-center.ru
@@ -1849,10 +1868,6 @@ services:
     ip_ranges:
       - 91.236.48.0/22
       - 91.221.198.0/23
-      - 91.236.49.0/24
-      - 91.236.50.0/24
-      - 91.236.51.0/24
-      - 91.221.199.0/24
     domains:
       - 2gis.com
       - 2gis.dev
@@ -2187,6 +2202,8 @@ services:
   - name: "HLL (Ароматный мир и др.)"
     asn:
       - 51115
+      - 197068
+      - 219306
     domains: []
 
   - name: "Gitverse"
@@ -2247,7 +2264,8 @@ services:
       - litres.ru
 
   - name: "Kaspersky"
-    asn: []
+    asn:
+      - 209030
     domains:
       - kaspersky.com
       - kaspersky.ru
@@ -2302,7 +2320,6 @@ services:
       - rdva58.rosdomofon.com
       - rdva6.rosdomofon.com
       - rdva63.rosdomofon.com
-      - rdva64.rosdomofon.com
       - rdva7.rosdomofon.com
       - rdva81.rosdomofon.com
       - rdva88.rosdomofon.com
